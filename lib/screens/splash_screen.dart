@@ -27,31 +27,33 @@ class SplashScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(left: 40.0, right: 40.0),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Icon(
-              Icons.fastfood,
-              size: 150.0,
-              color: Theme.of(context).accentColor,
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(
-                top: 15.0,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Icon(
+                Icons.fastfood,
+                size: 100.0,
+                color: Theme.of(context).accentColor,
               ),
-              child: WavyAnimatedTextKit(
-                textStyle: TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.w700,
-                  color: Theme.of(context).accentColor,
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(
+                  top: 15.0,
                 ),
-                text: ["Loading..."],
-                isRepeatingAnimation: true,
+                child: WavyAnimatedTextKit(
+                  textStyle: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  text: ["Loading..."],
+                  isRepeatingAnimation: true,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

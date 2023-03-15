@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import '../model/restaurant.dart';
 
@@ -9,7 +9,7 @@ class DetailScreen extends StatelessWidget {
 
   final Restaurant restaurant;
 
-  DetailScreen({@required this.restaurant});
+  DetailScreen({required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,6 @@ class DetailScreen extends StatelessWidget {
                     starCount: 5,
                     rating: restaurant.rating,
                     size: 40.0,
-                    isReadOnly: true,
                     color: Colors.orange,
                     borderColor: Colors.orange,
                     spacing: 0.0)),

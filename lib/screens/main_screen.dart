@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/util/constants.dart';
 import 'package:restaurant_app/util/platform_widget.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import 'detail_screen.dart';
 
@@ -69,15 +69,22 @@ class MainScreen extends StatelessWidget {
   FutureBuilder<String> _buildList(BuildContext context) {
     return FutureBuilder<String>(
       future:
-          DefaultAssetBundle.of(context).loadString('assets/restaurant.json'),
+          DefaultAssetBundle.of(context).loadString('assets/local_restaurant.json'),
       builder: (context, snapshot) {
-        final List<Restaurant> restaurant = parseRestaurant(snapshot.data);
-        return ListView.builder(
-          itemCount: restaurant.length,
-          itemBuilder: (context, index) {
-            return _buildRestaurantItem(context, restaurant[index]);
-          },
-        );
+        print(snapshot.data.toString());
+        // if (snapshot.hasData) {
+          final RestaurantResponse response = RestaurantResponse.fromRawJson(
+              snapshot.data.toString());
+          final List<Restaurant> restaurant = response.restaurants;
+          return ListView.builder(
+            itemCount: restaurant.length,
+            itemBuilder: (context, index) {
+              return _buildRestaurantItem(context, restaurant[index]);
+            },
+          );
+        // } else {
+        //   return CircularProgressIndicator();
+        // }
       },
     );
   }
@@ -130,7 +137,7 @@ class MainScreen extends StatelessWidget {
                             starCount: 5,
                             rating: restaurant.rating,
                             size: 20.0,
-                            isReadOnly: true,
+
                             color: Colors.orange,
                             borderColor: Colors.orange,
                             spacing: 0.0),
