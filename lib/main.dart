@@ -14,14 +14,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = ThemeData();
     return MaterialApp(
       title: '$Constants.appName',
-      theme: ThemeData(
+      theme: theme.copyWith(
         // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        accentColor: Colors.cyan[600],
+        colorScheme: theme.colorScheme.copyWith(secondary: Colors.amber),
         scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          color: Colors.amber,
+        )
       ),
       initialRoute: SplashScreen.routeName,
       routes: {

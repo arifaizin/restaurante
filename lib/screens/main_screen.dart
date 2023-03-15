@@ -16,21 +16,6 @@ class MainScreen extends StatelessWidget {
       androidBuilder: _buildAndroid,
       iosBuilder: _buildIos,
     );
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     automaticallyImplyLeading: false,
-    //     centerTitle: true,
-    //     title: Text(
-    //       Constants.appName,
-    //       style: TextStyle(
-    //           fontSize: 28.0,
-    //           fontWeight: FontWeight.bold,
-    //           fontFamily: 'Nunito'),
-    //     ),
-    //     elevation: 0.0,
-    //   ),
-    //   body: _buildList(context),
-    // );
   }
 
   Widget _buildAndroid(BuildContext context) {
@@ -72,7 +57,7 @@ class MainScreen extends StatelessWidget {
           DefaultAssetBundle.of(context).loadString('assets/local_restaurant.json'),
       builder: (context, snapshot) {
         print(snapshot.data.toString());
-        // if (snapshot.hasData) {
+        if (snapshot.hasData) {
           final RestaurantResponse response = RestaurantResponse.fromRawJson(
               snapshot.data.toString());
           final List<Restaurant> restaurant = response.restaurants;
@@ -82,9 +67,9 @@ class MainScreen extends StatelessWidget {
               return _buildRestaurantItem(context, restaurant[index]);
             },
           );
-        // } else {
-        //   return CircularProgressIndicator();
-        // }
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
@@ -94,11 +79,11 @@ class MainScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: TextButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return DetailScreen(restaurant: restaurant);
-          }));
-          // Navigator.pushNamed(context, DetailScreen.routeName,
-          //     arguments: restaurant);
+          // Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //   return DetailScreen(restaurant: restaurant);
+          // }));
+          Navigator.pushNamed(context, DetailScreen.routeName,
+              arguments: restaurant);
         },
         child: Card(
           shape: RoundedRectangleBorder(
