@@ -85,13 +85,13 @@ class MainScreen extends StatelessWidget {
   Widget _buildRestaurantItem(BuildContext context, Restaurant restaurant) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return DetailScreen(restaurant: restaurant);
-          // }));
-          Navigator.pushNamed(context, DetailScreen.routeName,
-              arguments: restaurant);
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return DetailScreen(restaurant: restaurant);
+          }));
+          // Navigator.pushNamed(context, DetailScreen.routeName,
+          //     arguments: restaurant);
         },
         child: Card(
           shape: RoundedRectangleBorder(
