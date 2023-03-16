@@ -56,15 +56,6 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - images/bosscha.jpg
-    - images/farm-house.jpg
-    - images/floating-market.png
-    - images/jalan-asia-afrika.jpg
-    - images/kawah-putih.jpg
-    - images/museum-geologi.jpg
-    - images/ranca-upas.jpg
-    - images/stone-garden.jpg
-    - images/taman-film.jpg
     - assets/
 
 
