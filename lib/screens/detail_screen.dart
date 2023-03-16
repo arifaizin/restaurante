@@ -173,6 +173,7 @@ Widget _buildRestaurantItem(BuildContext context, Drink food) {
                   Text(
                     food.name,
                     maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 12.0,
