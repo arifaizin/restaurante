@@ -57,7 +57,9 @@ class MainScreen extends StatelessWidget {
           DefaultAssetBundle.of(context).loadString('assets/local_restaurant.json'),
       builder: (context, snapshot) {
         print(snapshot.data.toString());
-        if (snapshot.hasData) {
+        if (snapshot.hasError) {
+          return Center(child: Text("Something went wrong!"));
+        } else if (snapshot.hasData) {
           final RestaurantResponse response = RestaurantResponse.fromRawJson(
               snapshot.data.toString());
           final List<Restaurant> restaurant = response.restaurants;
