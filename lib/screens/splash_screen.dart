@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:restaurant_app/screens/main_screen.dart';
 
@@ -21,37 +22,9 @@ class SplashScreen extends StatelessWidget {
 
   Container _buildImage(BuildContext context) {
     return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.fastfood,
-              size: 150.0,
-              color: Colors.orange,
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(
-                top: 30.0,
-              ),
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  WavyAnimatedText(
-                    'Loading...',
-                    textStyle: const TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.orange),
-                  ),
-                ],
-                isRepeatingAnimation: true,
-              ),
-            ),
-          ],
-        ),
-      ),
+      height: double.infinity,
+      width: double.infinity,
+      child: Lottie.asset('assets/8438-mr-cookie-drink.json', fit: BoxFit.cover),
     );
   }
 }
