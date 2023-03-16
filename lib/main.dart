@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
         // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        colorScheme: theme.colorScheme.copyWith(secondary: Colors.amber),
+        colorScheme: theme.colorScheme.copyWith(secondary: Colors.orange),
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
-          color: Colors.amber,
+          color: Colors.orange,
         )
       ),
       initialRoute: SplashScreen.routeName,

@@ -29,7 +29,7 @@ class SplashScreen extends StatelessWidget {
             Icon(
               Icons.fastfood,
               size: 150.0,
-              color: Colors.amber,
+              color: Colors.orange,
             ),
             Container(
               alignment: Alignment.center,
@@ -43,7 +43,7 @@ class SplashScreen extends StatelessWidget {
                     textStyle: const TextStyle(
                         fontSize: 25.0,
                         fontWeight: FontWeight.w700,
-                        color: Colors.amber),
+                        color: Colors.orange),
                   ),
                 ],
                 isRepeatingAnimation: true,
