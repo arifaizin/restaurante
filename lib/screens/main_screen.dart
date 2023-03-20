@@ -53,15 +53,15 @@ class MainScreen extends StatelessWidget {
 
   FutureBuilder<String> _buildList(BuildContext context) {
     return FutureBuilder<String>(
-      future:
-          DefaultAssetBundle.of(context).loadString('assets/local_restaurant.json'),
+      future: DefaultAssetBundle.of(context)
+          .loadString('assets/local_restaurant.json'),
       builder: (context, snapshot) {
         print(snapshot.data.toString());
         if (snapshot.hasError) {
           return Center(child: Text("Something went wrong!"));
         } else if (snapshot.hasData) {
-          final RestaurantResponse response = RestaurantResponse.fromRawJson(
-              snapshot.data.toString());
+          final RestaurantResponse response =
+              RestaurantResponse.fromRawJson(snapshot.data.toString());
           final List<Restaurant> restaurant = response.restaurants;
           return ListView.builder(
             itemCount: restaurant.length,
@@ -81,9 +81,6 @@ class MainScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: TextButton(
         onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return DetailScreen(restaurant: restaurant);
-          // }));
           Navigator.pushNamed(context, DetailScreen.routeName,
               arguments: restaurant);
         },
@@ -98,8 +95,16 @@ class MainScreen extends StatelessWidget {
                 child: InkWell(
                   child: Hero(
                     tag: "photo" + restaurant.id,
-                    child: Image.network(restaurant.pictureId,
-                        height: 200, fit: BoxFit.fitWidth),
+                    child: Image.network(
+                      restaurant.pictureId,
+                      height: 200,
+                      fit: BoxFit.fitWidth,
+                      errorBuilder: (ctx, error, _) => Image.asset(
+                        "images/no_image.png",
+                        height: 200,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -124,7 +129,6 @@ class MainScreen extends StatelessWidget {
                             starCount: 5,
                             rating: restaurant.rating,
                             size: 20.0,
-
                             color: Colors.orange,
                             borderColor: Colors.orange,
                             spacing: 0.0),

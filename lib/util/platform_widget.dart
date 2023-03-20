@@ -10,8 +10,6 @@ class PlatformWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return androidBuilder(context);
       case TargetPlatform.iOS:
         return iosBuilder(context);
       default:

@@ -21,7 +21,15 @@ class DetailScreen extends StatelessWidget {
               children: <Widget>[
                 Hero(
                     tag: "photo" + restaurant.id,
-                    child: Image.network(restaurant.pictureId)),
+                    child: Image.network(
+                      restaurant.pictureId,
+                      fit: BoxFit.fitWidth,
+                      errorBuilder: (ctx, error, _) => Image.asset(
+                        "images/no_image.png",
+                        height: 300,
+                        fit: BoxFit.cover,
+                      ),
+                    )),
                 SafeArea(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,8 +123,7 @@ class DetailScreen extends StatelessWidget {
                   "Drink",
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.w800),
-                )
-            ),
+                )),
             SizedBox(
               height: 145,
               child: Container(
