@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/util/constants.dart';
 import 'package:restaurant_app/util/platform_widget.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import 'detail_screen.dart';
 
@@ -71,13 +71,17 @@ class MainScreen extends StatelessWidget {
       future:
           DefaultAssetBundle.of(context).loadString('assets/restaurant.json'),
       builder: (context, snapshot) {
-        final List<Restaurant> restaurant = parseRestaurant(snapshot.data);
-        return ListView.builder(
-          itemCount: restaurant.length,
-          itemBuilder: (context, index) {
-            return _buildRestaurantItem(context, restaurant[index]);
-          },
-        );
+        if (snapshot.hasData) {
+          final List<Restaurant> restaurant = parseRestaurant(snapshot.data);
+          return ListView.builder(
+            itemCount: restaurant.length,
+            itemBuilder: (context, index) {
+              return _buildRestaurantItem(context, restaurant[index]);
+            },
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
@@ -85,8 +89,8 @@ class MainScreen extends StatelessWidget {
   Widget _buildRestaurantItem(BuildContext context, Restaurant restaurant) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: FlatButton(
-        onPressed: () {
+      child: InkWell(
+        onTap: () {
           // Navigator.push(context, MaterialPageRoute(builder: (context) {
           //   return DetailScreen(restaurant: restaurant);
           // }));
@@ -130,7 +134,6 @@ class MainScreen extends StatelessWidget {
                             starCount: 5,
                             rating: restaurant.rating,
                             size: 20.0,
-                            isReadOnly: true,
                             color: Colors.orange,
                             borderColor: Colors.orange,
                             spacing: 0.0),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/screens/detail_screen.dart';
 import 'package:restaurant_app/screens/splash_screen.dart';
 import 'package:restaurant_app/util/constants.dart';
-
 import 'screens/main_screen.dart';
 
 void main() {
@@ -14,12 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '$Constants.appName',
+      title: Constants.appName,
       theme: ThemeData(
         // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        accentColor: Colors.cyan[600],
+        colorScheme:
+            ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]),
         scaffoldBackgroundColor: Colors.white,
       ),
       initialRoute: SplashScreen.routeName,
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         SplashScreen.routeName: (context) => SplashScreen(),
         MainScreen.routeName: (context) => MainScreen(),
         DetailScreen.routeName: (context) => DetailScreen(
-            restaurant: ModalRoute.of(context).settings.arguments),
+            restaurant:
+                ModalRoute.of(context)!.settings.arguments as Restaurant),
       },
     );
   }

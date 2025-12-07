@@ -6,7 +6,6 @@ import 'package:restaurant_app/screens/main_screen.dart';
 import 'package:restaurant_app/util/constants.dart';
 
 class SplashScreen extends StatelessWidget {
-
   static const routeName = '/restaurant_splash';
 
   @override
@@ -34,20 +33,24 @@ class SplashScreen extends StatelessWidget {
             Icon(
               Icons.fastfood,
               size: 150.0,
-              color: Theme.of(context).accentColor,
+              color: Colors.cyan[600],
             ),
             Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(
                 top: 15.0,
               ),
-              child: WavyAnimatedTextKit(
-                textStyle: TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.w700,
-                  color: Theme.of(context).accentColor,
-                ),
-                text: ["Loading..."],
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  WavyAnimatedText(
+                    'Loading...',
+                    textStyle: TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.cyan[600],
+                    ),
+                  ),
+                ],
                 isRepeatingAnimation: true,
               ),
             ),

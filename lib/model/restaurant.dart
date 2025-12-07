@@ -9,25 +9,24 @@ class Restaurant {
   String pictureId;
 
   Restaurant({
-    this.id,
-    this.name,
-    this.description,
-    this.city,
-    this.rating,
-    this.pictureId,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.city,
+    required this.rating,
+    required this.pictureId,
   });
 
-  Restaurant.fromJson(Map<String, dynamic> restaurant) {
-    id = restaurant['id'];
-    name = restaurant['name'];
-    description = restaurant['description'];
-    city = restaurant['city'];
-    rating = restaurant['rating'];
-    pictureId = restaurant['pictureId'];
-  }
+  Restaurant.fromJson(Map<String, dynamic> restaurant)
+      : id = restaurant['id'],
+        name = restaurant['name'],
+        description = restaurant['description'],
+        city = restaurant['city'],
+        rating = restaurant['rating'].toDouble(),
+        pictureId = restaurant['pictureId'];
 }
 
-List<Restaurant> parseRestaurant(String json) {
+List<Restaurant> parseRestaurant(String? json) {
   if (json == null) {
     return [];
   }
