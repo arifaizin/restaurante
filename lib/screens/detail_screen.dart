@@ -76,48 +76,57 @@ class DetailScreen extends StatelessWidget {
                 ),
               ],
             ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
+              child: Text(
+                restaurant.name,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Nunito'),
+                overflow: TextOverflow.visible,
+                softWrap: true,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
+              child: Text(
+                restaurant.city,
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 18.0, fontFamily: 'Nunito'),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             Container(
-                margin: EdgeInsets.only(top: 10.0, left: 20.0),
-                child: Text(
-                  restaurant.name,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Nunito'),
-                )),
-            Container(
-                margin: EdgeInsets.only(left: 20.0),
-                child: Text(
-                  restaurant.city,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 18.0, fontFamily: 'Nunito'),
-                )),
-            Container(
-                margin: EdgeInsets.only(left: 20.0),
-                child: SmoothStarRating(
-                    allowHalfRating: false,
-                    starCount: 5,
-                    rating: restaurant.rating,
-                    size: 40.0,
-                    color: Colors.orange,
-                    borderColor: Colors.orange,
-                    spacing: 0.0)),
-            Container(
-                margin: EdgeInsets.only(left: 20.0, top: 20.0),
-                child: Text(
-                  "Description",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.w800),
-                )),
-            Container(
+              margin: EdgeInsets.only(left: 20.0, top: 8.0),
+              child: SmoothStarRating(
+                  allowHalfRating: false,
+                  starCount: 5,
+                  rating: restaurant.rating,
+                  size: 40.0,
+                  color: Colors.orange,
+                  borderColor: Colors.orange,
+                  spacing: 0.0),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
+              child: Text(
+                "Description",
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.w800),
+              ),
+            ),
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               child: Text(
                 restaurant.description,
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 16.0),
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: 16.0, height: 1.5),
+                softWrap: true,
               ),
             ),
+            SizedBox(height: 20.0),
           ],
         ),
       ),

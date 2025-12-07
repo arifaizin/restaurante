@@ -3,56 +3,49 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:restaurant_app/screens/main_screen.dart';
-import 'package:restaurant_app/util/constants.dart';
 
 class SplashScreen extends StatelessWidget {
   static const routeName = '/restaurant_splash';
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: AnimatedSplashScreen(
-        duration: 3000,
-        backgroundColor: Colors.white,
-        splash: _buildImage(context),
-        nextScreen: MainScreen(),
-        splashTransition: SplashTransition.fadeTransition,
-        pageTransitionType: PageTransitionType.bottomToTop,
-      ),
+    return AnimatedSplashScreen(
+      duration: 3000,
+      backgroundColor: Colors.white,
+      splash: _buildImage(context),
+      nextScreen: MainScreen(),
+      splashTransition: SplashTransition.fadeTransition,
+      pageTransitionType: PageTransitionType.bottomToTop,
     );
   }
 
-  Container _buildImage(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 40.0, right: 40.0),
-      child: Center(
+  Widget _buildImage(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        constraints: BoxConstraints(maxHeight: 200),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(
               Icons.fastfood,
-              size: 150.0,
+              size: 80.0,
               color: Colors.cyan[600],
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(
-                top: 15.0,
-              ),
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  WavyAnimatedText(
-                    'Loading...',
-                    textStyle: TextStyle(
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.cyan[600],
-                    ),
+            SizedBox(height: 10.0),
+            AnimatedTextKit(
+              animatedTexts: [
+                WavyAnimatedText(
+                  'Loading...',
+                  textStyle: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.cyan[600],
                   ),
-                ],
-                isRepeatingAnimation: true,
-              ),
+                ),
+              ],
+              isRepeatingAnimation: true,
             ),
           ],
         ),

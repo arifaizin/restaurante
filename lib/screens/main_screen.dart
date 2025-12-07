@@ -38,12 +38,15 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Text(
-          Constants.appName,
-          style: TextStyle(
-              fontSize: 28.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Nunito'),
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            Constants.appName,
+            style: TextStyle(
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Nunito'),
+          ),
         ),
         elevation: 0.0,
       ),
@@ -54,12 +57,15 @@ class MainScreen extends StatelessWidget {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(
-          Constants.appName,
-          style: TextStyle(
-              fontSize: 28.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Nunito'),
+        middle: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            Constants.appName,
+            style: TextStyle(
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Nunito'),
+          ),
         ),
       ),
       child: _buildList(context),
@@ -91,9 +97,6 @@ class MainScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return DetailScreen(restaurant: restaurant);
-          // }));
           Navigator.pushNamed(context, DetailScreen.routeName,
               arguments: restaurant);
         },
@@ -105,11 +108,19 @@ class MainScreen extends StatelessWidget {
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-                child: InkWell(
-                  child: Hero(
-                    tag: "photo" + restaurant.id,
-                    child: Image.network(restaurant.pictureId,
-                        height: 200, fit: BoxFit.fitWidth),
+                child: Hero(
+                  tag: "photo" + restaurant.id,
+                  child: Image.network(
+                    restaurant.pictureId,
+                    height: 200,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 200,
+                        color: Colors.grey[300],
+                        child: Icon(Icons.error),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -125,9 +136,12 @@ class MainScreen extends StatelessWidget {
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Nunito'),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
-                    Container(
-                        child: Row(
+                    SizedBox(height: 4.0),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         SmoothStarRating(
                             allowHalfRating: false,
@@ -139,15 +153,17 @@ class MainScreen extends StatelessWidget {
                             spacing: 0.0),
                         Text(
                           " (20 review)",
+                          style: TextStyle(fontSize: 14.0),
                         ),
                       ],
-                    )),
+                    ),
                     Container(
                       margin: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         restaurant.description,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
+                        style: TextStyle(fontSize: 14.0),
                       ),
                     ),
                   ],
