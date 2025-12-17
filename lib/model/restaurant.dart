@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Restaurant {
   String id;
   String name;
@@ -18,18 +16,21 @@ class Restaurant {
   });
 
   Restaurant.fromJson(Map<String, dynamic> restaurant)
-      : id = restaurant['id'],
-        name = restaurant['name'],
-        description = restaurant['description'],
-        city = restaurant['city'],
-        rating = restaurant['rating'].toDouble(),
-        pictureId = restaurant['pictureId'];
-}
+      : id = restaurant['id'] ?? '',
+        name = restaurant['name'] ?? '',
+        description = restaurant['description'] ?? '',
+        city = restaurant['city'] ?? '',
+        rating = (restaurant['rating'] ?? 0).toDouble(),
+        pictureId = restaurant['pictureId'] ?? '';
 
-List<Restaurant> parseRestaurant(String? json) {
-  if (json == null) {
-    return [];
+  /// Returns the full image URL for the restaurant picture
+  /// Handles both API format (pictureId only) and local JSON format (full URL)
+  String get fullImageUrl {
+    // If pictureId already contains a full URL (backward compatibility with local JSON)
+    if (pictureId.startsWith('http')) {
+      return pictureId;
+    }
+    // For API format, construct the full URL
+    return 'https://restaurant-api.dicoding.dev/images/medium/$pictureId';
   }
-  final List parsed = jsonDecode(json);
-  return parsed.map((json) => Restaurant.fromJson(json)).toList();
 }
