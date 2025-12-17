@@ -33,6 +33,11 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]),
           scaffoldBackgroundColor: Colors.white,
         ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.black,
+          scaffoldBackgroundColor: Colors.black,
+        ),
         initialRoute: SplashScreen.routeName,
         routes: {
           SplashScreen.routeName: (context) => SplashScreen(),

@@ -75,7 +75,8 @@
 
 -
 
-- [-] 7. Integrate search screen with main navigation
+- [ ] 7. Integrate search screen with main navigation
+
 
   - Add search tab or navigation option to main screen
   - Implement navigation routing to SearchScreen

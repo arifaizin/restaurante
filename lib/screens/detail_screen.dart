@@ -134,7 +134,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   fontSize: 28.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Nunito',
-                  color: Colors.black87,
+                  color: Theme.of(context).textTheme.headlineLarge?.color,
                 ),
                 overflow: TextOverflow.visible,
                 softWrap: true,
@@ -188,7 +188,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Nunito',
-                  color: Colors.black87,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ],
@@ -205,7 +205,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   style: TextStyle(
                     fontSize: 16.0,
                     fontFamily: 'Nunito',
-                    color: Colors.black87,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                   softWrap: true,
                 ),
@@ -249,7 +249,7 @@ class _DetailScreenState extends State<DetailScreen> {
             style: TextStyle(
               fontSize: 16.0,
               height: 1.6,
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontFamily: 'Nunito',
             ),
             softWrap: true,
@@ -301,7 +301,7 @@ class _DetailScreenState extends State<DetailScreen> {
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.headlineSmall?.color,
                 fontFamily: 'Nunito',
               ),
             ),
@@ -334,7 +334,7 @@ class _DetailScreenState extends State<DetailScreen> {
         else
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(color: Colors.grey[300]!),
             ),
@@ -362,7 +362,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     item.name,
                     style: TextStyle(
                       fontSize: 15.0,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontFamily: 'Nunito',
                     ),
                   ),
@@ -389,7 +389,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Theme.of(context).textTheme.headlineSmall?.color,
                   fontFamily: 'Nunito',
                 ),
               ),
@@ -457,7 +457,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(color: Colors.grey[300]!),
         boxShadow: [
@@ -498,7 +498,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontFamily: 'Nunito',
                     ),
                   ),
@@ -521,7 +521,7 @@ class _DetailScreenState extends State<DetailScreen> {
             review.review,
             style: TextStyle(
               fontSize: 14.0,
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               height: 1.4,
               fontFamily: 'Nunito',
             ),
@@ -549,7 +549,7 @@ class _DetailScreenState extends State<DetailScreen> {
       style: TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
-        color: Colors.black87,
+        color: Theme.of(context).textTheme.headlineSmall?.color,
         fontFamily: 'Nunito',
       ),
     );
