@@ -21,6 +21,13 @@ class RestaurantDetailProvider extends ChangeNotifier {
   bool get hasError => _errorMessage != null;
   bool get hasData => _restaurantDetail != null;
 
+  // Setter for testing purposes
+  set restaurantDetail(RestaurantDetail? restaurant) {
+    _restaurantDetail = restaurant;
+    _errorMessage = null; // Clear any existing error when setting data
+    notifyListeners();
+  }
+
   // Private helper methods
   void _setLoading(bool loading) {
     _isLoading = loading;
@@ -71,6 +78,45 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   /// Retries the last failed operation
   Future<void> retry() async {
+    if (_lastRestaurantId != null) {
+      await fetchRestaurantDetail(_lastRestaurantId!);
+    }
+  }
+
+  /// Refreshes restaurant data after successful review submission
+  /// This method updates the restaurant detail state with new review data
+  Future<void> refreshAfterReviewSubmission() async {
+    // Always clear error state at the beginning of refresh
+    _clearError();
+
+    if (_lastRestaurantId != null && _restaurantDetail != null) {
+      // Don't show loading state for refresh to avoid UI flicker
+      try {
+        final response =
+            await _apiService.getRestaurantDetail(_lastRestaurantId!);
+
+        if (response.isSuccess) {
+          _restaurantDetail = response.data.restaurant;
+          notifyListeners();
+        } else {
+          // For refresh operations, we don't want to show errors prominently
+          // as the user has already successfully submitted a review
+          if (kDebugMode) {
+            print('Failed to refresh restaurant data: ${response.message}');
+          }
+        }
+      } catch (e) {
+        // Silent error handling for refresh operations
+        if (kDebugMode) {
+          print('Error refreshing restaurant data: ${e.toString()}');
+        }
+      }
+    }
+  }
+
+  /// Force refresh restaurant data - useful for manual refresh after review submission
+  /// This method will show loading state and handle errors appropriately
+  Future<void> forceRefresh() async {
     if (_lastRestaurantId != null) {
       await fetchRestaurantDetail(_lastRestaurantId!);
     }

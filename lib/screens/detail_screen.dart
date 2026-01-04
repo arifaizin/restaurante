@@ -4,6 +4,9 @@ import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.da
 import 'package:intl/intl.dart';
 
 import '../providers/restaurant_detail_provider.dart';
+import '../providers/review_submission_provider.dart';
+import '../widgets/review_submission_form.dart';
+import '../util/error_helper.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/restaurant_detail';
@@ -130,12 +133,7 @@ class _DetailScreenState extends State<DetailScreen> {
               // Restaurant Name
               Text(
                 restaurant.name,
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Nunito',
-                  color: Theme.of(context).textTheme.headlineLarge?.color,
-                ),
+                style: Theme.of(context).textTheme.headlineMedium,
                 overflow: TextOverflow.visible,
                 softWrap: true,
               ),
@@ -155,11 +153,10 @@ class _DetailScreenState extends State<DetailScreen> {
                   SizedBox(width: 8.0),
                   Text(
                     '${restaurant.rating.toStringAsFixed(1)}',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.orange,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orange,
+                        ),
                   ),
                 ],
               ),
@@ -185,11 +182,7 @@ class _DetailScreenState extends State<DetailScreen> {
               SizedBox(width: 8.0),
               Text(
                 restaurant.city,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontFamily: 'Nunito',
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),
@@ -202,11 +195,7 @@ class _DetailScreenState extends State<DetailScreen> {
               Expanded(
                 child: Text(
                   restaurant.address,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontFamily: 'Nunito',
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
+                  style: Theme.of(context).textTheme.bodyLarge,
                   softWrap: true,
                 ),
               ),
@@ -226,11 +215,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 return Chip(
                   label: Text(
                     category.name,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                   ),
                   backgroundColor: Colors.orange,
                   elevation: 2.0,
@@ -246,12 +234,7 @@ class _DetailScreenState extends State<DetailScreen> {
           Text(
             restaurant.description,
             textAlign: TextAlign.justify,
-            style: TextStyle(
-              fontSize: 16.0,
-              height: 1.6,
-              color: Theme.of(context).textTheme.bodyLarge?.color,
-              fontFamily: 'Nunito',
-            ),
+            style: Theme.of(context).textTheme.bodyLarge,
             softWrap: true,
           ),
         ],
@@ -298,12 +281,7 @@ class _DetailScreenState extends State<DetailScreen> {
             SizedBox(width: 8.0),
             Text(
               title,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).textTheme.headlineSmall?.color,
-                fontFamily: 'Nunito',
-              ),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
         ),
@@ -322,11 +300,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 SizedBox(width: 8.0),
                 Text(
                   'No ${title.toLowerCase()} available',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.grey[600],
-                    fontStyle: FontStyle.italic,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
                 ),
               ],
             ),
@@ -360,11 +337,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   title: Text(
                     item.name,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                      fontFamily: 'Nunito',
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 );
               },
@@ -386,12 +359,7 @@ class _DetailScreenState extends State<DetailScreen> {
               SizedBox(width: 8.0),
               Text(
                 'Customer Reviews',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.headlineSmall?.color,
-                  fontFamily: 'Nunito',
-                ),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(width: 8.0),
               Container(
@@ -402,16 +370,38 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 child: Text(
                   '${restaurant.customerReviews.length}',
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
             ],
           ),
           SizedBox(height: 16.0),
+
+          // Review Submission Form
+          Consumer<ReviewSubmissionProvider>(
+            builder: (context, reviewProvider, child) {
+              return ReviewSubmissionForm(
+                restaurantId: restaurant.id,
+                onSubmissionSuccess: () {
+                  // Refresh restaurant data after successful review submission
+                  // Add small delay to ensure server has processed the new review
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    final detailProvider =
+                        Provider.of<RestaurantDetailProvider>(
+                      context,
+                      listen: false,
+                    );
+                    detailProvider.refreshAfterReviewSubmission();
+                  });
+                },
+              );
+            },
+          ),
+
+          // Existing Reviews Section
           if (restaurant.customerReviews.isEmpty)
             Container(
               padding: EdgeInsets.all(20.0),
@@ -427,11 +417,10 @@ class _DetailScreenState extends State<DetailScreen> {
                   Expanded(
                     child: Text(
                       'No customer reviews available yet.',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey[600],
-                        fontStyle: FontStyle.italic,
-                      ),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Colors.grey[600],
+                            fontStyle: FontStyle.italic,
+                          ),
                     ),
                   ),
                 ],
@@ -485,32 +474,24 @@ class _DetailScreenState extends State<DetailScreen> {
                       review.name.isNotEmpty
                           ? review.name[0].toUpperCase()
                           : '?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.0,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
                   SizedBox(width: 8.0),
                   Text(
                     review.name,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                      fontFamily: 'Nunito',
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                 ],
               ),
               Text(
                 _formatReviewDate(review.date),
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.grey[600],
-                  fontFamily: 'Nunito',
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -519,12 +500,7 @@ class _DetailScreenState extends State<DetailScreen> {
           // Review text
           Text(
             review.review,
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-              height: 1.4,
-              fontFamily: 'Nunito',
-            ),
+            style: Theme.of(context).textTheme.bodyMedium,
             softWrap: true,
           ),
         ],
@@ -546,21 +522,15 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 20.0,
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).textTheme.headlineSmall?.color,
-        fontFamily: 'Nunito',
-      ),
+      style: Theme.of(context).textTheme.titleLarge,
     );
   }
 
   Widget _buildErrorState(
       BuildContext context, RestaurantDetailProvider provider) {
-    final isNetworkError =
-        provider.errorMessage?.toLowerCase().contains('internet') == true ||
-            provider.errorMessage?.toLowerCase().contains('network') == true ||
-            provider.errorMessage?.toLowerCase().contains('connection') == true;
+    final userFriendlyMessage =
+        ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
+    final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
 
     return Center(
       child: Padding(
@@ -590,32 +560,21 @@ class _DetailScreenState extends State<DetailScreen> {
                   SizedBox(height: 16),
                   Text(
                     isNetworkError
-                        ? 'No Internet Connection'
-                        : 'Oops! Something went wrong',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                    ),
+                        ? 'Tidak Ada Koneksi Internet'
+                        : 'Ups! Terjadi Kesalahan',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(height: 8),
                   Text(
-                    provider.errorMessage ?? 'Unknown error occurred',
+                    userFriendlyMessage,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () => provider.retry(),
                     icon: Icon(Icons.refresh),
-                    label: Text('Retry'),
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    ),
+                    label: Text('Coba Lagi'),
                   ),
                 ],
               ),
@@ -627,25 +586,24 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 }
 
-class FavoriteButton extends StatefulWidget {
-  @override
-  _FavoriteButtonState createState() => _FavoriteButtonState();
-}
-
-class _FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false;
-
+class FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // For now, we'll use a simple stateless implementation
+    // In a real app, this would connect to a favorites provider
     return IconButton(
       icon: Icon(
-        isFavorite ? Icons.favorite : Icons.favorite_border,
+        Icons.favorite_border,
         color: Colors.red,
       ),
       onPressed: () {
-        setState(() {
-          isFavorite = !isFavorite;
-        });
+        // TODO: Implement favorite functionality with Provider
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Fitur favorit segera hadir!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
       },
     );
   }

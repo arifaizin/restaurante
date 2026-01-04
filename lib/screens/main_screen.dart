@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/providers/restaurant_provider.dart';
 import 'package:restaurant_app/util/constants.dart';
+import 'package:restaurant_app/util/error_helper.dart';
 import 'package:restaurant_app/util/platform_widget.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
@@ -15,10 +16,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
     // return Scaffold(
     //   appBar: AppBar(
     //     automaticallyImplyLeading: false,
@@ -41,16 +39,7 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            Constants.appName,
-            style: TextStyle(
-                fontSize: 28.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Nunito'),
-          ),
-        ),
+        title: FittedBox(fit: BoxFit.scaleDown, child: Text(Constants.appName)),
         elevation: 0.0,
         actions: [
           IconButton(
@@ -71,13 +60,7 @@ class MainScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: FittedBox(
           fit: BoxFit.scaleDown,
-          child: Text(
-            Constants.appName,
-            style: TextStyle(
-                fontSize: 28.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Nunito'),
-          ),
+          child: Text(Constants.appName),
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -105,7 +88,9 @@ class MainScreen extends StatelessWidget {
               itemCount: provider.restaurants.length,
               itemBuilder: (context, index) {
                 return _buildRestaurantItem(
-                    context, provider.restaurants[index]);
+                  context,
+                  provider.restaurants[index],
+                );
               },
             ),
           );
@@ -121,10 +106,9 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _buildErrorState(BuildContext context, RestaurantProvider provider) {
-    final isNetworkError =
-        provider.errorMessage?.toLowerCase().contains('internet') == true ||
-            provider.errorMessage?.toLowerCase().contains('network') == true ||
-            provider.errorMessage?.toLowerCase().contains('connection') == true;
+    final userFriendlyMessage =
+        ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
+    final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
 
     return RefreshIndicator(
       onRefresh: () => provider.fetchRestaurants(),
@@ -146,41 +130,27 @@ class MainScreen extends StatelessWidget {
                   SizedBox(height: 16),
                   Text(
                     isNetworkError
-                        ? 'No Internet Connection'
-                        : 'Oops! Something went wrong',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                    ),
+                        ? 'Tidak Ada Koneksi Internet'
+                        : 'Ups! Terjadi Kesalahan',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(height: 8),
                   Text(
-                    provider.errorMessage ?? 'Unknown error occurred',
+                    userFriendlyMessage,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () => provider.retry(),
                     icon: Icon(Icons.refresh),
-                    label: Text('Retry'),
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    ),
+                    label: Text('Coba Lagi'),
                   ),
                   if (isNetworkError) ...[
                     SizedBox(height: 12),
                     Text(
-                      'Pull down to refresh',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[500],
-                      ),
+                      'Tarik ke bawah untuk memuat ulang',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ],
@@ -197,12 +167,16 @@ class MainScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, DetailScreen.routeName,
-              arguments: restaurant.id);
+          Navigator.pushNamed(
+            context,
+            DetailScreen.routeName,
+            arguments: restaurant.id,
+          );
         },
         child: Card(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0))),
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -232,28 +206,44 @@ class MainScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       restaurant.name,
-                      style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Nunito'),
+                      style: Theme.of(context).textTheme.headlineSmall,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
                     SizedBox(height: 4.0),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 16.0,
+                          color: Colors.grey[600],
+                        ),
+                        SizedBox(width: 4.0),
+                        Text(
+                          restaurant.city,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: Colors.grey[600]),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.0),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         SmoothStarRating(
-                            allowHalfRating: false,
-                            starCount: 5,
-                            rating: restaurant.rating,
-                            size: 20.0,
-                            color: Colors.orange,
-                            borderColor: Colors.orange,
-                            spacing: 0.0),
+                          allowHalfRating: false,
+                          starCount: 5,
+                          rating: restaurant.rating,
+                          size: 20.0,
+                          color: Colors.orange,
+                          borderColor: Colors.orange,
+                          spacing: 0.0,
+                        ),
                         Text(
                           " (20 review)",
-                          style: TextStyle(fontSize: 14.0),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -263,7 +253,7 @@ class MainScreen extends StatelessWidget {
                         restaurant.description,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(fontSize: 14.0),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ],

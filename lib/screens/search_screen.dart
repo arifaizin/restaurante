@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/providers/search_provider.dart';
+import 'package:restaurant_app/util/error_helper.dart';
 import 'package:restaurant_app/util/platform_widget.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
@@ -44,14 +45,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Search Restaurants',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Nunito',
-          ),
-        ),
+        title: Text('Cari Restoran'),
         elevation: 0.0,
       ),
       body: _buildSearchBody(context),
@@ -61,14 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(
-          'Search Restaurants',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Nunito',
-          ),
-        ),
+        middle: Text('Cari Restoran'),
       ),
       child: _buildSearchBody(context),
     );
@@ -88,57 +75,33 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildSearchField(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      child: TextField(
-        controller: _searchController,
-        focusNode: _searchFocusNode,
-        decoration: InputDecoration(
-          hintText: 'Search restaurants...',
-          hintStyle: TextStyle(
-            color: Colors.grey[600],
-            fontFamily: 'Nunito',
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.grey[600],
-          ),
-          suffixIcon: _searchController.text.isNotEmpty
-              ? IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () {
-                    _searchController.clear();
-                    context.read<SearchProvider>().clearSearch();
-                    _searchFocusNode.unfocus();
-                  },
-                )
-              : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.grey[300]!),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.orange, width: 2.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.grey[300]!),
-          ),
-          filled: true,
-          fillColor: Colors.grey[50],
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        ),
-        style: TextStyle(
-          fontSize: 16.0,
-          fontFamily: 'Nunito',
-        ),
-        textInputAction: TextInputAction.search,
-        onChanged: (query) {
-          setState(() {}); // Rebuild to show/hide clear button
-          context.read<SearchProvider>().searchRestaurants(query);
-        },
-        onSubmitted: (query) {
-          _searchFocusNode.unfocus();
+      child: Consumer<SearchProvider>(
+        builder: (context, provider, child) {
+          return TextField(
+            controller: _searchController,
+            focusNode: _searchFocusNode,
+            decoration: InputDecoration(
+              hintText: 'Cari restoran...',
+              prefixIcon: Icon(Icons.search),
+              suffixIcon: provider.currentQuery.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                        provider.clearSearch();
+                        _searchFocusNode.unfocus();
+                      },
+                    )
+                  : null,
+            ),
+            textInputAction: TextInputAction.search,
+            onChanged: (query) {
+              provider.searchRestaurants(query);
+            },
+            onSubmitted: (query) {
+              _searchFocusNode.unfocus();
+            },
+          );
         },
       ),
     );
@@ -176,23 +139,14 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             SizedBox(height: 16),
             Text(
-              'Search for restaurants',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[600],
-                fontFamily: 'Nunito',
-              ),
+              'Cari Restoran',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 8),
             Text(
-              'Enter at least 3 characters to start searching',
+              'Masukkan minimal 3 karakter untuk mulai mencari',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-                fontFamily: 'Nunito',
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -208,12 +162,8 @@ class _SearchScreenState extends State<SearchScreen> {
           CircularProgressIndicator(),
           SizedBox(height: 16),
           Text(
-            'Searching restaurants...',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              fontFamily: 'Nunito',
-            ),
+            'Mencari restoran...',
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
       ),
@@ -221,90 +171,42 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildErrorState(BuildContext context, SearchProvider provider) {
+    final userFriendlyMessage =
+        ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
+    final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildErrorIcon(provider),
+            Icon(
+              isNetworkError ? Icons.wifi_off : Icons.error_outline,
+              size: 64,
+              color: Colors.grey[600],
+            ),
             SizedBox(height: 16),
             Text(
-              _getErrorTitle(provider),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
-                fontFamily: 'Nunito',
-              ),
+              isNetworkError ? 'Tidak Ada Koneksi Internet' : 'Pencarian Gagal',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 8),
             Text(
-              provider.getUserFriendlyErrorMessage(),
+              userFriendlyMessage,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-                fontFamily: 'Nunito',
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: 24),
-            _buildRetrySection(context, provider),
+            _buildRetrySection(context, provider, isNetworkError),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildErrorIcon(SearchProvider provider) {
-    IconData iconData;
-    Color iconColor = Colors.grey[600]!;
-
-    switch (provider.errorType) {
-      case SearchErrorType.network:
-        iconData = Icons.wifi_off;
-        iconColor = Colors.orange[600]!;
-        break;
-      case SearchErrorType.timeout:
-        iconData = Icons.access_time;
-        iconColor = Colors.blue[600]!;
-        break;
-      case SearchErrorType.server:
-        iconData = Icons.cloud_off;
-        iconColor = Colors.red[600]!;
-        break;
-      case SearchErrorType.api:
-        iconData = Icons.api;
-        iconColor = Colors.purple[600]!;
-        break;
-      default:
-        iconData = Icons.error_outline;
-        iconColor = Colors.grey[600]!;
-    }
-
-    return Icon(
-      iconData,
-      size: 64,
-      color: iconColor,
-    );
-  }
-
-  String _getErrorTitle(SearchProvider provider) {
-    switch (provider.errorType) {
-      case SearchErrorType.network:
-        return 'No Internet Connection';
-      case SearchErrorType.timeout:
-        return 'Request Timed Out';
-      case SearchErrorType.server:
-        return 'Server Error';
-      case SearchErrorType.api:
-        return 'Service Unavailable';
-      default:
-        return 'Search Failed';
-    }
-  }
-
-  Widget _buildRetrySection(BuildContext context, SearchProvider provider) {
+  Widget _buildRetrySection(
+      BuildContext context, SearchProvider provider, bool isNetworkError) {
     return Column(
       children: [
         ElevatedButton.icon(
@@ -319,49 +221,24 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 )
               : Icon(Icons.refresh),
-          label: Text(provider.isLoading ? 'Retrying...' : 'Retry Search'),
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            backgroundColor: Colors.orange,
-            foregroundColor: Colors.white,
-          ),
+          label: Text(provider.isLoading ? 'Mencoba lagi...' : 'Coba Lagi'),
         ),
-        if (provider.isNetworkError) ...[
+        if (isNetworkError) ...[
           SizedBox(height: 12),
-          TextButton.icon(
-            onPressed: () async {
-              final hasConnection = await provider.checkConnectivity();
-              if (hasConnection) {
-                provider.retry();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Still no internet connection detected'),
-                    backgroundColor: Colors.orange,
-                  ),
-                );
-              }
-            },
-            icon: Icon(Icons.network_check, size: 18),
-            label: Text('Check Connection'),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.orange,
-            ),
+          Text(
+            'Periksa koneksi internet Anda',
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
         SizedBox(height: 12),
         TextButton.icon(
           onPressed: () {
-            provider.clearError();
             _searchController.clear();
             provider.clearSearch();
             _searchFocusNode.requestFocus();
           },
           icon: Icon(Icons.search, size: 18),
-          label: Text('New Search'),
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.grey[600],
-          ),
+          label: Text('Pencarian Baru'),
         ),
       ],
     );
@@ -381,35 +258,23 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             SizedBox(height: 16),
             Text(
-              'No restaurants found',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[600],
-                fontFamily: 'Nunito',
-              ),
+              'Restoran Tidak Ditemukan',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 8),
             Text(
-              'Try searching with different keywords',
+              'Coba gunakan kata kunci yang berbeda',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-                fontFamily: 'Nunito',
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             if (query.isNotEmpty) ...[
               SizedBox(height: 8),
               Text(
-                'Searched for: "$query"',
+                'Pencarian: "$query"',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[400],
-                  fontStyle: FontStyle.italic,
-                  fontFamily: 'Nunito',
-                ),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                    ),
               ),
             ],
           ],
@@ -468,10 +333,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: <Widget>[
                     Text(
                       restaurant.name,
-                      style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Nunito'),
+                      style: Theme.of(context).textTheme.headlineSmall,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
@@ -486,11 +348,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         SizedBox(width: 4.0),
                         Text(
                           restaurant.city,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey[600],
-                            fontFamily: 'Nunito',
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -508,10 +366,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             spacing: 0.0),
                         Text(
                           " (${restaurant.rating})",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontFamily: 'Nunito',
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -521,10 +376,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         restaurant.description,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontFamily: 'Nunito',
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ],
