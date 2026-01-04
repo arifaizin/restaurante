@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
+import 'dart:convert';
+import '../model/restaurant.dart';
 
 final selectNotificationSubject = BehaviorSubject<String>();
 
@@ -40,7 +42,8 @@ class NotificationHelper {
   }
 
   Future<void> showNotification(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+      Restaurant restaurant) async {
     var channelId = "1";
     var channelName = "channel_01";
     var channelDescription = "restaurant channel";
@@ -58,11 +61,12 @@ class NotificationHelper {
         iOS: iOSPlatformChannelSpecifics);
 
     var titleNotification = "<b>Daily Reminder</b>";
-    var titleNews = "Waktunya makan siang! Yuk cek restoran favoritmu.";
+    var titleNews =
+        "Waktunya makan siang! Yuk cek ${restaurant.name} di ${restaurant.city}.";
 
     await flutterLocalNotificationsPlugin.show(
         0, titleNotification, titleNews, platformChannelSpecifics,
-        payload: 'Daily Reminder');
+        payload: json.encode(restaurant.toJson()));
   }
 
   void configureSelectNotificationSubject(String route) {
