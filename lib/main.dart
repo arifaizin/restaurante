@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/common/navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/preferences/preferences_helper.dart';
 import 'package:restaurant_app/providers/preferences_provider.dart';
@@ -13,8 +15,17 @@ import 'package:restaurant_app/services/database_helper.dart';
 import 'package:restaurant_app/screens/search_screen.dart';
 import 'package:restaurant_app/screens/splash_screen.dart';
 import 'package:restaurant_app/util/constants.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:restaurant_app/providers/scheduling_provider.dart';
+import 'package:restaurant_app/screens/settings_screen.dart';
+import 'package:restaurant_app/utils/background_service.dart';
+import 'package:restaurant_app/utils/notification_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/main_screen.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +35,14 @@ void main() async {
   WidgetsFlutterBinding ensures the Flutter engine interacts with the native layer 
   before running the app.
   */
+  final NotificationHelper notificationHelper = NotificationHelper();
+  final BackgroundService service = BackgroundService();
+
+  service.initializeIsolate();
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+  }
+  await notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -53,18 +72,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
         ),
+        ChangeNotifierProvider(create: (_) => SchedulingProvider()),
       ],
       child: Consumer<PreferencesProvider>(
         builder: (context, provider, child) {
           return MaterialApp(
             title: Constants.appName,
             theme: provider.themeData,
+            navigatorKey: navigatorKey,
             initialRoute: SplashScreen.routeName,
             routes: {
               SplashScreen.routeName: (context) => SplashScreen(),
               MainScreen.routeName: (context) => MainScreen(),
               SearchScreen.routeName: (context) => SearchScreen(),
               FavoriteScreen.routeName: (context) => FavoriteScreen(),
+              SettingsScreen.routeName: (context) => SettingsScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
