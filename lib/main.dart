@@ -19,7 +19,6 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:restaurant_app/providers/scheduling_provider.dart';
 import 'package:restaurant_app/screens/settings_screen.dart';
-import 'package:restaurant_app/utils/background_service.dart';
 import 'package:restaurant_app/utils/notification_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/main_screen.dart';
@@ -36,9 +35,7 @@ void main() async {
   before running the app.
   */
   final NotificationHelper notificationHelper = NotificationHelper();
-  final BackgroundService service = BackgroundService();
 
-  service.initializeIsolate();
   if (Platform.isAndroid) {
     await AndroidAlarmManager.initialize();
   }
