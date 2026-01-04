@@ -112,7 +112,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ),
             Positioned(
-              right: 16.0,
+              right: 0.0,
               bottom: 16.0,
               child: FavoriteButton(restaurant: restaurant),
             ),

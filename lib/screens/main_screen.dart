@@ -37,8 +37,11 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: FittedBox(fit: BoxFit.scaleDown, child: Text(Constants.appName)),
+        centerTitle: false,
+        title: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(Constants.appName)),
         elevation: 0.0,
         actions: [
           IconButton(
