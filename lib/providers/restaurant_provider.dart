@@ -12,9 +12,24 @@ class RestaurantProvider extends ChangeNotifier {
   String? _errorMessage;
   int _retryCount = 0;
   static const int _maxRetries = 3;
+  bool _isDisposed = false;
 
   RestaurantProvider({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    _apiService.dispose();
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
 
   // Getters for accessing state properties
   List<Restaurant> get restaurants => _restaurants;
@@ -105,11 +120,5 @@ class RestaurantProvider extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
     }
-  }
-
-  @override
-  void dispose() {
-    _apiService.dispose();
-    super.dispose();
   }
 }

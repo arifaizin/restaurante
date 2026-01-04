@@ -11,6 +11,21 @@ class DatabaseProvider extends ChangeNotifier {
     _getFavorites();
   }
 
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
+
   ResultState _state = ResultState.loading;
   ResultState get state => _state;
 
