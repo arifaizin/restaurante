@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/providers/preferences_provider.dart';
 import 'package:restaurant_app/providers/restaurant_provider.dart';
 import 'package:restaurant_app/screens/favorite_screen.dart';
 import 'package:restaurant_app/util/constants.dart';
@@ -58,6 +59,18 @@ class MainScreen extends StatelessWidget {
             },
             tooltip: 'Favorite restaurants',
           ),
+          Consumer<PreferencesProvider>(
+            builder: (context, provider, child) {
+              return IconButton(
+                icon: Icon(
+                  provider.isDarkTheme ? Icons.dark_mode : Icons.light_mode,
+                ),
+                onPressed: () {
+                  provider.enableDarkTheme(!provider.isDarkTheme);
+                },
+              );
+            },
+          ),
         ],
       ),
       body: _buildList(context),
@@ -86,6 +99,21 @@ class MainScreen extends StatelessWidget {
               child: Icon(CupertinoIcons.heart),
               onPressed: () {
                 Navigator.pushNamed(context, FavoriteScreen.routeName);
+              },
+            ),
+            Consumer<PreferencesProvider>(
+              builder: (context, provider, child) {
+                return CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(
+                    provider.isDarkTheme
+                        ? CupertinoIcons.moon_stars_fill
+                        : CupertinoIcons.sun_max_fill,
+                  ),
+                  onPressed: () {
+                    provider.enableDarkTheme(!provider.isDarkTheme);
+                  },
+                );
               },
             ),
           ],
