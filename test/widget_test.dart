@@ -1,30 +1,41 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:restaurant_app/main.dart';
+import 'package:restaurant_app/providers/restaurant_provider.dart';
+import 'package:restaurant_app/providers/restaurant_detail_provider.dart';
+import 'package:restaurant_app/providers/search_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  setUpAll(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
+  testWidgets('Restaurant App smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    final prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(MyApp(prefs: prefs));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the app builds without errors
+    expect(find.byType(MaterialApp), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Provider setup test', (WidgetTester tester) async {
+    // Build our app and verify providers are properly set up
+    final prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(MyApp(prefs: prefs));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Find the MultiProvider widget
+    expect(find.byType(MultiProvider), findsOneWidget);
+
+    // Verify that all required providers are available in the widget tree
+    final BuildContext context = tester.element(find.byType(MaterialApp));
+
+    expect(Provider.of<RestaurantProvider>(context, listen: false), isNotNull);
+    expect(Provider.of<RestaurantDetailProvider>(context, listen: false),
+        isNotNull);
+    expect(Provider.of<SearchProvider>(context, listen: false), isNotNull);
   });
 }
