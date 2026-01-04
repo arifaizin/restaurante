@@ -15,6 +15,8 @@ import 'search_screen.dart';
 class MainScreen extends StatelessWidget {
   static const routeName = '/restaurant_list';
 
+  const MainScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
@@ -59,6 +61,7 @@ class MainScreen extends StatelessWidget {
             },
           ),
           PopupMenuButton<String>(
+            key: const ValueKey('myPopupMenuButton'),
             onSelected: (value) {
               switch (value) {
                 case 'search':
@@ -138,7 +141,7 @@ class MainScreen extends StatelessWidget {
             ),
             CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.ellipsis_vertical),
+              child: const Icon(CupertinoIcons.ellipsis_vertical),
               onPressed: () {
                 showCupertinoModalPopup(
                   context: context,
@@ -149,7 +152,7 @@ class MainScreen extends StatelessWidget {
                           Navigator.pop(context);
                           Navigator.pushNamed(context, SearchScreen.routeName);
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(CupertinoIcons.search),
@@ -164,7 +167,7 @@ class MainScreen extends StatelessWidget {
                           Navigator.pushNamed(
                               context, FavoriteScreen.routeName);
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(CupertinoIcons.heart),
@@ -179,7 +182,7 @@ class MainScreen extends StatelessWidget {
                           Navigator.pushNamed(
                               context, SettingsScreen.routeName);
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(CupertinoIcons.settings),
@@ -193,7 +196,7 @@ class MainScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Cancel'),
+                      child: const Text('Cancel'),
                     ),
                   ),
                 );
@@ -210,7 +213,7 @@ class MainScreen extends StatelessWidget {
     return Consumer<RestaurantProvider>(
       builder: (context, provider, child) {
         if (provider.isLoading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (provider.hasError) {
           return _buildErrorState(context, provider);
         } else if (provider.hasData) {
@@ -230,7 +233,7 @@ class MainScreen extends StatelessWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             provider.fetchRestaurants();
           });
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );
@@ -244,8 +247,8 @@ class MainScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () => provider.fetchRestaurants(),
       child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Container(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.7,
           child: Center(
             child: Padding(
@@ -258,27 +261,27 @@ class MainScreen extends StatelessWidget {
                     size: 64,
                     color: Colors.grey[600],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     isNetworkError
                         ? 'Tidak Ada Koneksi Internet'
                         : 'Ups! Terjadi Kesalahan',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     userFriendlyMessage,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () => provider.retry(),
-                    icon: Icon(Icons.refresh),
-                    label: Text('Coba Lagi'),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Coba Lagi'),
                   ),
                   if (isNetworkError) ...[
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Text(
                       'Tarik ke bawah untuk memuat ulang',
                       style: Theme.of(context).textTheme.bodySmall,

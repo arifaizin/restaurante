@@ -46,14 +46,14 @@ void main() {
         MaterialApp(
           home: ChangeNotifierProvider<SearchProvider>.value(
             value: searchProvider,
-            child: SearchScreen(),
+            child: const SearchScreen(),
           ),
         ),
       );
 
       // Trigger a search to cause error
       await tester.enterText(find.byType(TextField), 'test query');
-      await tester.pump(Duration(milliseconds: 600)); // Wait for debounce
+      await tester.pump(const Duration(milliseconds: 600)); // Wait for debounce
       await tester.pump(); // Allow error state to update
 
       // Verify error UI elements
@@ -73,14 +73,14 @@ void main() {
         MaterialApp(
           home: ChangeNotifierProvider<SearchProvider>.value(
             value: searchProvider,
-            child: SearchScreen(),
+            child: const SearchScreen(),
           ),
         ),
       );
 
       // Trigger a search to cause error
       await tester.enterText(find.byType(TextField), 'test query');
-      await tester.pump(Duration(milliseconds: 600)); // Wait for debounce
+      await tester.pump(const Duration(milliseconds: 600)); // Wait for debounce
       await tester.pump(); // Allow error state to update
 
       // Verify error UI elements
@@ -98,14 +98,14 @@ void main() {
         MaterialApp(
           home: ChangeNotifierProvider<SearchProvider>.value(
             value: searchProvider,
-            child: SearchScreen(),
+            child: const SearchScreen(),
           ),
         ),
       );
 
       // Trigger a search to cause error
       await tester.enterText(find.byType(TextField), 'test query');
-      await tester.pump(Duration(milliseconds: 600)); // Wait for debounce
+      await tester.pump(const Duration(milliseconds: 600)); // Wait for debounce
       await tester.pump(); // Allow error state to update
 
       // Verify error UI elements
@@ -122,14 +122,14 @@ void main() {
         MaterialApp(
           home: ChangeNotifierProvider<SearchProvider>.value(
             value: searchProvider,
-            child: SearchScreen(),
+            child: const SearchScreen(),
           ),
         ),
       );
 
       // Trigger a search to cause error
       await tester.enterText(find.byType(TextField), 'test query');
-      await tester.pump(Duration(milliseconds: 600)); // Wait for debounce
+      await tester.pump(const Duration(milliseconds: 600)); // Wait for debounce
       await tester.pump(); // Allow error state to update
 
       // Tap retry button
@@ -149,14 +149,14 @@ void main() {
         MaterialApp(
           home: ChangeNotifierProvider<SearchProvider>.value(
             value: searchProvider,
-            child: SearchScreen(),
+            child: const SearchScreen(),
           ),
         ),
       );
 
       // Trigger a search to cause error
       await tester.enterText(find.byType(TextField), 'test query');
-      await tester.pump(Duration(milliseconds: 600)); // Wait for debounce
+      await tester.pump(const Duration(milliseconds: 600)); // Wait for debounce
       await tester.pump(); // Allow error state to update
 
       // Tap new search button

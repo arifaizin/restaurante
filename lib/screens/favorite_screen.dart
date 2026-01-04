@@ -8,6 +8,8 @@ import 'package:restaurant_app/widgets/restaurant_card.dart';
 class FavoriteScreen extends StatelessWidget {
   static const routeName = '/favorite';
 
+  const FavoriteScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -19,7 +21,7 @@ class FavoriteScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorite Restaurants'),
+        title: const Text('Favorite Restaurants'),
       ),
       body: _buildList(context),
     );
@@ -27,7 +29,7 @@ class FavoriteScreen extends StatelessWidget {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Favorite Restaurants'),
       ),
       child: _buildList(context),
@@ -38,7 +40,7 @@ class FavoriteScreen extends StatelessWidget {
     return Consumer<DatabaseProvider>(
       builder: (context, provider, child) {
         if (provider.state == ResultState.loading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (provider.state == ResultState.hasData) {
           return ListView.builder(
             itemCount: provider.favorites.length,
@@ -49,8 +51,8 @@ class FavoriteScreen extends StatelessWidget {
                 background: Container(
                   color: Colors.red,
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Icon(Icons.delete, color: Colors.white),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: const Icon(Icons.delete, color: Colors.white),
                 ),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
@@ -70,7 +72,7 @@ class FavoriteScreen extends StatelessWidget {
         } else if (provider.state == ResultState.error) {
           return Center(child: Text(provider.message));
         } else {
-          return Center(child: Text(''));
+          return const Center(child: Text(''));
         }
       },
     );

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -31,7 +32,7 @@ class NotificationHelper {
       onDidReceiveNotificationResponse: (NotificationResponse details) async {
         final payload = details.payload;
         if (payload != null) {
-          print('notification payload: $payload');
+          debugPrint('notification payload: $payload');
         }
         selectNotificationSubject.add(payload ?? 'empty payload');
       },

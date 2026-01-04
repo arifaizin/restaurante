@@ -60,6 +60,7 @@ class SettingsScreen extends StatelessWidget {
                                   await _requestNotificationPermission(context);
 
                               if (!hasPermission) {
+                                if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
@@ -74,11 +75,12 @@ class SettingsScreen extends StatelessWidget {
                             try {
                               bool result =
                                   await scheduled.scheduledNews(value);
-                              print("Scheduled Result: $result");
+                              debugPrint("Scheduled Result: $result");
 
                               // Update preference
                               provider.enableDailyReminder(value);
 
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(value
@@ -87,7 +89,8 @@ class SettingsScreen extends StatelessWidget {
                                 ),
                               );
                             } catch (e) {
-                              print("Error scheduling: $e");
+                              debugPrint("Error scheduling: $e");
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text("Failed to schedule: $e"),

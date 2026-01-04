@@ -23,7 +23,7 @@ class MockApiService extends ApiService {
     }
 
     if (shouldTimeout) {
-      throw TimeoutException('Request timed out', Duration(seconds: 10));
+      throw TimeoutException('Request timed out', const Duration(seconds: 10));
     }
 
     if (shouldReturnError) {
@@ -134,7 +134,7 @@ void main() {
     test('should clear results when query is too short', () async {
       // First perform a valid search
       searchProvider.searchRestaurants('cafe');
-      await Future.delayed(Duration(milliseconds: 600)); // Wait for debounce
+      await Future.delayed(const Duration(milliseconds: 600)); // Wait for debounce
 
       // Then search with short query
       searchProvider.searchRestaurants('ab');
@@ -151,7 +151,7 @@ void main() {
       expect(searchProvider.currentQuery, equals('cafe'));
 
       // Wait for debounce timer
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       // Should have completed search
       expect(searchProvider.isLoading, isFalse);
@@ -168,7 +168,7 @@ void main() {
       searchProvider.searchRestaurants('cafe');
 
       // Wait for debounce
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       // Should have results for 'cafe', not 'pizza'
       expect(searchProvider.currentQuery, equals('cafe'));
@@ -177,7 +177,7 @@ void main() {
 
     test('should handle search results correctly', () async {
       searchProvider.searchRestaurants('pizza');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasResults, isTrue);
       expect(searchProvider.searchResults.length, equals(1));
@@ -187,7 +187,7 @@ void main() {
 
     test('should handle empty search results', () async {
       searchProvider.searchRestaurants('nonexistent');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.searchResults, isEmpty);
       expect(searchProvider.hasResults, isFalse);
@@ -199,7 +199,7 @@ void main() {
       mockApiService.errorMessage = 'Network error';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
       expect(searchProvider.errorMessage, equals('Network error'));
@@ -212,7 +212,7 @@ void main() {
       mockApiService.errorMessage = 'No internet connection';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
       expect(searchProvider.isNetworkError, isTrue);
@@ -224,7 +224,7 @@ void main() {
       mockApiService.errorMessage = 'Request timed out';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
       expect(searchProvider.isTimeoutError, isTrue);
@@ -236,7 +236,7 @@ void main() {
       mockApiService.errorMessage = 'Server error 500';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
       expect(searchProvider.isServerError, isTrue);
@@ -248,7 +248,7 @@ void main() {
       mockApiService.errorMessage = 'API service unavailable';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
       expect(searchProvider.isApiError, isTrue);
@@ -260,7 +260,7 @@ void main() {
       mockApiService.errorMessage = 'No internet connection';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       final userMessage = searchProvider.getUserFriendlyErrorMessage();
       expect(userMessage, contains('network settings'));
@@ -272,7 +272,7 @@ void main() {
       mockApiService.errorMessage = 'No internet connection';
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       final errorIcon = searchProvider.getErrorIcon();
       expect(errorIcon, equals('wifi_off'));
@@ -284,7 +284,7 @@ void main() {
 
       // Perform search that will fail with network error
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.isNetworkError, isTrue);
 
@@ -298,16 +298,16 @@ void main() {
 
     test('should set loading state during search', () async {
       // Add delay to mock service to test loading state
-      mockApiService.customDelay = Duration(milliseconds: 100);
+      mockApiService.customDelay = const Duration(milliseconds: 100);
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600)); // Wait for debounce
+      await Future.delayed(const Duration(milliseconds: 600)); // Wait for debounce
 
       // Should be loading during API call
       expect(searchProvider.isLoading, isTrue);
 
       // Wait for API call to complete
-      await Future.delayed(Duration(milliseconds: 200));
+      await Future.delayed(const Duration(milliseconds: 200));
 
       expect(searchProvider.isLoading, isFalse);
     });
@@ -315,7 +315,7 @@ void main() {
     test('should clear search results and state', () async {
       // First perform a search
       searchProvider.searchRestaurants('cafe');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       // Verify search has results
       expect(searchProvider.hasResults, isTrue);
@@ -337,7 +337,7 @@ void main() {
 
       // Perform search that will fail
       searchProvider.searchRestaurants('cafe');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
 
@@ -369,7 +369,7 @@ void main() {
       mockApiService.shouldReturnError = true;
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
 
@@ -394,7 +394,7 @@ void main() {
       mockApiService.shouldTimeout = true;
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasError, isTrue);
       expect(searchProvider.errorMessage, contains('unexpected error'));
@@ -409,7 +409,7 @@ void main() {
 
       // Perform search
       searchProvider.searchRestaurants('cafe');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       // Should have notified listeners multiple times (loading start, loading end, results)
       expect(notificationCount, greaterThan(0));
@@ -430,7 +430,7 @@ void main() {
 
     test('should handle case-insensitive search', () async {
       searchProvider.searchRestaurants('CAFE');
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       expect(searchProvider.hasResults, isTrue);
       expect(searchProvider.searchResults.first.name, contains('Cafe'));

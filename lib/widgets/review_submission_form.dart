@@ -58,24 +58,24 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
         content: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.check_circle,
                 color: Colors.white,
                 size: 20.0,
               ),
             ),
-            SizedBox(width: 12.0),
+            const SizedBox(width: 12.0),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'Berhasil!',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -99,8 +99,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
-        duration: Duration(seconds: 4),
-        margin: EdgeInsets.all(16.0),
+        duration: const Duration(seconds: 4),
+        margin: const EdgeInsets.all(16.0),
         elevation: 6.0,
       ),
     );
@@ -138,7 +138,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
         content: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
@@ -149,11 +149,11 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                 size: 20.0,
               ),
             ),
-            SizedBox(width: 12.0),
+            const SizedBox(width: 12.0),
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13.0,
                   color: Colors.white,
                 ),
@@ -166,8 +166,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
-        duration: Duration(seconds: 6),
-        margin: EdgeInsets.all(16.0),
+        duration: const Duration(seconds: 6),
+        margin: const EdgeInsets.all(16.0),
         elevation: 6.0,
       ),
     );
@@ -357,7 +357,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
           title: Row(
             children: [
               Icon(dialogIcon, color: iconColor),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               Expanded(child: Text(title)),
             ],
           ),
@@ -365,22 +365,22 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Coba langkah-langkah berikut untuk mengatasi masalah:',
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
-              SizedBox(height: 12.0),
+              const SizedBox(height: 12.0),
               ...steps.asMap().entries.map((entry) {
                 final index = entry.key + 1;
                 final step = entry.value;
                 return _buildTroubleshootingStep(index.toString(), step);
-              }).toList(),
+              }),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Tutup'),
+              child: const Text('Tutup'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -391,7 +391,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                 backgroundColor: iconColor,
                 foregroundColor: Colors.white,
               ),
-              child: Text('Coba Lagi'),
+              child: const Text('Coba Lagi'),
             ),
           ],
         );
@@ -401,7 +401,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
 
   Widget _buildTroubleshootingStep(String number, String text) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -423,11 +423,11 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
               ),
             ),
           ),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: 14.0),
+              style: const TextStyle(fontSize: 14.0),
             ),
           ),
         ],
@@ -440,8 +440,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
     return Consumer<ReviewSubmissionProvider>(
       builder: (context, provider, child) {
         return Container(
-          margin: EdgeInsets.only(bottom: 16.0),
-          padding: EdgeInsets.all(16.0),
+          margin: const EdgeInsets.only(bottom: 16.0),
+          padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12.0),
@@ -451,7 +451,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                 color: Colors.grey.withValues(alpha: 0.1),
                 spreadRadius: 1,
                 blurRadius: 3,
-                offset: Offset(0, 1),
+                offset: const Offset(0, 1),
               ),
             ],
           ),
@@ -463,12 +463,12 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                 // Form header
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.edit_note,
                       color: Colors.orange,
                       size: 20.0,
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Text(
                       'Tulis Ulasan',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -477,7 +477,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
                 // Name input field
                 TextFormField(
@@ -490,7 +490,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                   decoration: InputDecoration(
                     labelText: 'Nama Anda',
                     hintText: 'Masukkan nama Anda',
-                    prefixIcon: Icon(Icons.person_outline),
+                    prefixIcon: const Icon(Icons.person_outline),
                     errorText:
                         provider.hasNameError ? provider.nameError : null,
                     semanticCounterText: 'Nama reviewer',
@@ -503,7 +503,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                     FocusScope.of(context).requestFocus(_reviewFocusNode);
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
                 // Review text input field
                 TextFormField(
@@ -518,7 +518,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                   decoration: InputDecoration(
                     labelText: 'Ulasan Anda',
                     hintText: 'Bagikan pengalaman Anda tentang restoran ini...',
-                    prefixIcon: Icon(Icons.rate_review_outlined),
+                    prefixIcon: const Icon(Icons.rate_review_outlined),
                     errorText:
                         provider.hasReviewError ? provider.reviewError : null,
                     semanticCounterText: 'Teks ulasan',
@@ -531,12 +531,12 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                     _handleSubmit();
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
 
                 // Enhanced error message display with type-specific handling
                 if (provider.hasSubmissionError) ...[
                   Container(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       color: _getErrorBackgroundColor(provider.lastErrorType),
                       borderRadius: BorderRadius.circular(12.0),
@@ -547,7 +547,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                           color: Colors.red.withValues(alpha: 0.1),
                           spreadRadius: 1,
                           blurRadius: 4,
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -557,7 +557,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                         Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(6.0),
+                              padding: const EdgeInsets.all(6.0),
                               decoration: BoxDecoration(
                                 color: _getErrorIconBackgroundColor(
                                     provider.lastErrorType),
@@ -570,7 +570,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                 size: 18.0,
                               ),
                             ),
-                            SizedBox(width: 12.0),
+                            const SizedBox(width: 12.0),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -586,7 +586,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  SizedBox(height: 4.0),
+                                  const SizedBox(height: 4.0),
                                   Text(
                                     provider.submissionError!,
                                     style: Theme.of(context)
@@ -610,7 +610,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                               ),
                               onPressed: () => provider.clearError(),
                               padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(
+                              constraints: const BoxConstraints(
                                 minWidth: 32.0,
                                 minHeight: 32.0,
                               ),
@@ -618,7 +618,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                           ],
                         ),
                         if (provider.isRetryable) ...[
-                          SizedBox(height: 12.0),
+                          const SizedBox(height: 12.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -631,22 +631,22 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                           _showTroubleshootingDialog(
                                               context, provider);
                                         },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.help_outline,
                                     size: 16.0,
                                   ),
-                                  label: Text('Bantuan'),
+                                  label: const Text('Bantuan'),
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.blue.shade600,
                                   ),
                                 ),
-                                SizedBox(width: 8.0),
+                                const SizedBox(width: 8.0),
                               ],
                               ElevatedButton.icon(
                                 onPressed: provider.isSubmitting
                                     ? null
                                     : _handleSubmit,
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.refresh,
                                   size: 16.0,
                                 ),
@@ -654,13 +654,13 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                   provider.isNetworkError
                                       ? 'Coba Lagi'
                                       : 'Kirim Ulang',
-                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: _getErrorIconColor(
                                       provider.lastErrorType),
                                   foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0,
                                     vertical: 8.0,
                                   ),
@@ -672,7 +672,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                             ],
                           ),
                         ] else ...[
-                          SizedBox(height: 8.0),
+                          const SizedBox(height: 8.0),
                           Text(
                             _getErrorGuidance(provider.lastErrorType),
                             style: Theme.of(context)
@@ -689,7 +689,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                 ],
 
                 // Submit button
@@ -698,13 +698,13 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                   child: ElevatedButton(
                     onPressed: provider.isSubmitting ? null : _handleSubmit,
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     child: provider.isSubmitting
-                        ? Row(
+                        ? const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
@@ -726,7 +726,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                               ),
                             ],
                           )
-                        : Row(
+                        : const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.send, size: 18.0),

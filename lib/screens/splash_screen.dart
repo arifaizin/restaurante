@@ -7,13 +7,15 @@ import 'package:restaurant_app/screens/main_screen.dart';
 class SplashScreen extends StatelessWidget {
   static const routeName = '/restaurant_splash';
 
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       duration: 3000,
       backgroundColor: Colors.white,
       splash: _buildImage(context),
-      nextScreen: MainScreen(),
+      nextScreen: const MainScreen(),
       splashTransition: SplashTransition.fadeTransition,
       pageTransitionType: PageTransitionType.bottomToTop,
     );
@@ -24,11 +26,12 @@ class SplashScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Expanded(
-          flex: 2,
-          child: Icon(Icons.fastfood, size: 80.0, color: Colors.cyan[600]),
+        Icon(
+          Icons.fastfood,
+          size: 64,
+          color: Colors.cyan[600],
         ),
-        SizedBox(height: 170.0),
+        const SizedBox(height: 170.0),
         Expanded(
           flex: 1,
           child: AnimatedTextKit(

@@ -24,7 +24,7 @@ class RestaurantSearchResponse {
                   if (restaurantJson is Map<String, dynamic>) {
                     return Restaurant.fromJson(restaurantJson);
                   } else {
-                    throw FormatException('Invalid restaurant data format');
+                    throw const FormatException('Invalid restaurant data format');
                   }
                 }).toList() ??
                 [],

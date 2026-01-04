@@ -12,8 +12,10 @@ import 'detail_screen.dart';
 class SearchScreen extends StatefulWidget {
   static const routeName = '/restaurant_search';
 
+  const SearchScreen({Key? key}) : super(key: key);
+
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
@@ -45,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cari Restoran'),
+        title: const Text('Cari Restoran'),
         elevation: 0.0,
       ),
       body: _buildSearchBody(context),
@@ -54,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Cari Restoran'),
       ),
       child: _buildSearchBody(context),
@@ -74,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchField(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Consumer<SearchProvider>(
         builder: (context, provider, child) {
           return TextField(
@@ -82,10 +84,10 @@ class _SearchScreenState extends State<SearchScreen> {
             focusNode: _searchFocusNode,
             decoration: InputDecoration(
               hintText: 'Cari restoran...',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               suffixIcon: provider.currentQuery.isNotEmpty
                   ? IconButton(
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.clear),
                       onPressed: () {
                         _searchController.clear();
                         provider.clearSearch();
@@ -137,12 +139,12 @@ class _SearchScreenState extends State<SearchScreen> {
               size: 64,
               color: Colors.grey[400],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Cari Restoran',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Masukkan minimal 3 karakter untuk mulai mencari',
               textAlign: TextAlign.center,
@@ -159,8 +161,8 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 16),
+          const CircularProgressIndicator(),
+          const SizedBox(height: 16),
           Text(
             'Mencari restoran...',
             style: Theme.of(context).textTheme.bodyLarge,
@@ -186,18 +188,18 @@ class _SearchScreenState extends State<SearchScreen> {
               size: 64,
               color: Colors.grey[600],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               isNetworkError ? 'Tidak Ada Koneksi Internet' : 'Pencarian Gagal',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               userFriendlyMessage,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             _buildRetrySection(context, provider, isNetworkError),
           ],
         ),
@@ -212,7 +214,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ElevatedButton.icon(
           onPressed: provider.isLoading ? null : () => provider.retry(),
           icon: provider.isLoading
-              ? SizedBox(
+              ? const SizedBox(
                   width: 16,
                   height: 16,
                   child: CircularProgressIndicator(
@@ -220,25 +222,25 @@ class _SearchScreenState extends State<SearchScreen> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 )
-              : Icon(Icons.refresh),
+              : const Icon(Icons.refresh),
           label: Text(provider.isLoading ? 'Mencoba lagi...' : 'Coba Lagi'),
         ),
         if (isNetworkError) ...[
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
             'Periksa koneksi internet Anda',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         TextButton.icon(
           onPressed: () {
             _searchController.clear();
             provider.clearSearch();
             _searchFocusNode.requestFocus();
           },
-          icon: Icon(Icons.search, size: 18),
-          label: Text('Pencarian Baru'),
+          icon: const Icon(Icons.search, size: 18),
+          label: const Text('Pencarian Baru'),
         ),
       ],
     );
@@ -256,19 +258,19 @@ class _SearchScreenState extends State<SearchScreen> {
               size: 64,
               color: Colors.grey[400],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Restoran Tidak Ditemukan',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Coba gunakan kata kunci yang berbeda',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             if (query.isNotEmpty) ...[
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Pencarian: "$query"',
                 textAlign: TextAlign.center,
@@ -285,7 +287,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildResultsList(BuildContext context, List<Restaurant> restaurants) {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       itemCount: restaurants.length,
       itemBuilder: (context, index) {
         return _buildRestaurantItem(context, restaurants[index]);
@@ -302,15 +304,16 @@ class _SearchScreenState extends State<SearchScreen> {
               arguments: restaurant.id);
         },
         child: Card(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16.0)),
                 child: Hero(
-                  tag: "photo" + restaurant.id,
+                  tag: "photo${restaurant.id}",
                   child: Image.network(
                     restaurant.fullImageUrl,
                     height: 200,
@@ -319,7 +322,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       return Container(
                         height: 200,
                         color: Colors.grey[300],
-                        child: Icon(Icons.error),
+                        child: const Icon(Icons.error),
                       );
                     },
                   ),
@@ -337,7 +340,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Row(
                       children: [
                         Icon(
@@ -345,14 +348,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           size: 16.0,
                           color: Colors.grey[600],
                         ),
-                        SizedBox(width: 4.0),
+                        const SizedBox(width: 4.0),
                         Text(
                           restaurant.city,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [

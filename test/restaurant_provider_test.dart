@@ -13,7 +13,7 @@ class MockApiService extends ApiService {
   @override
   Future<ApiResponse<List<Restaurant>>> getRestaurants() async {
     // Simulate network delay
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     if (shouldReturnError) {
       return ApiResponse.failure(
@@ -138,7 +138,7 @@ void main() {
       final fetchFuture = restaurantProvider.fetchRestaurants();
 
       // Give it a moment to start
-      await Future.delayed(Duration(milliseconds: 10));
+      await Future.delayed(const Duration(milliseconds: 10));
 
       // Should be loading
       expect(restaurantProvider.isLoading, isTrue);

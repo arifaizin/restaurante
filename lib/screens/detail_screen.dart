@@ -16,10 +16,10 @@ class DetailScreen extends StatefulWidget {
 
   final String restaurantId;
 
-  DetailScreen({required this.restaurantId});
+  const DetailScreen({Key? key, required this.restaurantId}) : super(key: key);
 
   @override
-  _DetailScreenState createState() => _DetailScreenState();
+  State<DetailScreen> createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
@@ -39,7 +39,7 @@ class _DetailScreenState extends State<DetailScreen> {
       body: Consumer<RestaurantDetailProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (provider.hasError) {
             return _buildErrorState(context, provider);
           } else if (provider.hasData) {
@@ -52,12 +52,12 @@ class _DetailScreenState extends State<DetailScreen> {
                   _buildBasicInformation(restaurant),
                   _buildMenusSection(restaurant),
                   _buildCustomerReviewsSection(restaurant),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                 ],
               ),
             );
           } else {
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           }
         },
       ),
@@ -72,8 +72,8 @@ class _DetailScreenState extends State<DetailScreen> {
         Stack(
           children: <Widget>[
             Hero(
-              tag: "photo" + restaurant.id,
-              child: Container(
+              tag: "photo${restaurant.id}",
+              child: SizedBox(
                 height: 250,
                 width: double.infinity,
                 child: Image.network(
@@ -100,7 +100,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back,
                       color: Colors.white,
                     ),
@@ -120,7 +120,7 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         // Restaurant Name and Rating Section
         Container(
-          padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
+          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -131,7 +131,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 overflow: TextOverflow.visible,
                 softWrap: true,
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               // Rating with formatted display
               Row(
                 children: [
@@ -144,9 +144,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     borderColor: Colors.orange,
                     spacing: 2.0,
                   ),
-                  SizedBox(width: 8.0),
+                  const SizedBox(width: 8.0),
                   Text(
-                    '${restaurant.rating.toStringAsFixed(1)}',
+                    restaurant.rating.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: Colors.orange,
@@ -163,29 +163,29 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget _buildBasicInformation(restaurant) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 20.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Location Information
           _buildSectionTitle('Location'),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Row(
             children: [
               Icon(Icons.location_city, color: Colors.grey[600], size: 18.0),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               Text(
                 restaurant.city,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.location_on, color: Colors.grey[600], size: 18.0),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
                   restaurant.address,
@@ -196,12 +196,12 @@ class _DetailScreenState extends State<DetailScreen> {
             ],
           ),
 
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
 
           // Categories Section
           if (restaurant.categories.isNotEmpty) ...[
             _buildSectionTitle('Categories'),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
@@ -219,12 +219,12 @@ class _DetailScreenState extends State<DetailScreen> {
                 );
               }).toList(),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
           ],
 
           // Description Section
           _buildSectionTitle('Description'),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             restaurant.description,
             textAlign: TextAlign.justify,
@@ -238,12 +238,12 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget _buildMenusSection(restaurant) {
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSectionTitle('Menu'),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
 
           // Food Menu Section
           _buildMenuSubsection(
@@ -252,7 +252,7 @@ class _DetailScreenState extends State<DetailScreen> {
             Icons.restaurant,
           ),
 
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
 
           // Drink Menu Section
           _buildMenuSubsection(
@@ -272,17 +272,17 @@ class _DetailScreenState extends State<DetailScreen> {
         Row(
           children: [
             Icon(icon, color: Colors.orange, size: 20.0),
-            SizedBox(width: 8.0),
+            const SizedBox(width: 8.0),
             Text(
               title,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         if (items.isEmpty)
           Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.grey[100],
               borderRadius: BorderRadius.circular(8.0),
@@ -291,7 +291,7 @@ class _DetailScreenState extends State<DetailScreen> {
             child: Row(
               children: [
                 Icon(Icons.info_outline, color: Colors.grey[600], size: 18.0),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 Text(
                   'No ${title.toLowerCase()} available',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -311,7 +311,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
             child: ListView.separated(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: items.length,
               separatorBuilder: (context, index) => Divider(
                 height: 1,
@@ -324,7 +324,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   leading: Container(
                     width: 8.0,
                     height: 8.0,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
@@ -343,21 +343,22 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget _buildCustomerReviewsSection(restaurant) {
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.rate_review, color: Colors.orange, size: 20.0),
-              SizedBox(width: 8.0),
+              const Icon(Icons.rate_review, color: Colors.orange, size: 20.0),
+              const SizedBox(width: 8.0),
               Text(
                 'Customer Reviews',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                 decoration: BoxDecoration(
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(12.0),
@@ -372,7 +373,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ],
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
 
           // Review Submission Form
           Consumer<ReviewSubmissionProvider>(
@@ -382,7 +383,8 @@ class _DetailScreenState extends State<DetailScreen> {
                 onSubmissionSuccess: () {
                   // Refresh restaurant data after successful review submission
                   // Add small delay to ensure server has processed the new review
-                  Future.delayed(Duration(milliseconds: 500), () {
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    if (!context.mounted) return;
                     final detailProvider =
                         Provider.of<RestaurantDetailProvider>(
                       context,
@@ -398,7 +400,7 @@ class _DetailScreenState extends State<DetailScreen> {
           // Existing Reviews Section
           if (restaurant.customerReviews.isEmpty)
             Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(12.0),
@@ -407,7 +409,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Row(
                 children: [
                   Icon(Icons.info_outline, color: Colors.grey[600], size: 20.0),
-                  SizedBox(width: 12.0),
+                  const SizedBox(width: 12.0),
                   Expanded(
                     child: Text(
                       'No customer reviews available yet.',
@@ -423,9 +425,10 @@ class _DetailScreenState extends State<DetailScreen> {
           else
             ListView.separated(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: restaurant.customerReviews.length,
-              separatorBuilder: (context, index) => SizedBox(height: 12.0),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: 12.0),
               itemBuilder: (context, index) {
                 final review = restaurant.customerReviews[index];
                 return _buildReviewCard(review);
@@ -438,7 +441,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget _buildReviewCard(review) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12.0),
@@ -448,7 +451,7 @@ class _DetailScreenState extends State<DetailScreen> {
             color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -474,7 +477,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                     ),
                   ),
-                  SizedBox(width: 8.0),
+                  const SizedBox(width: 8.0),
                   Text(
                     review.name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -489,7 +492,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ],
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
 
           // Review text
           Text(
@@ -536,7 +539,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -551,24 +554,24 @@ class _DetailScreenState extends State<DetailScreen> {
                     size: 64,
                     color: Colors.grey[600],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     isNetworkError
                         ? 'Tidak Ada Koneksi Internet'
                         : 'Ups! Terjadi Kesalahan',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     userFriendlyMessage,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: () => provider.retry(),
-                    icon: Icon(Icons.refresh),
-                    label: Text('Coba Lagi'),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Coba Lagi'),
                   ),
                 ],
               ),
@@ -583,7 +586,7 @@ class _DetailScreenState extends State<DetailScreen> {
 class FavoriteButton extends StatelessWidget {
   final RestaurantDetail restaurant;
 
-  const FavoriteButton({required this.restaurant});
+  const FavoriteButton({Key? key, required this.restaurant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -607,7 +610,7 @@ class FavoriteButton extends StatelessWidget {
             }
           },
           fillColor: Colors.white,
-          shape: CircleBorder(),
+          shape: const CircleBorder(),
           elevation: 4.0,
           child: Padding(
             padding: const EdgeInsets.all(8.0),

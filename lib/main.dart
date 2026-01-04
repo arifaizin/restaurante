@@ -79,11 +79,11 @@ class MyApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             initialRoute: SplashScreen.routeName,
             routes: {
-              SplashScreen.routeName: (context) => SplashScreen(),
-              MainScreen.routeName: (context) => MainScreen(),
-              SearchScreen.routeName: (context) => SearchScreen(),
-              FavoriteScreen.routeName: (context) => FavoriteScreen(),
-              SettingsScreen.routeName: (context) => SettingsScreen(),
+              SplashScreen.routeName: (context) => const SplashScreen(),
+              MainScreen.routeName: (context) => const MainScreen(),
+              SearchScreen.routeName: (context) => const SearchScreen(),
+              FavoriteScreen.routeName: (context) => const FavoriteScreen(),
+              SettingsScreen.routeName: (context) => const SettingsScreen(),
             },
             onGenerateRoute: (settings) {
               switch (settings.name) {
@@ -96,7 +96,7 @@ class MyApp extends StatelessWidget {
                     );
                   }
                   return MaterialPageRoute(
-                    builder: (context) => MainScreen(),
+                    builder: (context) => const MainScreen(),
                   );
                 default:
                   return null;

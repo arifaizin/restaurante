@@ -21,16 +21,16 @@ class RestaurantCard extends StatelessWidget {
           );
         },
         child: Card(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
                 child: Hero(
-                  tag: "photo" + restaurant.id,
+                  tag: "photo${restaurant.id}",
                   child: Image.network(
                     restaurant.fullImageUrl,
                     height: 200,
@@ -39,7 +39,7 @@ class RestaurantCard extends StatelessWidget {
                       return Container(
                         height: 200,
                         color: Colors.grey[300],
-                        child: Icon(Icons.error),
+                        child: const Icon(Icons.error),
                       );
                     },
                   ),
@@ -57,7 +57,7 @@ class RestaurantCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Row(
                       children: [
                         Icon(
@@ -65,7 +65,7 @@ class RestaurantCard extends StatelessWidget {
                           size: 16.0,
                           color: Colors.grey[600],
                         ),
-                        SizedBox(width: 4.0),
+                        const SizedBox(width: 4.0),
                         Text(
                           restaurant.city,
                           style: Theme.of(context)
@@ -75,7 +75,7 @@ class RestaurantCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.0),
+                    const SizedBox(height: 8.0),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [

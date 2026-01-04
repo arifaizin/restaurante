@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-final Color darkPrimaryColor = Colors.black;
+const Color darkPrimaryColor = Colors.black;
 final Color darkSecondaryColor = Colors.grey.shade800;
-final Color lightPrimaryColor = Colors.white;
-final Color lightSecondaryColor = Colors.orange;
+const Color lightPrimaryColor = Colors.white;
+const Color lightSecondaryColor = Colors.orange;
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -13,7 +13,7 @@ ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: lightPrimaryColor,
   fontFamily: 'Nunito',
   textTheme: _buildTextTheme(Brightness.light),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: lightPrimaryColor,
     foregroundColor: Colors.black,
     elevation: 0.0,
@@ -37,7 +37,7 @@ ThemeData lightTheme = ThemeData(
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
-      borderSide: BorderSide(color: Colors.orange, width: 2.0),
+      borderSide: const BorderSide(color: Colors.orange, width: 2.0),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
@@ -45,7 +45,7 @@ ThemeData lightTheme = ThemeData(
     ),
     filled: true,
     fillColor: Colors.grey.shade50,
-    contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
     hintStyle: TextStyle(
       fontFamily: 'Nunito',
       color: Colors.grey.shade600,
@@ -55,7 +55,7 @@ ThemeData lightTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.orange,
       foregroundColor: Colors.white,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontFamily: 'Nunito',
         fontWeight: FontWeight.w600,
       ),
@@ -72,7 +72,7 @@ ThemeData darkTheme = ThemeData(
   scaffoldBackgroundColor: darkPrimaryColor,
   fontFamily: 'Nunito',
   textTheme: _buildTextTheme(Brightness.dark),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: darkPrimaryColor,
     foregroundColor: Colors.white,
     elevation: 0.0,
@@ -97,7 +97,7 @@ ThemeData darkTheme = ThemeData(
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
-      borderSide: BorderSide(color: Colors.orange, width: 2.0),
+      borderSide: const BorderSide(color: Colors.orange, width: 2.0),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
@@ -105,7 +105,7 @@ ThemeData darkTheme = ThemeData(
     ),
     filled: true,
     fillColor: Colors.grey.shade800,
-    contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
     hintStyle: TextStyle(
       fontFamily: 'Nunito',
       color: Colors.grey.shade400,
@@ -115,7 +115,7 @@ ThemeData darkTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.orange,
       foregroundColor: Colors.white,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontFamily: 'Nunito',
         fontWeight: FontWeight.w600,
       ),
