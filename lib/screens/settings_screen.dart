@@ -49,7 +49,8 @@ class SettingsScreen extends StatelessWidget {
                         ),
                         child: Switch.adaptive(
                           value: provider.isDailyReminderActive,
-                          activeColor: Theme.of(context).colorScheme.primary,
+                          activeThumbColor:
+                              Theme.of(context).colorScheme.primary,
                           inactiveThumbColor: Colors.grey.shade300,
                           inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) async {

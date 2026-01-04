@@ -263,7 +263,7 @@ class ApiService {
             ),
           );
         }
-      } on FormatException catch (e) {
+      } on FormatException catch (_) {
         return ApiResponse.failure(
           'Invalid response format from server. Please try again later.',
           data: ReviewSubmissionResponse(
@@ -357,7 +357,7 @@ class ApiService {
           _getHttpErrorMessage(response.statusCode),
         );
       }
-    } on FormatException catch (e) {
+    } on FormatException catch (_) {
       return ApiResponse.failure('Invalid JSON response from server');
     } catch (e) {
       return ApiResponse.failure('Failed to parse server response: $e');

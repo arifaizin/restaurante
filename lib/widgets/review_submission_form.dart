@@ -310,21 +310,6 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
     }
   }
 
-  String _getErrorTitle(ErrorType? errorType) {
-    switch (errorType) {
-      case ErrorType.network:
-        return 'Masalah Koneksi';
-      case ErrorType.timeout:
-        return 'Koneksi Lambat';
-      case ErrorType.server:
-        return 'Masalah Server';
-      case ErrorType.validation:
-        return 'Data Tidak Valid';
-      default:
-        return 'Terjadi Kesalahan';
-    }
-  }
-
   String _getErrorGuidance(ErrorType? errorType) {
     switch (errorType) {
       case ErrorType.authentication:
