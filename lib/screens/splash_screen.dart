@@ -26,12 +26,12 @@ class SplashScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Icon(
-          Icons.fastfood,
-          size: 64,
-          color: Colors.cyan[600],
-        ),
-        const SizedBox(height: 170.0),
+        // Icon(
+        //   Icons.fastfood,
+        //   size: 64,
+        //   color: Colors.cyan[600],
+        // ),
+        // const SizedBox(height: 170.0),
         Expanded(
           flex: 1,
           child: AnimatedTextKit(
