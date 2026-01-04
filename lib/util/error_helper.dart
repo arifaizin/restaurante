@@ -40,10 +40,10 @@ class ErrorHelper {
     if (errorMessage == null || errorMessage.isEmpty) {
       return const ErrorInfo(
         type: ErrorType.unknown,
-        userMessage: 'Terjadi kesalahan yang tidak diketahui',
+        userMessage: 'An unknown error occurred',
         isRetryable: true,
         actionGuidance:
-            'Silakan coba lagi atau hubungi dukungan jika masalah berlanjut.',
+            'Please try again or contact support if the problem persists.',
       );
     }
 
@@ -57,11 +57,10 @@ class ErrorHelper {
         lowerError.contains('deadline exceeded')) {
       return ErrorInfo(
         type: ErrorType.timeout,
-        userMessage: 'Koneksi terlalu lambat',
+        userMessage: 'Connection too slow',
         technicalMessage: errorMessage,
         isRetryable: true,
-        actionGuidance:
-            'Coba lagi dalam beberapa saat atau periksa kecepatan internet Anda.',
+        actionGuidance: 'Try again in a moment or check your internet speed.',
       );
     }
 
@@ -72,10 +71,10 @@ class ErrorHelper {
         lowerError.contains('tls')) {
       return ErrorInfo(
         type: ErrorType.security,
-        userMessage: 'Masalah keamanan koneksi',
+        userMessage: 'Connection security problem',
         technicalMessage: errorMessage,
         isRetryable: true,
-        actionGuidance: 'Periksa koneksi internet Anda atau coba lagi nanti.',
+        actionGuidance: 'Check your internet connection or try again later.',
       );
     }
 
@@ -88,10 +87,10 @@ class ErrorHelper {
         lowerError.contains('no address associated with hostname')) {
       return ErrorInfo(
         type: ErrorType.network,
-        userMessage: 'Tidak ada koneksi internet',
+        userMessage: 'No internet connection',
         technicalMessage: errorMessage,
         isRetryable: true,
-        actionGuidance: 'Periksa koneksi internet Anda dan coba lagi.',
+        actionGuidance: 'Check your internet connection and try again.',
       );
     }
 
@@ -105,11 +104,11 @@ class ErrorHelper {
         lowerError.contains('service unavailable')) {
       return ErrorInfo(
         type: ErrorType.server,
-        userMessage: 'Server sedang bermasalah',
+        userMessage: 'Server is having trouble',
         technicalMessage: errorMessage,
         isRetryable: true,
         actionGuidance:
-            'Coba lagi dalam beberapa menit. Jika masalah berlanjut, hubungi dukungan.',
+            'Try again in a few minutes. If the problem persists, contact support.',
       );
     }
 
@@ -117,10 +116,11 @@ class ErrorHelper {
     if (lowerError.contains('404') || lowerError.contains('not found')) {
       return ErrorInfo(
         type: ErrorType.notFound,
-        userMessage: 'Data yang dicari tidak ditemukan',
+        userMessage: 'The requested data was not found',
         technicalMessage: errorMessage,
         isRetryable: false,
-        actionGuidance: 'Pastikan data yang Anda cari masih tersedia.',
+        actionGuidance:
+            'Make sure the data you are looking for is still available.',
       );
     }
 
@@ -131,10 +131,10 @@ class ErrorHelper {
         lowerError.contains('forbidden')) {
       return ErrorInfo(
         type: ErrorType.authentication,
-        userMessage: 'Akses ditolak',
+        userMessage: 'Access denied',
         technicalMessage: errorMessage,
         isRetryable: false,
-        actionGuidance: 'Periksa izin akses Anda atau hubungi administrator.',
+        actionGuidance: 'Check your permissions or contact the administrator.',
       );
     }
 
@@ -145,11 +145,11 @@ class ErrorHelper {
         lowerError.contains('format')) {
       return ErrorInfo(
         type: ErrorType.format,
-        userMessage: 'Data yang diterima tidak valid',
+        userMessage: 'Invalid data received',
         technicalMessage: errorMessage,
         isRetryable: true,
         actionGuidance:
-            'Coba lagi nanti. Jika masalah berlanjut, hubungi dukungan.',
+            'Try again later. If the problem persists, contact support.',
       );
     }
 
@@ -162,11 +162,11 @@ class ErrorHelper {
         lowerError.contains('ulasan')) {
       return ErrorInfo(
         type: ErrorType.validation,
-        userMessage: 'Data yang dimasukkan tidak valid',
+        userMessage: 'The entered data is invalid',
         technicalMessage: errorMessage,
         isRetryable: true,
         actionGuidance:
-            'Periksa kembali data yang Anda masukkan dan pastikan semua field terisi dengan benar.',
+            'Please re-check your input and ensure all fields are filled correctly.',
       );
     }
 
@@ -176,22 +176,22 @@ class ErrorHelper {
         lowerError.contains('failed')) {
       return ErrorInfo(
         type: ErrorType.unknown,
-        userMessage: 'Terjadi kesalahan saat memproses permintaan',
+        userMessage: 'An error occurred while processing the request',
         technicalMessage: errorMessage,
         isRetryable: true,
         actionGuidance:
-            'Silakan coba lagi. Jika masalah berlanjut, hubungi dukungan.',
+            'Please try again. If the problem persists, contact support.',
       );
     }
 
     // If no pattern matches, return a generic message
     return ErrorInfo(
       type: ErrorType.unknown,
-      userMessage: 'Terjadi kesalahan',
+      userMessage: 'An error occurred',
       technicalMessage: errorMessage,
       isRetryable: true,
       actionGuidance:
-          'Silakan coba lagi atau hubungi dukungan jika masalah berlanjut.',
+          'Please try again or contact support if the problem persists.',
     );
   }
 
@@ -210,28 +210,28 @@ class ErrorHelper {
   /// Gets specific error message for review submission failures
   static String getReviewSubmissionErrorMessage(String? errorMessage) {
     if (errorMessage == null || errorMessage.isEmpty) {
-      return 'Gagal mengirim ulasan. Silakan coba lagi.';
+      return 'Failed to submit review. Please try again.';
     }
 
     final errorInfo = getErrorInfo(errorMessage);
 
     switch (errorInfo.type) {
       case ErrorType.network:
-        return 'Tidak dapat mengirim ulasan karena tidak ada koneksi internet. Periksa koneksi Anda dan coba lagi.';
+        return 'Unable to submit review because there is no internet connection. Check your connection and try again.';
       case ErrorType.timeout:
-        return 'Pengiriman ulasan gagal karena koneksi terlalu lambat. Coba lagi dalam beberapa saat.';
+        return 'Review submission failed due to a slow connection. Try again in a moment.';
       case ErrorType.server:
-        return 'Server sedang bermasalah. Ulasan Anda belum terkirim, silakan coba lagi nanti.';
+        return 'Server is having trouble. Your review has not been sent, please try again later.';
       case ErrorType.validation:
-        return 'Data ulasan tidak valid. Periksa kembali nama dan isi ulasan Anda.';
+        return 'Invalid review data. Please re-check your name and review content.';
       case ErrorType.authentication:
-        return 'Akses ditolak untuk mengirim ulasan. Silakan coba lagi.';
+        return 'Access denied to submit review. Please try again.';
       case ErrorType.format:
-        return 'Terjadi kesalahan dalam memproses ulasan. Coba lagi nanti.';
+        return 'An error occurred while processing the review. Try again later.';
       case ErrorType.security:
-        return 'Masalah keamanan koneksi saat mengirim ulasan. Periksa koneksi internet Anda dan coba lagi.';
+        return 'Connection security problem while submitting review. Check your internet connection and try again.';
       default:
-        return 'Gagal mengirim ulasan. ${errorInfo.userMessage}';
+        return 'Failed to submit review. ${errorInfo.userMessage}';
     }
   }
 
@@ -240,14 +240,14 @@ class ErrorHelper {
   /// Gets success message variations for review submission
   static String getReviewSubmissionSuccessMessage() {
     final messages = [
-      'Ulasan berhasil ditambahkan! Terima kasih atas feedback Anda.',
-      'Ulasan Anda telah berhasil dikirim dan akan segera tampil.',
-      'Terima kasih! Ulasan Anda berhasil ditambahkan ke restoran ini.',
-      'Ulasan berhasil dikirim! Pengalaman Anda akan membantu pengguna lain.',
-      'Berhasil! Ulasan Anda telah tersimpan dan dapat dilihat oleh pengguna lain.',
-      'Terima kasih telah berbagi pengalaman! Ulasan Anda berhasil ditambahkan.',
-      'Ulasan berhasil dikirim! Feedback Anda sangat berharga untuk restoran ini.',
-      'Selamat! Ulasan Anda telah berhasil dipublikasikan.',
+      'Review successfully added! Thank you for your feedback.',
+      'Your review has been successfully submitted and will appear soon.',
+      'Thank you! Your review was successfully added to this restaurant.',
+      'Review submitted successfully! Your experience will help other users.',
+      'Success! Your review has been saved and can be seen by other users.',
+      'Thank you for sharing your experience! Your review was successfully added.',
+      'Review submitted successfully! Your feedback is valuable for this restaurant.',
+      'Congratulations! Your review has been successfully published.',
     ];
 
     // Use a counter for better test predictability while maintaining variety
@@ -263,28 +263,28 @@ class ErrorHelper {
       case 'name':
       case 'nama':
         if (value == null || value.trim().isEmpty) {
-          return 'Nama tidak boleh kosong. Masukkan nama Anda untuk melanjutkan.';
+          return 'Name cannot be empty. Please enter your name to continue.';
         }
         if (value.trim().length < 2) {
-          return 'Nama terlalu pendek. Masukkan minimal 2 karakter.';
+          return 'Name is too short. Enter at least 2 characters.';
         }
         if (value.trim().length > 50) {
-          return 'Nama terlalu panjang. Maksimal 50 karakter.';
+          return 'Name is too long. Maximum 50 characters.';
         }
         break;
       case 'review':
       case 'ulasan':
         if (value == null || value.trim().isEmpty) {
-          return 'Ulasan tidak boleh kosong. Bagikan pengalaman Anda tentang restoran ini.';
+          return 'Review cannot be empty. Share your experience about this restaurant.';
         }
         if (value.trim().length < 10) {
-          return 'Ulasan terlalu pendek. Tulis minimal 10 karakter untuk memberikan feedback yang berguna.';
+          return 'Review is too short. Write at least 10 characters to provide useful feedback.';
         }
         if (value.trim().length > 500) {
-          return 'Ulasan terlalu panjang. Maksimal 500 karakter.';
+          return 'Review is too long. Maximum 500 characters.';
         }
         break;
     }
-    return 'Data tidak valid. Silakan periksa kembali.';
+    return 'Invalid data. Please re-check your input.';
   }
 }

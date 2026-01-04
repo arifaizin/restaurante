@@ -47,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cari Restoran'),
+        title: const Text('Search Restaurants'),
         elevation: 0.0,
       ),
       body: _buildSearchBody(context),
@@ -57,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
-        middle: Text('Cari Restoran'),
+        middle: Text('Search Restaurants'),
       ),
       child: _buildSearchBody(context),
     );
@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
             controller: _searchController,
             focusNode: _searchFocusNode,
             decoration: InputDecoration(
-              hintText: 'Cari restoran...',
+              hintText: 'Search restaurants...',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: provider.currentQuery.isNotEmpty
                   ? IconButton(
@@ -128,46 +128,52 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildEmptySearchState() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Cari Restoran',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Masukkan minimal 3 karakter untuk mulai mencari',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.search,
+                size: 64,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Search Restaurants',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Enter at least 3 characters to start searching',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildLoadingState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 16),
-          Text(
-            'Mencari restoran...',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-        ],
+    return const SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text(
+              'Searching restaurants...',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -177,31 +183,34 @@ class _SearchScreenState extends State<SearchScreen> {
         ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
     final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              isNetworkError ? Icons.wifi_off : Icons.error_outline,
-              size: 64,
-              color: Colors.grey[600],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              isNetworkError ? 'Tidak Ada Koneksi Internet' : 'Pencarian Gagal',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              userFriendlyMessage,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 24),
-            _buildRetrySection(context, provider, isNetworkError),
-          ],
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isNetworkError ? Icons.wifi_off : Icons.error_outline,
+                size: 64,
+                color: Colors.grey[600],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                isNetworkError ? 'No Internet Connection' : 'Search Failed',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                userFriendlyMessage,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+              _buildRetrySection(context, provider, isNetworkError),
+            ],
+          ),
         ),
       ),
     );
@@ -223,12 +232,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 )
               : const Icon(Icons.refresh),
-          label: Text(provider.isLoading ? 'Mencoba lagi...' : 'Coba Lagi'),
+          label: Text(provider.isLoading ? 'Retrying...' : 'Try Again'),
         ),
         if (isNetworkError) ...[
           const SizedBox(height: 12),
           Text(
-            'Periksa koneksi internet Anda',
+            'Check your internet connection',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -240,46 +249,49 @@ class _SearchScreenState extends State<SearchScreen> {
             _searchFocusNode.requestFocus();
           },
           icon: const Icon(Icons.search, size: 18),
-          label: const Text('Pencarian Baru'),
+          label: const Text('New Search'),
         ),
       ],
     );
   }
 
   Widget _buildNoResultsState(String query) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search_off,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Restoran Tidak Ditemukan',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Coba gunakan kata kunci yang berbeda',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            if (query.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Pencarian: "$query"',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontStyle: FontStyle.italic,
-                    ),
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.search_off,
+                size: 64,
+                color: Colors.grey[400],
               ),
+              const SizedBox(height: 16),
+              Text(
+                'Restaurants Not Found',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Try using different keywords',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14.0),
+              ),
+              if (query.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  'Search: "$query"',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
