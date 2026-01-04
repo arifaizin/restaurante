@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/providers/preferences_provider.dart';
 import 'package:restaurant_app/providers/scheduling_provider.dart';
+import 'package:restaurant_app/main.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
 
   const SettingsScreen({Key? key}) : super(key: key);
+
+  Future<bool> _requestNotificationPermission(BuildContext context) async {
+    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+
+    if (androidImplementation != null) {
+      final bool? granted =
+          await androidImplementation.requestNotificationsPermission();
+      return granted ?? false;
+    }
+    return true; // For iOS or if permission is already granted
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,42 +35,66 @@ class SettingsScreen extends StatelessWidget {
             children: [
               Material(
                 child: ListTile(
-                  title: const Text('Dark Theme'),
-                  trailing: Switch.adaptive(
-                    value: provider.isDarkTheme,
-                    onChanged: (value) {
-                      provider.enableDarkTheme(value);
-                    },
-                  ),
-                ),
-              ),
-              Material(
-                child: ListTile(
-                  title: const Text('Scheduling News (11:00 AM)'),
+                  leading: const Icon(Icons.notifications_active),
+                  title: const Text('Daily Reminder'),
+                  subtitle: const Text('Notification at 11:00 AM'),
                   trailing: Consumer<SchedulingProvider>(
                     builder: (context, scheduled, _) {
-                      return Switch.adaptive(
-                        value: provider.isDailyReminderActive,
-                        onChanged: (value) async {
-                          // Update schedule via SchedulingProvider
-                          try {
-                            // Ensure persistence matches actual schedule status
-                            // (Though usually we might want to decouple UI state from async result,
-                            // here we couple them for simplicity as per common flutter patterns)
-                            bool result = await scheduled.scheduledNews(value);
-                            print("Scheduled Result: $result");
-
-                            // Update preference
-                            provider.enableDailyReminder(value);
-                          } catch (e) {
-                            print("Error scheduling: $e");
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Failed to schedule: $e"),
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          // Ensure switch is visible in light mode when disabled
+                          colorScheme: Theme.of(context).colorScheme.copyWith(
+                                outline: Colors.grey.shade400,
                               ),
-                            );
-                          }
-                        },
+                        ),
+                        child: Switch.adaptive(
+                          value: provider.isDailyReminderActive,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          inactiveThumbColor: Colors.grey.shade300,
+                          inactiveTrackColor: Colors.grey.shade400,
+                          onChanged: (value) async {
+                            if (value) {
+                              // Request permission first
+                              bool hasPermission =
+                                  await _requestNotificationPermission(context);
+
+                              if (!hasPermission) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Notification permission is required'),
+                                  ),
+                                );
+                                return;
+                              }
+                            }
+
+                            // Update schedule via SchedulingProvider
+                            try {
+                              bool result =
+                                  await scheduled.scheduledNews(value);
+                              print("Scheduled Result: $result");
+
+                              // Update preference
+                              provider.enableDailyReminder(value);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(value
+                                      ? 'Daily reminder enabled at 11:00 AM'
+                                      : 'Daily reminder disabled'),
+                                ),
+                              );
+                            } catch (e) {
+                              print("Error scheduling: $e");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Failed to schedule: $e"),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       );
                     },
                   ),

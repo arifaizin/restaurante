@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/providers/preferences_provider.dart';
 import 'package:restaurant_app/providers/restaurant_provider.dart';
 import 'package:restaurant_app/screens/favorite_screen.dart';
 import 'package:restaurant_app/util/constants.dart';
@@ -45,25 +46,64 @@ class MainScreen extends StatelessWidget {
             child: Text(Constants.appName)),
         elevation: 0.0,
         actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.pushNamed(context, SearchScreen.routeName);
+          Consumer<PreferencesProvider>(
+            builder: (context, provider, child) {
+              return IconButton(
+                icon: Icon(
+                  provider.isDarkTheme ? Icons.dark_mode : Icons.light_mode,
+                ),
+                onPressed: () {
+                  provider.enableDarkTheme(!provider.isDarkTheme);
+                },
+              );
             },
-            tooltip: 'Search restaurants',
           ),
-          IconButton(
-            icon: Icon(Icons.favorite),
-            onPressed: () {
-              Navigator.pushNamed(context, FavoriteScreen.routeName);
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              switch (value) {
+                case 'search':
+                  Navigator.pushNamed(context, SearchScreen.routeName);
+                  break;
+                case 'favorite':
+                  Navigator.pushNamed(context, FavoriteScreen.routeName);
+                  break;
+                case 'settings':
+                  Navigator.pushNamed(context, SettingsScreen.routeName);
+                  break;
+              }
             },
-            tooltip: 'Favorite restaurants',
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.pushNamed(context, SettingsScreen.routeName);
-            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'search',
+                child: Row(
+                  children: [
+                    Icon(Icons.search),
+                    SizedBox(width: 8),
+                    Text('Search'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'favorite',
+                child: Row(
+                  children: [
+                    Icon(Icons.favorite),
+                    SizedBox(width: 8),
+                    Text('Favorite'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'settings',
+                child: Row(
+                  children: [
+                    Icon(Icons.settings),
+                    SizedBox(width: 8),
+                    Text('Settings'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -81,25 +121,82 @@ class MainScreen extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.search),
-              onPressed: () {
-                Navigator.pushNamed(context, SearchScreen.routeName);
+            Consumer<PreferencesProvider>(
+              builder: (context, provider, child) {
+                return CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(
+                    provider.isDarkTheme
+                        ? CupertinoIcons.moon_stars_fill
+                        : CupertinoIcons.sun_max_fill,
+                  ),
+                  onPressed: () {
+                    provider.enableDarkTheme(!provider.isDarkTheme);
+                  },
+                );
               },
             ),
             CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.heart),
+              child: Icon(CupertinoIcons.ellipsis_vertical),
               onPressed: () {
-                Navigator.pushNamed(context, FavoriteScreen.routeName);
-              },
-            ),
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Icon(CupertinoIcons.settings),
-              onPressed: () {
-                Navigator.pushNamed(context, SettingsScreen.routeName);
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (BuildContext context) => CupertinoActionSheet(
+                    actions: [
+                      CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, SearchScreen.routeName);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(CupertinoIcons.search),
+                            SizedBox(width: 8),
+                            Text('Search'),
+                          ],
+                        ),
+                      ),
+                      CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                              context, FavoriteScreen.routeName);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(CupertinoIcons.heart),
+                            SizedBox(width: 8),
+                            Text('Favorite'),
+                          ],
+                        ),
+                      ),
+                      CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                              context, SettingsScreen.routeName);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(CupertinoIcons.settings),
+                            SizedBox(width: 8),
+                            Text('Settings'),
+                          ],
+                        ),
+                      ),
+                    ],
+                    cancelButton: CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Cancel'),
+                    ),
+                  ),
+                );
               },
             ),
           ],
