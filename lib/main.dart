@@ -4,7 +4,10 @@ import 'package:restaurant_app/providers/restaurant_provider.dart';
 import 'package:restaurant_app/providers/restaurant_detail_provider.dart';
 import 'package:restaurant_app/providers/search_provider.dart';
 import 'package:restaurant_app/providers/review_submission_provider.dart';
+import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:restaurant_app/screens/detail_screen.dart';
+import 'package:restaurant_app/screens/favorite_screen.dart';
+import 'package:restaurant_app/services/database_helper.dart';
 import 'package:restaurant_app/screens/search_screen.dart';
 import 'package:restaurant_app/screens/splash_screen.dart';
 import 'package:restaurant_app/util/constants.dart';
@@ -244,6 +247,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RestaurantDetailProvider()),
         ChangeNotifierProvider(create: (context) => SearchProvider()),
         ChangeNotifierProvider(create: (context) => ReviewSubmissionProvider()),
+        ChangeNotifierProvider(
+          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+        ),
       ],
       child: MaterialApp(
         title: Constants.appName,
@@ -255,6 +261,7 @@ class MyApp extends StatelessWidget {
           SplashScreen.routeName: (context) => SplashScreen(),
           MainScreen.routeName: (context) => MainScreen(),
           SearchScreen.routeName: (context) => SearchScreen(),
+          FavoriteScreen.routeName: (context) => FavoriteScreen(),
         },
         onGenerateRoute: (settings) {
           switch (settings.name) {

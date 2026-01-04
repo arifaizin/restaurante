@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/model/restaurant.dart';
+import 'package:restaurant_app/model/restaurant_detail.dart';
+import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 import 'package:intl/intl.dart';
 
@@ -61,7 +64,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildRestaurantHeader(restaurant) {
+  Widget _buildRestaurantHeader(RestaurantDetail restaurant) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -111,16 +114,7 @@ class _DetailScreenState extends State<DetailScreen> {
             Positioned(
               right: 16.0,
               bottom: 16.0,
-              child: RawMaterialButton(
-                onPressed: () {},
-                fillColor: Colors.white,
-                shape: CircleBorder(),
-                elevation: 4.0,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: FavoriteButton(),
-                ),
-              ),
+              child: FavoriteButton(restaurant: restaurant),
             ),
           ],
         ),
@@ -587,21 +581,40 @@ class _DetailScreenState extends State<DetailScreen> {
 }
 
 class FavoriteButton extends StatelessWidget {
+  final RestaurantDetail restaurant;
+
+  const FavoriteButton({required this.restaurant});
+
   @override
   Widget build(BuildContext context) {
-    // For now, we'll use a simple stateless implementation
-    // In a real app, this would connect to a favorites provider
-    return IconButton(
-      icon: Icon(
-        Icons.favorite_border,
-        color: Colors.red,
-      ),
-      onPressed: () {
-        // TODO: Implement favorite functionality with Provider
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Fitur favorit segera hadir!'),
-            duration: Duration(seconds: 2),
+    return Consumer<DatabaseProvider>(
+      builder: (context, provider, child) {
+        final isFavorited =
+            provider.favorites.any((r) => r.id == restaurant.id);
+        return RawMaterialButton(
+          onPressed: () {
+            if (isFavorited) {
+              provider.removeFavorite(restaurant.id);
+            } else {
+              provider.addFavorite(Restaurant(
+                id: restaurant.id,
+                name: restaurant.name,
+                description: restaurant.description,
+                city: restaurant.city,
+                rating: restaurant.rating,
+                pictureId: restaurant.pictureId,
+              ));
+            }
+          },
+          fillColor: Colors.white,
+          shape: CircleBorder(),
+          elevation: 4.0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              isFavorited ? Icons.favorite : Icons.favorite_border,
+              color: Colors.red,
+            ),
           ),
         );
       },
