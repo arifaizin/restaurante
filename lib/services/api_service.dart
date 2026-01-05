@@ -11,36 +11,34 @@ import '../model/review_submission_request.dart';
 import '../model/review_submission_response.dart';
 
 class ApiService {
-  static const String baseUrl = 'https://restaurant-api.dicoding.dev';
-  static const String listEndpoint = '/list';
-  static const String detailEndpoint = '/detail';
-  static const String searchEndpoint = '/search';
-  static const String reviewEndpoint = '/review';
-  static const Duration timeoutDuration = Duration(seconds: 10);
+  static const baseUrl = 'https://restaurant-api.dicoding.dev';
+  static const listEndpoint = '/list';
+  static const detailEndpoint = '/detail';
+  static const searchEndpoint = '/search';
+  static const reviewEndpoint = '/review';
+  static const timeoutDuration = Duration(seconds: 10);
 
   final http.Client _client;
   final Connectivity _connectivity;
 
   ApiService({http.Client? client, Connectivity? connectivity})
-    : _client = client ?? http.Client(),
-      _connectivity = connectivity ?? Connectivity();
+      : _client = client ?? http.Client(),
+        _connectivity = connectivity ?? Connectivity();
 
   /// Fetches the list of restaurants from the API
   Future<ApiResponse<List<Restaurant>>> getRestaurants() async {
     try {
       final uri = Uri.parse('$baseUrl$listEndpoint');
 
-      final response = await _client
-          .get(uri)
-          .timeout(
+      final response = await _client.get(uri).timeout(
+        timeoutDuration,
+        onTimeout: () {
+          throw TimeoutException(
+            'Request timed out. Please check your connection and try again.',
             timeoutDuration,
-            onTimeout: () {
-              throw TimeoutException(
-                'Request timed out. Please check your connection and try again.',
-                timeoutDuration,
-              );
-            },
           );
+        },
+      );
 
       return _handleResponse<List<Restaurant>>(
         response,
@@ -76,17 +74,15 @@ class ApiService {
     try {
       final uri = Uri.parse('$baseUrl$detailEndpoint/$id');
 
-      final response = await _client
-          .get(uri)
-          .timeout(
+      final response = await _client.get(uri).timeout(
+        timeoutDuration,
+        onTimeout: () {
+          throw TimeoutException(
+            'Request timed out. Please check your connection and try again.',
             timeoutDuration,
-            onTimeout: () {
-              throw TimeoutException(
-                'Request timed out. Please check your connection and try again.',
-                timeoutDuration,
-              );
-            },
           );
+        },
+      );
 
       return _handleResponse<RestaurantDetailResponse>(
         response,
@@ -136,17 +132,15 @@ class ApiService {
       final encodedQuery = Uri.encodeQueryComponent(query.trim());
       final uri = Uri.parse('$baseUrl$searchEndpoint?q=$encodedQuery');
 
-      final response = await _client
-          .get(uri)
-          .timeout(
+      final response = await _client.get(uri).timeout(
+        timeoutDuration,
+        onTimeout: () {
+          throw TimeoutException(
+            'Search request timed out. Please check your connection and try again.',
             timeoutDuration,
-            onTimeout: () {
-              throw TimeoutException(
-                'Search request timed out. Please check your connection and try again.',
-                timeoutDuration,
-              );
-            },
           );
+        },
+      );
 
       return _handleResponse<RestaurantSearchResponse>(
         response,
@@ -223,19 +217,19 @@ class ApiService {
 
       final response = await _client
           .post(
-            uri,
-            headers: {'Content-Type': 'application/json'},
-            body: requestBody,
-          )
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: requestBody,
+      )
           .timeout(
+        timeoutDuration,
+        onTimeout: () {
+          throw TimeoutException(
+            'Review submission timed out. Please check your connection and try again.',
             timeoutDuration,
-            onTimeout: () {
-              throw TimeoutException(
-                'Review submission timed out. Please check your connection and try again.',
-                timeoutDuration,
-              );
-            },
           );
+        },
+      );
 
       // Special handling for review submission response
       try {
