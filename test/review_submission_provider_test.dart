@@ -15,9 +15,11 @@ class MockApiService extends ApiService {
 
   @override
   Future<ApiResponse<ReviewSubmissionResponse>> submitReview(
-      ReviewSubmissionRequest request) async {
+    ReviewSubmissionRequest request,
+  ) async {
     if (shouldSucceed) {
-      final response = mockResponse ??
+      final response =
+          mockResponse ??
           ReviewSubmissionResponse(
             error: false,
             message: 'Review added successfully',
@@ -222,8 +224,10 @@ void main() {
         expect(provider.lastErrorType, isNotNull);
         expect(provider.isRetryable, true);
         expect(provider.reviewerName, 'John Doe'); // Form should not be cleared
-        expect(provider.reviewText,
-            'Great food and excellent service!'); // Form should not be cleared
+        expect(
+          provider.reviewText,
+          'Great food and excellent service!',
+        ); // Form should not be cleared
         expect(provider.isSubmitting, false);
       });
 
@@ -455,8 +459,10 @@ void main() {
           'Terima kasih! Ulasan Anda berhasil ditambahkan ke restoran ini.',
           'Ulasan berhasil dikirim! Pengalaman Anda akan membantu pengguna lain.',
         ];
-        expect(possibleMessages.any((msg) => provider.successMessage == msg),
-            true);
+        expect(
+          possibleMessages.any((msg) => provider.successMessage == msg),
+          true,
+        );
       });
     });
 
@@ -504,7 +510,8 @@ void main() {
         // Test various state changes
         provider.updateReviewerName('John'); // Should notify
         provider.updateReviewText(
-            'Great food and excellent service!'); // Should notify
+          'Great food and excellent service!',
+        ); // Should notify
         provider.clearForm(); // Should notify
         provider.resetState(); // Should notify
 

@@ -31,14 +31,18 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
 
     // Listen to controller changes and update provider
     _nameController.addListener(() {
-      final provider =
-          Provider.of<ReviewSubmissionProvider>(context, listen: false);
+      final provider = Provider.of<ReviewSubmissionProvider>(
+        context,
+        listen: false,
+      );
       provider.updateReviewerName(_nameController.text);
     });
 
     _reviewController.addListener(() {
-      final provider =
-          Provider.of<ReviewSubmissionProvider>(context, listen: false);
+      final provider = Provider.of<ReviewSubmissionProvider>(
+        context,
+        listen: false,
+      );
       provider.updateReviewText(_reviewController.text);
     });
   }
@@ -107,7 +111,10 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
   }
 
   void _showErrorSnackBar(
-      BuildContext context, String message, ErrorType? errorType) {
+    BuildContext context,
+    String message,
+    ErrorType? errorType,
+  ) {
     Color backgroundColor;
     IconData icon;
 
@@ -143,20 +150,13 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                 color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: 20.0,
-              ),
+              child: Icon(icon, color: Colors.white, size: 20.0),
             ),
             const SizedBox(width: 12.0),
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.white,
-                ),
+                style: const TextStyle(fontSize: 13.0, color: Colors.white),
               ),
             ),
           ],
@@ -174,8 +174,10 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
   }
 
   void _handleSubmit() async {
-    final provider =
-        Provider.of<ReviewSubmissionProvider>(context, listen: false);
+    final provider = Provider.of<ReviewSubmissionProvider>(
+      context,
+      listen: false,
+    );
 
     // Validate form
     if (!_formKey.currentState!.validate()) {
@@ -203,7 +205,9 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
       // Show enhanced success message
       if (mounted) {
         _showSuccessSnackBar(
-            context, provider.successMessage ?? 'Ulasan berhasil ditambahkan');
+          context,
+          provider.successMessage ?? 'Ulasan berhasil ditambahkan',
+        );
       }
     } else {
       // Show contextual error feedback for critical errors
@@ -322,7 +326,9 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
   }
 
   void _showTroubleshootingDialog(
-      BuildContext context, ReviewSubmissionProvider provider) {
+    BuildContext context,
+    ReviewSubmissionProvider provider,
+  ) {
     final steps = provider.getTroubleshootingSteps();
     final title = provider.getErrorTitle();
 
@@ -424,12 +430,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
             ),
           ),
           const SizedBox(width: 8.0),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 14.0),
-            ),
-          ),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 14.0))),
         ],
       ),
     );
@@ -472,8 +473,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                     Text(
                       'Tulis Ulasan',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -491,8 +492,9 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                     labelText: 'Nama Anda',
                     hintText: 'Masukkan nama Anda',
                     prefixIcon: const Icon(Icons.person_outline),
-                    errorText:
-                        provider.hasNameError ? provider.nameError : null,
+                    errorText: provider.hasNameError
+                        ? provider.nameError
+                        : null,
                     semanticCounterText: 'Nama reviewer',
                   ),
                   validator: (value) {
@@ -519,8 +521,9 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                     labelText: 'Ulasan Anda',
                     hintText: 'Bagikan pengalaman Anda tentang restoran ini...',
                     prefixIcon: const Icon(Icons.rate_review_outlined),
-                    errorText:
-                        provider.hasReviewError ? provider.reviewError : null,
+                    errorText: provider.hasReviewError
+                        ? provider.reviewError
+                        : null,
                     semanticCounterText: 'Teks ulasan',
                   ),
                   validator: (value) {
@@ -541,7 +544,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                       color: _getErrorBackgroundColor(provider.lastErrorType),
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(
-                          color: _getErrorBorderColor(provider.lastErrorType)),
+                        color: _getErrorBorderColor(provider.lastErrorType),
+                      ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.red.withValues(alpha: 0.1),
@@ -560,13 +564,15 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                               padding: const EdgeInsets.all(6.0),
                               decoration: BoxDecoration(
                                 color: _getErrorIconBackgroundColor(
-                                    provider.lastErrorType),
+                                  provider.lastErrorType,
+                                ),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
                                 _getErrorIcon(provider.lastErrorType),
-                                color:
-                                    _getErrorIconColor(provider.lastErrorType),
+                                color: _getErrorIconColor(
+                                  provider.lastErrorType,
+                                ),
                                 size: 18.0,
                               ),
                             ),
@@ -582,7 +588,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                         .titleSmall
                                         ?.copyWith(
                                           color: _getErrorTextColor(
-                                              provider.lastErrorType),
+                                            provider.lastErrorType,
+                                          ),
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -594,8 +601,8 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                         .bodyMedium
                                         ?.copyWith(
                                           color: _getErrorTextColor(
-                                                  provider.lastErrorType)
-                                              .withValues(alpha: 0.8),
+                                            provider.lastErrorType,
+                                          ).withValues(alpha: 0.8),
                                         ),
                                   ),
                                 ],
@@ -604,8 +611,9 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                             IconButton(
                               icon: Icon(
                                 Icons.close,
-                                color:
-                                    _getErrorIconColor(provider.lastErrorType),
+                                color: _getErrorIconColor(
+                                  provider.lastErrorType,
+                                ),
                                 size: 20.0,
                               ),
                               onPressed: () => provider.clearError(),
@@ -629,7 +637,9 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                       : () {
                                           // Show contextual troubleshooting tips
                                           _showTroubleshootingDialog(
-                                              context, provider);
+                                            context,
+                                            provider,
+                                          );
                                         },
                                   icon: const Icon(
                                     Icons.help_outline,
@@ -646,19 +656,19 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                                 onPressed: provider.isSubmitting
                                     ? null
                                     : _handleSubmit,
-                                icon: const Icon(
-                                  Icons.refresh,
-                                  size: 16.0,
-                                ),
+                                icon: const Icon(Icons.refresh, size: 16.0),
                                 label: Text(
                                   provider.isNetworkError
                                       ? 'Coba Lagi'
                                       : 'Kirim Ulang',
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: _getErrorIconColor(
-                                      provider.lastErrorType),
+                                    provider.lastErrorType,
+                                  ),
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0,
@@ -675,13 +685,11 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                           const SizedBox(height: 8.0),
                           Text(
                             _getErrorGuidance(provider.lastErrorType),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
-                                  color:
-                                      _getErrorTextColor(provider.lastErrorType)
-                                          .withValues(alpha: 0.7),
+                                  color: _getErrorTextColor(
+                                    provider.lastErrorType,
+                                  ).withValues(alpha: 0.7),
                                   fontStyle: FontStyle.italic,
                                 ),
                           ),
@@ -720,9 +728,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                               SizedBox(width: 8.0),
                               Text(
                                 'Mengirim...',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ],
                           )
@@ -733,9 +739,7 @@ class _ReviewSubmissionFormState extends State<ReviewSubmissionForm> {
                               SizedBox(width: 8.0),
                               Text(
                                 'Kirim Ulasan',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),

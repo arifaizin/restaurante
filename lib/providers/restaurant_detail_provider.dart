@@ -12,7 +12,7 @@ class RestaurantDetailProvider extends ChangeNotifier {
   String? _errorMessage;
 
   RestaurantDetailProvider({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   // Getters for accessing state properties
   RestaurantDetail? get restaurantDetail => _restaurantDetail;
@@ -92,8 +92,9 @@ class RestaurantDetailProvider extends ChangeNotifier {
     if (_lastRestaurantId != null && _restaurantDetail != null) {
       // Don't show loading state for refresh to avoid UI flicker
       try {
-        final response =
-            await _apiService.getRestaurantDetail(_lastRestaurantId!);
+        final response = await _apiService.getRestaurantDetail(
+          _lastRestaurantId!,
+        );
 
         if (response.isSuccess) {
           _restaurantDetail = response.data.restaurant;

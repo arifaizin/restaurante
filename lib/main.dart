@@ -42,10 +42,7 @@ void main() async {
     await AndroidAlarmManager.initialize();
   }
 
-  Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: true,
-  );
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
   await notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
 

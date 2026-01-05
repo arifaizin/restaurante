@@ -71,50 +71,58 @@ void main() {
       });
 
       test(
-          'should maintain existing restaurant data when refresh is called without valid state',
-          () async {
-        // Arrange - fetch valid restaurant data first
-        await provider.fetchRestaurantDetail('rqdv5juczeskfw1e867');
+        'should maintain existing restaurant data when refresh is called without valid state',
+        () async {
+          // Arrange - fetch valid restaurant data first
+          await provider.fetchRestaurantDetail('rqdv5juczeskfw1e867');
 
-        // Wait for the fetch to complete and check if we have data
-        if (provider.hasData) {
-          // Act - call refresh
+          // Wait for the fetch to complete and check if we have data
+          if (provider.hasData) {
+            // Act - call refresh
+            await provider.refreshAfterReviewSubmission();
+
+            // Assert - data should be maintained or updated
+            expect(provider.restaurantDetail, isNotNull);
+            // The data might be the same or updated, both are valid outcomes
+          }
+        },
+      );
+
+      test(
+        'should handle refresh method existence and basic functionality',
+        () async {
+          // This test verifies the method exists and can be called without throwing
+          expect(
+            () => provider.refreshAfterReviewSubmission(),
+            returnsNormally,
+          );
+
+          // Act
           await provider.refreshAfterReviewSubmission();
 
-          // Assert - data should be maintained or updated
-          expect(provider.restaurantDetail, isNotNull);
-          // The data might be the same or updated, both are valid outcomes
-        }
-      });
+          // Assert - method should complete without throwing
+          expect(provider, isA<RestaurantDetailProvider>());
+        },
+      );
 
-      test('should handle refresh method existence and basic functionality',
-          () async {
-        // This test verifies the method exists and can be called without throwing
-        expect(() => provider.refreshAfterReviewSubmission(), returnsNormally);
+      test(
+        'should not affect loading state during refresh operation',
+        () async {
+          // Arrange
+          bool loadingStateChanged = false;
+          provider.addListener(() {
+            if (provider.isLoading) {
+              loadingStateChanged = true;
+            }
+          });
 
-        // Act
-        await provider.refreshAfterReviewSubmission();
+          // Act
+          await provider.refreshAfterReviewSubmission();
 
-        // Assert - method should complete without throwing
-        expect(provider, isA<RestaurantDetailProvider>());
-      });
-
-      test('should not affect loading state during refresh operation',
-          () async {
-        // Arrange
-        bool loadingStateChanged = false;
-        provider.addListener(() {
-          if (provider.isLoading) {
-            loadingStateChanged = true;
-          }
-        });
-
-        // Act
-        await provider.refreshAfterReviewSubmission();
-
-        // Assert - loading state should not change during refresh
-        expect(loadingStateChanged, isFalse);
-      });
+          // Assert - loading state should not change during refresh
+          expect(loadingStateChanged, isFalse);
+        },
+      );
 
       test('should handle multiple consecutive refresh calls', () async {
         // Act - call refresh multiple times
@@ -127,21 +135,23 @@ void main() {
         expect(provider.isLoading, isFalse);
       });
 
-      test('should maintain provider state consistency after refresh',
-          () async {
-        // Arrange
-        final initialHasData = provider.hasData;
-        final initialHasError = provider.hasError;
-        final initialIsLoading = provider.isLoading;
+      test(
+        'should maintain provider state consistency after refresh',
+        () async {
+          // Arrange
+          final initialHasData = provider.hasData;
+          final initialHasError = provider.hasError;
+          final initialIsLoading = provider.isLoading;
 
-        // Act
-        await provider.refreshAfterReviewSubmission();
+          // Act
+          await provider.refreshAfterReviewSubmission();
 
-        // Assert - state should remain consistent
-        expect(provider.hasData, equals(initialHasData));
-        expect(provider.hasError, equals(initialHasError));
-        expect(provider.isLoading, equals(initialIsLoading));
-      });
+          // Assert - state should remain consistent
+          expect(provider.hasData, equals(initialHasData));
+          expect(provider.hasError, equals(initialHasError));
+          expect(provider.isLoading, equals(initialIsLoading));
+        },
+      );
     });
 
     group('Integration with existing functionality', () {
@@ -158,23 +168,27 @@ void main() {
 
           // Assert - should maintain or update data appropriately
           expect(provider.hasData, isTrue);
-          expect(provider.restaurantDetail?.customerReviews.length,
-              greaterThanOrEqualTo(originalReviewCount));
+          expect(
+            provider.restaurantDetail?.customerReviews.length,
+            greaterThanOrEqualTo(originalReviewCount),
+          );
         }
       });
 
-      test('should handle refresh after failed fetchRestaurantDetail',
-          () async {
-        // Arrange - try to fetch invalid restaurant
-        await provider.fetchRestaurantDetail('invalid-restaurant-id');
-        expect(provider.hasError, isTrue);
+      test(
+        'should handle refresh after failed fetchRestaurantDetail',
+        () async {
+          // Arrange - try to fetch invalid restaurant
+          await provider.fetchRestaurantDetail('invalid-restaurant-id');
+          expect(provider.hasError, isTrue);
 
-        // Act - refresh after error
-        await provider.refreshAfterReviewSubmission();
+          // Act - refresh after error
+          await provider.refreshAfterReviewSubmission();
 
-        // Assert - should clear error and not crash
-        expect(provider.hasError, isFalse);
-      });
+          // Assert - should clear error and not crash
+          expect(provider.hasError, isFalse);
+        },
+      );
 
       test('should work with retry functionality', () async {
         // Arrange - fetch restaurant data

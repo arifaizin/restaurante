@@ -12,20 +12,24 @@ class ReviewSubmissionResponse {
   });
 
   ReviewSubmissionResponse.fromJson(Map<String, dynamic> json)
-      : error = json['error'] ?? false,
-        message = json['message'] ?? '',
-        customerReviews = (json['customerReviews'] as List<dynamic>?)
-                ?.map((review) =>
-                    CustomerReview.fromJson(review as Map<String, dynamic>))
-                .toList() ??
-            [];
+    : error = json['error'] ?? false,
+      message = json['message'] ?? '',
+      customerReviews =
+          (json['customerReviews'] as List<dynamic>?)
+              ?.map(
+                (review) =>
+                    CustomerReview.fromJson(review as Map<String, dynamic>),
+              )
+              .toList() ??
+          [];
 
   Map<String, dynamic> toJson() {
     return {
       'error': error,
       'message': message,
-      'customerReviews':
-          customerReviews.map((review) => review.toJson()).toList(),
+      'customerReviews': customerReviews
+          .map((review) => review.toJson())
+          .toList(),
     };
   }
 

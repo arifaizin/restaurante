@@ -16,9 +16,11 @@ class NotificationHelper {
   factory NotificationHelper() => _instance ?? NotificationHelper._internal();
 
   Future<void> initNotifications(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
-    var initializationSettingsAndroid =
-        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+  ) async {
+    var initializationSettingsAndroid = const AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
 
     var initializationSettingsIOS = const DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -27,7 +29,9 @@ class NotificationHelper {
     );
 
     var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
@@ -42,39 +46,45 @@ class NotificationHelper {
   }
 
   Future<void> showNotification(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-      Restaurant restaurant) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+    Restaurant restaurant,
+  ) async {
     var channelId = "1";
     var channelName = "channel_01";
     var channelDescription = "restaurant channel";
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        channelId, channelName,
-        channelDescription: channelDescription,
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker',
-        styleInformation: const DefaultStyleInformation(true, true));
+      channelId,
+      channelName,
+      channelDescription: channelDescription,
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      styleInformation: const DefaultStyleInformation(true, true),
+    );
 
     var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
 
     var titleNotification = "<b>Daily Reminder</b>";
     var titleNews =
         "Waktunya makan siang! Yuk cek ${restaurant.name} di ${restaurant.city}.";
 
     await flutterLocalNotificationsPlugin.show(
-        0, titleNotification, titleNews, platformChannelSpecifics,
-        payload: json.encode(restaurant.toJson()));
+      0,
+      titleNotification,
+      titleNews,
+      platformChannelSpecifics,
+      payload: json.encode(restaurant.toJson()),
+    );
   }
 
   void configureSelectNotificationSubject(String route) {
-    selectNotificationSubject.stream.listen(
-      (String payload) async {
-        // Navigate to a specific screen if needed
-        // For now we can just print or handle navigation in main.dart listener
-      },
-    );
+    selectNotificationSubject.stream.listen((String payload) async {
+      // Navigate to a specific screen if needed
+      // For now we can just print or handle navigation in main.dart listener
+    });
   }
 }

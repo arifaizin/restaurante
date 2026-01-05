@@ -16,16 +16,10 @@ class MockApiService extends ApiService {
     await Future.delayed(const Duration(milliseconds: 100));
 
     if (shouldReturnError) {
-      return ApiResponse.failure(
-        errorMessage,
-        data: <Restaurant>[],
-      );
+      return ApiResponse.failure(errorMessage, data: <Restaurant>[]);
     }
 
-    return ApiResponse.success(
-      mockRestaurants,
-      message: 'Success',
-    );
+    return ApiResponse.success(mockRestaurants, message: 'Success');
   }
 
   @override
@@ -93,23 +87,25 @@ void main() {
     });
 
     /// Skenario 2: Memastikan harus mengembalikan daftar restoran ketika pengambilan data API berhasil
-    test('should return restaurant list when API fetch is successful',
-        () async {
-      // Ensure mock API will return success
-      mockApiService.shouldReturnError = false;
+    test(
+      'should return restaurant list when API fetch is successful',
+      () async {
+        // Ensure mock API will return success
+        mockApiService.shouldReturnError = false;
 
-      // Fetch restaurants
-      await restaurantProvider.fetchRestaurants();
+        // Fetch restaurants
+        await restaurantProvider.fetchRestaurants();
 
-      // Verify that restaurants were fetched successfully
-      expect(restaurantProvider.restaurants, isNotEmpty);
-      expect(restaurantProvider.restaurants.length, equals(3));
-      expect(restaurantProvider.restaurants, equals(testRestaurants));
-      expect(restaurantProvider.hasData, isTrue);
-      expect(restaurantProvider.isLoading, isFalse);
-      expect(restaurantProvider.hasError, isFalse);
-      expect(restaurantProvider.errorMessage, isNull);
-    });
+        // Verify that restaurants were fetched successfully
+        expect(restaurantProvider.restaurants, isNotEmpty);
+        expect(restaurantProvider.restaurants.length, equals(3));
+        expect(restaurantProvider.restaurants, equals(testRestaurants));
+        expect(restaurantProvider.hasData, isTrue);
+        expect(restaurantProvider.isLoading, isFalse);
+        expect(restaurantProvider.hasError, isFalse);
+        expect(restaurantProvider.errorMessage, isNull);
+      },
+    );
 
     /// Skenario 3: Memastikan harus mengembalikan kesalahan ketika pengambilan data API gagal
     test('should return error when API fetch fails', () async {
@@ -122,8 +118,10 @@ void main() {
 
       // Verify that error was handled correctly
       expect(restaurantProvider.hasError, isTrue);
-      expect(restaurantProvider.errorMessage,
-          equals('Failed to fetch restaurants'));
+      expect(
+        restaurantProvider.errorMessage,
+        equals('Failed to fetch restaurants'),
+      );
       expect(restaurantProvider.restaurants, isEmpty);
       expect(restaurantProvider.hasData, isFalse);
       expect(restaurantProvider.isLoading, isFalse);

@@ -16,7 +16,8 @@ class MockApiService extends ApiService {
 
   @override
   Future<ApiResponse<RestaurantSearchResponse>> searchRestaurants(
-      String query) async {
+    String query,
+  ) async {
     // Simulate network delay
     if (customDelay != null) {
       await Future.delayed(customDelay!);
@@ -39,8 +40,10 @@ class MockApiService extends ApiService {
 
     // Simulate search logic - filter mock restaurants by query
     final filteredRestaurants = mockRestaurants
-        .where((restaurant) =>
-            restaurant.name.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (restaurant) =>
+              restaurant.name.toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
 
     final searchResponse = RestaurantSearchResponse(
@@ -49,10 +52,7 @@ class MockApiService extends ApiService {
       restaurants: filteredRestaurants,
     );
 
-    return ApiResponse.success(
-      searchResponse,
-      message: 'Search successful',
-    );
+    return ApiResponse.success(searchResponse, message: 'Search successful');
   }
 
   @override
@@ -134,7 +134,9 @@ void main() {
     test('should clear results when query is too short', () async {
       // First perform a valid search
       searchProvider.searchRestaurants('cafe');
-      await Future.delayed(const Duration(milliseconds: 600)); // Wait for debounce
+      await Future.delayed(
+        const Duration(milliseconds: 600),
+      ); // Wait for debounce
 
       // Then search with short query
       searchProvider.searchRestaurants('ab');
@@ -159,21 +161,23 @@ void main() {
       expect(searchProvider.searchResults.first.name, contains('Cafe'));
     });
 
-    test('should cancel previous search when new search is initiated',
-        () async {
-      // Start first search
-      searchProvider.searchRestaurants('pizza');
+    test(
+      'should cancel previous search when new search is initiated',
+      () async {
+        // Start first search
+        searchProvider.searchRestaurants('pizza');
 
-      // Immediately start second search before first completes
-      searchProvider.searchRestaurants('cafe');
+        // Immediately start second search before first completes
+        searchProvider.searchRestaurants('cafe');
 
-      // Wait for debounce
-      await Future.delayed(const Duration(milliseconds: 600));
+        // Wait for debounce
+        await Future.delayed(const Duration(milliseconds: 600));
 
-      // Should have results for 'cafe', not 'pizza'
-      expect(searchProvider.currentQuery, equals('cafe'));
-      expect(searchProvider.searchResults.first.name, contains('Cafe'));
-    });
+        // Should have results for 'cafe', not 'pizza'
+        expect(searchProvider.currentQuery, equals('cafe'));
+        expect(searchProvider.searchResults.first.name, contains('Cafe'));
+      },
+    );
 
     test('should handle search results correctly', () async {
       searchProvider.searchRestaurants('pizza');
@@ -301,7 +305,9 @@ void main() {
       mockApiService.customDelay = const Duration(milliseconds: 100);
 
       searchProvider.searchRestaurants('test');
-      await Future.delayed(const Duration(milliseconds: 600)); // Wait for debounce
+      await Future.delayed(
+        const Duration(milliseconds: 600),
+      ); // Wait for debounce
 
       // Should be loading during API call
       expect(searchProvider.isLoading, isTrue);

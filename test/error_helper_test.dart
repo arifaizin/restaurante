@@ -163,28 +163,32 @@ void main() {
     group('getReviewSubmissionErrorMessage', () {
       test('should return specific message for network errors', () {
         final message = ErrorHelper.getReviewSubmissionErrorMessage(
-            'SocketException: Connection failed');
+          'SocketException: Connection failed',
+        );
         expect(message, contains('koneksi internet'));
         expect(message, contains('ulasan'));
       });
 
       test('should return specific message for timeout errors', () {
-        final message =
-            ErrorHelper.getReviewSubmissionErrorMessage('TimeoutException');
+        final message = ErrorHelper.getReviewSubmissionErrorMessage(
+          'TimeoutException',
+        );
         expect(message, contains('lambat'));
         expect(message, contains('ulasan'));
       });
 
       test('should return specific message for server errors', () {
-        final message =
-            ErrorHelper.getReviewSubmissionErrorMessage('HTTP 500 Error');
+        final message = ErrorHelper.getReviewSubmissionErrorMessage(
+          'HTTP 500 Error',
+        );
         expect(message, contains('Server'));
         expect(message, contains('Ulasan'));
       });
 
       test('should return specific message for validation errors', () {
-        final message =
-            ErrorHelper.getReviewSubmissionErrorMessage('Validation failed');
+        final message = ErrorHelper.getReviewSubmissionErrorMessage(
+          'Validation failed',
+        );
         expect(message, contains('valid'));
         expect(message, contains('ulasan'));
       });
@@ -249,8 +253,10 @@ void main() {
       });
 
       test('should return error for long review', () {
-        final message =
-            ErrorHelper.getValidationErrorMessage('review', 'A' * 501);
+        final message = ErrorHelper.getValidationErrorMessage(
+          'review',
+          'A' * 501,
+        );
         expect(message, contains('panjang'));
         expect(message, contains('500 karakter'));
       });
@@ -323,10 +329,16 @@ void main() {
 
         for (final error in testCases) {
           final errorInfo = ErrorHelper.getErrorInfo(error);
-          expect(errorInfo.type, isNot(ErrorType.unknown),
-              reason: 'Should identify error type for: $error');
-          expect(errorInfo.userMessage, isNotEmpty,
-              reason: 'Should have user message for: $error');
+          expect(
+            errorInfo.type,
+            isNot(ErrorType.unknown),
+            reason: 'Should identify error type for: $error',
+          );
+          expect(
+            errorInfo.userMessage,
+            isNotEmpty,
+            reason: 'Should have user message for: $error',
+          );
         }
       });
 
@@ -339,10 +351,16 @@ void main() {
 
         for (final error in testCases) {
           final errorInfo = ErrorHelper.getErrorInfo(error);
-          expect(errorInfo.userMessage, isNotEmpty,
-              reason: 'Should handle special characters in: $error');
-          expect(errorInfo.technicalMessage, equals(error),
-              reason: 'Should preserve technical message for: $error');
+          expect(
+            errorInfo.userMessage,
+            isNotEmpty,
+            reason: 'Should handle special characters in: $error',
+          );
+          expect(
+            errorInfo.technicalMessage,
+            equals(error),
+            reason: 'Should preserve technical message for: $error',
+          );
         }
       });
 
@@ -360,12 +378,21 @@ void main() {
 
         errorTypes.forEach((errorMessage, expectedType) {
           final errorInfo = ErrorHelper.getErrorInfo(errorMessage);
-          expect(errorInfo.type, equals(expectedType),
-              reason: 'Should identify correct type for: $errorMessage');
-          expect(errorInfo.actionGuidance, isNotNull,
-              reason: 'Should provide guidance for: $errorMessage');
-          expect(errorInfo.actionGuidance!.isNotEmpty, isTrue,
-              reason: 'Should provide non-empty guidance for: $errorMessage');
+          expect(
+            errorInfo.type,
+            equals(expectedType),
+            reason: 'Should identify correct type for: $errorMessage',
+          );
+          expect(
+            errorInfo.actionGuidance,
+            isNotNull,
+            reason: 'Should provide guidance for: $errorMessage',
+          );
+          expect(
+            errorInfo.actionGuidance!.isNotEmpty,
+            isTrue,
+            reason: 'Should provide non-empty guidance for: $errorMessage',
+          );
         });
       });
 
@@ -389,89 +416,116 @@ void main() {
     });
 
     group('Review Submission Error Message Variations', () {
-      test('should provide context-specific messages for review submission',
-          () {
-        final errorScenarios = {
-          'SocketException: No route to host': 'koneksi internet',
-          'TimeoutException: Connection timeout': 'lambat',
-          'HTTP 500 Internal Server Error': 'Server',
-          'HTTP 503 Service Unavailable': 'Server',
-          'Validation failed: Name required': 'valid',
-          'HTTP 401 Unauthorized': 'Akses ditolak',
-          'FormatException: Invalid JSON': 'memproses',
-          'Certificate verify failed': 'keamanan',
-        };
+      test(
+        'should provide context-specific messages for review submission',
+        () {
+          final errorScenarios = {
+            'SocketException: No route to host': 'koneksi internet',
+            'TimeoutException: Connection timeout': 'lambat',
+            'HTTP 500 Internal Server Error': 'Server',
+            'HTTP 503 Service Unavailable': 'Server',
+            'Validation failed: Name required': 'valid',
+            'HTTP 401 Unauthorized': 'Akses ditolak',
+            'FormatException: Invalid JSON': 'memproses',
+            'Certificate verify failed': 'keamanan',
+          };
 
-        errorScenarios.forEach((errorMessage, expectedText) {
-          final message =
-              ErrorHelper.getReviewSubmissionErrorMessage(errorMessage);
-          expect(message.toLowerCase(),
+          errorScenarios.forEach((errorMessage, expectedText) {
+            final message = ErrorHelper.getReviewSubmissionErrorMessage(
+              errorMessage,
+            );
+            expect(
+              message.toLowerCase(),
               anyOf([contains('ulasan'), contains('Ulasan')]),
-              reason: 'Should mention review for: $errorMessage');
-          expect(message, contains(expectedText),
-              reason: 'Should contain expected text for: $errorMessage');
-        });
-      });
+              reason: 'Should mention review for: $errorMessage',
+            );
+            expect(
+              message,
+              contains(expectedText),
+              reason: 'Should contain expected text for: $errorMessage',
+            );
+          });
+        },
+      );
 
       test('should provide helpful guidance in review submission errors', () {
         final networkError = ErrorHelper.getReviewSubmissionErrorMessage(
-            'SocketException: Connection refused');
+          'SocketException: Connection refused',
+        );
         expect(networkError, contains('Periksa koneksi'));
         expect(networkError, contains('coba lagi'));
 
         final timeoutError = ErrorHelper.getReviewSubmissionErrorMessage(
-            'TimeoutException: Request timeout');
+          'TimeoutException: Request timeout',
+        );
         expect(timeoutError, contains('beberapa saat'));
 
         final serverError = ErrorHelper.getReviewSubmissionErrorMessage(
-            'HTTP 500 Internal Server Error');
+          'HTTP 500 Internal Server Error',
+        );
         expect(serverError, contains('nanti'));
       });
     });
 
     group('Validation Error Message Enhancements', () {
       test('should provide specific guidance for name validation', () {
-        final emptyNameError =
-            ErrorHelper.getValidationErrorMessage('name', '');
+        final emptyNameError = ErrorHelper.getValidationErrorMessage(
+          'name',
+          '',
+        );
         expect(emptyNameError, contains('Nama tidak boleh kosong'));
         expect(emptyNameError, contains('Masukkan nama Anda'));
 
-        final shortNameError =
-            ErrorHelper.getValidationErrorMessage('name', 'A');
+        final shortNameError = ErrorHelper.getValidationErrorMessage(
+          'name',
+          'A',
+        );
         expect(shortNameError, contains('terlalu pendek'));
         expect(shortNameError, contains('minimal 2 karakter'));
 
-        final longNameError =
-            ErrorHelper.getValidationErrorMessage('name', 'A' * 51);
+        final longNameError = ErrorHelper.getValidationErrorMessage(
+          'name',
+          'A' * 51,
+        );
         expect(longNameError, contains('terlalu panjang'));
         expect(longNameError, contains('Maksimal 50 karakter'));
       });
 
       test('should provide specific guidance for review validation', () {
-        final emptyReviewError =
-            ErrorHelper.getValidationErrorMessage('review', '');
+        final emptyReviewError = ErrorHelper.getValidationErrorMessage(
+          'review',
+          '',
+        );
         expect(emptyReviewError, contains('Ulasan tidak boleh kosong'));
         expect(emptyReviewError, contains('Bagikan pengalaman'));
 
-        final shortReviewError =
-            ErrorHelper.getValidationErrorMessage('review', 'Good');
+        final shortReviewError = ErrorHelper.getValidationErrorMessage(
+          'review',
+          'Good',
+        );
         expect(shortReviewError, contains('terlalu pendek'));
         expect(shortReviewError, contains('minimal 10 karakter'));
         expect(shortReviewError, contains('feedback yang berguna'));
 
-        final longReviewError =
-            ErrorHelper.getValidationErrorMessage('review', 'A' * 501);
+        final longReviewError = ErrorHelper.getValidationErrorMessage(
+          'review',
+          'A' * 501,
+        );
         expect(longReviewError, contains('terlalu panjang'));
         expect(longReviewError, contains('Maksimal 500 karakter'));
       });
 
       test('should handle whitespace-only input correctly', () {
-        final whitespaceNameError =
-            ErrorHelper.getValidationErrorMessage('name', '   ');
+        final whitespaceNameError = ErrorHelper.getValidationErrorMessage(
+          'name',
+          '   ',
+        );
         expect(whitespaceNameError, contains('tidak boleh kosong'));
 
-        final whitespaceReviewError =
-            ErrorHelper.getValidationErrorMessage('review', '\t\n  ');
+        final whitespaceReviewError = ErrorHelper.getValidationErrorMessage(
+          'review',
+          '\t\n  ',
+        );
         expect(whitespaceReviewError, contains('tidak boleh kosong'));
       });
     });
@@ -497,14 +551,15 @@ void main() {
           expect(message, contains('berhasil'));
           expect(message.length, greaterThan(20)); // Should be descriptive
           expect(
-              message,
-              anyOf([
-                contains('Terima kasih'),
-                contains('ditambahkan'),
-                contains('dikirim'),
-                contains('feedback'),
-                contains('pengalaman'),
-              ]));
+            message,
+            anyOf([
+              contains('Terima kasih'),
+              contains('ditambahkan'),
+              contains('dikirim'),
+              contains('feedback'),
+              contains('pengalaman'),
+            ]),
+          );
         }
       });
 
@@ -513,23 +568,25 @@ void main() {
 
         // Should be encouraging and specific to review submission
         expect(
-            message,
-            anyOf([
-              contains('ulasan'),
-              contains('Ulasan'),
-              contains('feedback'),
-              contains('pengalaman'),
-            ]));
+          message,
+          anyOf([
+            contains('ulasan'),
+            contains('Ulasan'),
+            contains('feedback'),
+            contains('pengalaman'),
+          ]),
+        );
 
         // Should express gratitude or confirmation
         expect(
-            message,
-            anyOf([
-              contains('Terima kasih'),
-              contains('berhasil'),
-              contains('ditambahkan'),
-              contains('dikirim'),
-            ]));
+          message,
+          anyOf([
+            contains('Terima kasih'),
+            contains('berhasil'),
+            contains('ditambahkan'),
+            contains('dikirim'),
+          ]),
+        );
       });
     });
 
@@ -544,8 +601,11 @@ void main() {
         ];
 
         for (final error in networkErrors) {
-          expect(ErrorHelper.isNetworkError(error), isTrue,
-              reason: 'Should identify as network error: $error');
+          expect(
+            ErrorHelper.isNetworkError(error),
+            isTrue,
+            reason: 'Should identify as network error: $error',
+          );
         }
 
         final nonNetworkErrors = [
@@ -557,8 +617,11 @@ void main() {
         ];
 
         for (final error in nonNetworkErrors) {
-          expect(ErrorHelper.isNetworkError(error), isFalse,
-              reason: 'Should not identify as network error: $error');
+          expect(
+            ErrorHelper.isNetworkError(error),
+            isFalse,
+            reason: 'Should not identify as network error: $error',
+          );
         }
       });
 
@@ -575,8 +638,11 @@ void main() {
         ];
 
         for (final error in retryableErrors) {
-          expect(ErrorHelper.isRetryableError(error), isTrue,
-              reason: 'Should be retryable: $error');
+          expect(
+            ErrorHelper.isRetryableError(error),
+            isTrue,
+            reason: 'Should be retryable: $error',
+          );
         }
 
         final nonRetryableErrors = [
@@ -586,8 +652,11 @@ void main() {
         ];
 
         for (final error in nonRetryableErrors) {
-          expect(ErrorHelper.isRetryableError(error), isFalse,
-              reason: 'Should not be retryable: $error');
+          expect(
+            ErrorHelper.isRetryableError(error),
+            isFalse,
+            reason: 'Should not be retryable: $error',
+          );
         }
       });
     });

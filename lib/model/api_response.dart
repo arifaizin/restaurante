@@ -27,11 +27,7 @@ class ApiResponse<T> {
 
   /// Creates a successful ApiResponse
   factory ApiResponse.success(T data, {String message = 'Success'}) {
-    return ApiResponse<T>(
-      error: false,
-      message: message,
-      data: data,
-    );
+    return ApiResponse<T>(error: false, message: message, data: data);
   }
 
   /// Creates an error ApiResponse

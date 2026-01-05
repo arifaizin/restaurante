@@ -4,13 +4,7 @@ import '../model/restaurant.dart';
 import '../services/api_service.dart';
 
 /// Error types for categorizing different search failures
-enum SearchErrorType {
-  network,
-  timeout,
-  api,
-  server,
-  unknown,
-}
+enum SearchErrorType { network, timeout, api, server, unknown }
 
 /// Provider class for managing restaurant search state
 class SearchProvider extends ChangeNotifier {
@@ -29,7 +23,7 @@ class SearchProvider extends ChangeNotifier {
   static const int _minQueryLength = 3;
 
   SearchProvider({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   // Getters for accessing state properties
   List<Restaurant> get searchResults => _searchResults;
@@ -99,10 +93,7 @@ class SearchProvider extends ChangeNotifier {
           _searchResults = [];
         }
       } else {
-        _setError(
-          response.message,
-          _categorizeErrorType(response.message),
-        );
+        _setError(response.message, _categorizeErrorType(response.message));
         _searchResults = [];
       }
     } catch (e) {

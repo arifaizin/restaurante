@@ -38,18 +38,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Restaurants'),
-        elevation: 0.0,
-      ),
+      appBar: AppBar(title: const Text('Search Restaurants'), elevation: 0.0),
       body: _buildSearchBody(context),
     );
   }
@@ -67,9 +61,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Column(
       children: [
         _buildSearchField(context),
-        Expanded(
-          child: _buildSearchResults(context),
-        ),
+        Expanded(child: _buildSearchResults(context)),
       ],
     );
   }
@@ -136,11 +128,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.search,
-                size: 64,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.search, size: 64, color: Colors.grey[400]),
               const SizedBox(height: 16),
               Text(
                 'Search Restaurants',
@@ -168,10 +156,7 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text(
-              'Searching restaurants...',
-              style: TextStyle(fontSize: 16.0),
-            ),
+            Text('Searching restaurants...', style: TextStyle(fontSize: 16.0)),
           ],
         ),
       ),
@@ -179,8 +164,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildErrorState(BuildContext context, SearchProvider provider) {
-    final userFriendlyMessage =
-        ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
+    final userFriendlyMessage = ErrorHelper.getUserFriendlyMessage(
+      provider.errorMessage,
+    );
     final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
 
     return SingleChildScrollView(
@@ -217,7 +203,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildRetrySection(
-      BuildContext context, SearchProvider provider, bool isNetworkError) {
+    BuildContext context,
+    SearchProvider provider,
+    bool isNetworkError,
+  ) {
     return Column(
       children: [
         ElevatedButton.icon(
@@ -264,11 +253,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.search_off,
-                size: 64,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
               const SizedBox(height: 16),
               Text(
                 'Restaurants Not Found',
@@ -285,9 +270,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 Text(
                   'Search: "$query"',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
                 ),
               ],
             ],
@@ -312,18 +297,23 @@ class _SearchScreenState extends State<SearchScreen> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, DetailScreen.routeName,
-              arguments: restaurant.id);
+          Navigator.pushNamed(
+            context,
+            DetailScreen.routeName,
+            arguments: restaurant.id,
+          );
         },
         child: Card(
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0))),
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16.0)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16.0),
+                ),
                 child: Hero(
                   tag: "photo${restaurant.id}",
                   child: Image.network(
@@ -372,13 +362,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         SmoothStarRating(
-                            allowHalfRating: false,
-                            starCount: 5,
-                            rating: restaurant.rating,
-                            size: 20.0,
-                            color: Colors.orange,
-                            borderColor: Colors.orange,
-                            spacing: 0.0),
+                          allowHalfRating: false,
+                          starCount: 5,
+                          rating: restaurant.rating,
+                          size: 20.0,
+                          color: Colors.orange,
+                          borderColor: Colors.orange,
+                          spacing: 0.0,
+                        ),
                         Text(
                           " (${restaurant.rating})",
                           style: Theme.of(context).textTheme.bodyMedium,

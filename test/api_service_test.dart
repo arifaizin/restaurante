@@ -41,8 +41,10 @@ void main() {
     });
 
     test('should create failure response', () {
-      final response =
-          ApiResponse<List<String>>.failure('Error occurred', data: <String>[]);
+      final response = ApiResponse<List<String>>.failure(
+        'Error occurred',
+        data: <String>[],
+      );
 
       expect(response.isSuccess, isFalse);
       expect(response.isFailure, isTrue);
@@ -77,16 +79,17 @@ void main() {
       expect(result.message, equals('Search query cannot be empty'));
     });
 
-    test('searchRestaurants should return failure for whitespace-only query',
-        () async {
-      final result = await apiService.searchRestaurants('   ');
+    test(
+      'searchRestaurants should return failure for whitespace-only query',
+      () async {
+        final result = await apiService.searchRestaurants('   ');
 
-      expect(result.error, isTrue);
-      expect(result.message, equals('Search query cannot be empty'));
-    });
+        expect(result.error, isTrue);
+        expect(result.message, equals('Search query cannot be empty'));
+      },
+    );
 
-    test('searchRestaurants should handle query with special characters',
-        () async {
+    test('searchRestaurants should handle query with special characters', () async {
       // This test validates that the method properly encodes special characters
       // The method should not crash on URL encoding and should return a valid response
       final result = await apiService.searchRestaurants('café & restaurant');
@@ -119,105 +122,113 @@ void main() {
       apiService.dispose();
     });
 
-    test('submitReview should return failure for invalid request - empty id',
-        () async {
-      final request = ReviewSubmissionRequest(
-        id: '',
-        name: 'John Doe',
-        review: 'Great restaurant!',
-      );
+    test(
+      'submitReview should return failure for invalid request - empty id',
+      () async {
+        final request = ReviewSubmissionRequest(
+          id: '',
+          name: 'John Doe',
+          review: 'Great restaurant!',
+        );
 
-      final result = await apiService.submitReview(request);
+        final result = await apiService.submitReview(request);
 
-      expect(result.error, isTrue);
-      expect(result.message, equals('Restaurant ID is required'));
-      expect(result.data, isA<ReviewSubmissionResponse>());
-      expect(result.data.error, isTrue);
-    });
-
-    test('submitReview should return failure for invalid request - empty name',
-        () async {
-      final request = ReviewSubmissionRequest(
-        id: 'rqdv5juczeskfw1e867',
-        name: '',
-        review: 'Great restaurant!',
-      );
-
-      final result = await apiService.submitReview(request);
-
-      expect(result.error, isTrue);
-      expect(result.message, equals('Nama tidak boleh kosong'));
-      expect(result.data, isA<ReviewSubmissionResponse>());
-      expect(result.data.error, isTrue);
-    });
+        expect(result.error, isTrue);
+        expect(result.message, equals('Restaurant ID is required'));
+        expect(result.data, isA<ReviewSubmissionResponse>());
+        expect(result.data.error, isTrue);
+      },
+    );
 
     test(
-        'submitReview should return failure for invalid request - name too short',
-        () async {
-      final request = ReviewSubmissionRequest(
-        id: 'rqdv5juczeskfw1e867',
-        name: 'A',
-        review: 'Great restaurant!',
-      );
+      'submitReview should return failure for invalid request - empty name',
+      () async {
+        final request = ReviewSubmissionRequest(
+          id: 'rqdv5juczeskfw1e867',
+          name: '',
+          review: 'Great restaurant!',
+        );
 
-      final result = await apiService.submitReview(request);
+        final result = await apiService.submitReview(request);
 
-      expect(result.error, isTrue);
-      expect(result.message, equals('Nama minimal 2 karakter'));
-      expect(result.data, isA<ReviewSubmissionResponse>());
-      expect(result.data.error, isTrue);
-    });
-
-    test(
-        'submitReview should return failure for invalid request - empty review',
-        () async {
-      final request = ReviewSubmissionRequest(
-        id: 'rqdv5juczeskfw1e867',
-        name: 'John Doe',
-        review: '',
-      );
-
-      final result = await apiService.submitReview(request);
-
-      expect(result.error, isTrue);
-      expect(result.message, equals('Ulasan tidak boleh kosong'));
-      expect(result.data, isA<ReviewSubmissionResponse>());
-      expect(result.data.error, isTrue);
-    });
+        expect(result.error, isTrue);
+        expect(result.message, equals('Nama tidak boleh kosong'));
+        expect(result.data, isA<ReviewSubmissionResponse>());
+        expect(result.data.error, isTrue);
+      },
+    );
 
     test(
-        'submitReview should return failure for invalid request - whitespace only name',
-        () async {
-      final request = ReviewSubmissionRequest(
-        id: 'rqdv5juczeskfw1e867',
-        name: '   ',
-        review: 'Great restaurant!',
-      );
+      'submitReview should return failure for invalid request - name too short',
+      () async {
+        final request = ReviewSubmissionRequest(
+          id: 'rqdv5juczeskfw1e867',
+          name: 'A',
+          review: 'Great restaurant!',
+        );
 
-      final result = await apiService.submitReview(request);
+        final result = await apiService.submitReview(request);
 
-      expect(result.error, isTrue);
-      expect(result.message, equals('Nama tidak boleh kosong'));
-      expect(result.data, isA<ReviewSubmissionResponse>());
-      expect(result.data.error, isTrue);
-    });
+        expect(result.error, isTrue);
+        expect(result.message, equals('Nama minimal 2 karakter'));
+        expect(result.data, isA<ReviewSubmissionResponse>());
+        expect(result.data.error, isTrue);
+      },
+    );
 
     test(
-        'submitReview should return failure for invalid request - whitespace only review',
-        () async {
-      final request = ReviewSubmissionRequest(
-        id: 'rqdv5juczeskfw1e867',
-        name: 'John Doe',
-        review: '   ',
-      );
+      'submitReview should return failure for invalid request - empty review',
+      () async {
+        final request = ReviewSubmissionRequest(
+          id: 'rqdv5juczeskfw1e867',
+          name: 'John Doe',
+          review: '',
+        );
 
-      final result = await apiService.submitReview(request);
+        final result = await apiService.submitReview(request);
 
-      expect(result.error, isTrue);
-      expect(result.message, equals('Ulasan tidak boleh kosong'));
-      expect(result.data, isA<ReviewSubmissionResponse>());
-      expect(result.data.error, isTrue);
-    });
+        expect(result.error, isTrue);
+        expect(result.message, equals('Ulasan tidak boleh kosong'));
+        expect(result.data, isA<ReviewSubmissionResponse>());
+        expect(result.data.error, isTrue);
+      },
+    );
+
+    test(
+      'submitReview should return failure for invalid request - whitespace only name',
+      () async {
+        final request = ReviewSubmissionRequest(
+          id: 'rqdv5juczeskfw1e867',
+          name: '   ',
+          review: 'Great restaurant!',
+        );
+
+        final result = await apiService.submitReview(request);
+
+        expect(result.error, isTrue);
+        expect(result.message, equals('Nama tidak boleh kosong'));
+        expect(result.data, isA<ReviewSubmissionResponse>());
+        expect(result.data.error, isTrue);
+      },
+    );
+
+    test(
+      'submitReview should return failure for invalid request - whitespace only review',
+      () async {
+        final request = ReviewSubmissionRequest(
+          id: 'rqdv5juczeskfw1e867',
+          name: 'John Doe',
+          review: '   ',
+        );
+
+        final result = await apiService.submitReview(request);
+
+        expect(result.error, isTrue);
+        expect(result.message, equals('Ulasan tidak boleh kosong'));
+        expect(result.data, isA<ReviewSubmissionResponse>());
+        expect(result.data.error, isTrue);
+      },
+    );
 
     test('submitReview should handle valid request structure', () async {
       final request = ReviewSubmissionRequest(
@@ -234,8 +245,7 @@ void main() {
       expect(result.data, isA<ReviewSubmissionResponse>());
     });
 
-    test('submitReview should handle request with special characters',
-        () async {
+    test('submitReview should handle request with special characters', () async {
       final request = ReviewSubmissionRequest(
         id: 'rqdv5juczeskfw1e867',
         name: 'José María',

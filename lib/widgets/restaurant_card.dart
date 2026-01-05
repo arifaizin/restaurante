@@ -28,7 +28,9 @@ class RestaurantCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16.0),
+                ),
                 child: Hero(
                   tag: "photo${restaurant.id}",
                   child: Image.network(
@@ -68,9 +70,7 @@ class RestaurantCard extends StatelessWidget {
                         const SizedBox(width: 4.0),
                         Text(
                           restaurant.city,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
+                          style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(color: Colors.grey[600]),
                         ),
                       ],

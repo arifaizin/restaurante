@@ -15,14 +15,11 @@ class MockErrorApiService extends ApiService {
 
   @override
   Future<ApiResponse<RestaurantSearchResponse>> searchRestaurants(
-      String query) async {
+    String query,
+  ) async {
     return ApiResponse.failure(
       errorMessage,
-      data: RestaurantSearchResponse(
-        error: true,
-        founded: 0,
-        restaurants: [],
-      ),
+      data: RestaurantSearchResponse(error: true, founded: 0, restaurants: []),
     );
   }
 
@@ -37,8 +34,9 @@ class MockErrorApiService extends ApiService {
 
 void main() {
   group('SearchScreen Error Handling', () {
-    testWidgets('should display network error UI correctly',
-        (WidgetTester tester) async {
+    testWidgets('should display network error UI correctly', (
+      WidgetTester tester,
+    ) async {
       final mockApiService = MockErrorApiService('No internet connection');
       final searchProvider = SearchProvider(apiService: mockApiService);
 
@@ -64,8 +62,9 @@ void main() {
       expect(find.text('New Search'), findsOneWidget);
     });
 
-    testWidgets('should display timeout error UI correctly',
-        (WidgetTester tester) async {
+    testWidgets('should display timeout error UI correctly', (
+      WidgetTester tester,
+    ) async {
       final mockApiService = MockErrorApiService('Request timed out');
       final searchProvider = SearchProvider(apiService: mockApiService);
 
@@ -89,8 +88,9 @@ void main() {
       expect(find.text('Retry Search'), findsOneWidget);
     });
 
-    testWidgets('should display server error UI correctly',
-        (WidgetTester tester) async {
+    testWidgets('should display server error UI correctly', (
+      WidgetTester tester,
+    ) async {
       final mockApiService = MockErrorApiService('Server error 500');
       final searchProvider = SearchProvider(apiService: mockApiService);
 
@@ -140,8 +140,9 @@ void main() {
       expect(find.text('Retry Search'), findsOneWidget);
     });
 
-    testWidgets('should handle new search button tap',
-        (WidgetTester tester) async {
+    testWidgets('should handle new search button tap', (
+      WidgetTester tester,
+    ) async {
       final mockApiService = MockErrorApiService('Network error');
       final searchProvider = SearchProvider(apiService: mockApiService);
 

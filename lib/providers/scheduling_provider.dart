@@ -31,9 +31,7 @@ class SchedulingProvider extends ChangeNotifier {
         "fetch-data-task",
         frequency: const Duration(hours: 24), // Can be different or the same
         initialDelay: DateTimeHelper.format().difference(DateTime.now()),
-        constraints: Constraints(
-          networkType: NetworkType.connected,
-        ),
+        constraints: Constraints(networkType: NetworkType.connected),
       );
 
       return true;

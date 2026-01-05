@@ -15,7 +15,7 @@ void main() {
             'description': 'Quisque rutrum. Aenean imperdiet...',
             'pictureId': '03',
             'city': 'Surabaya',
-            'rating': 4.2
+            'rating': 4.2,
           },
           {
             'id': 'abc123',
@@ -23,9 +23,9 @@ void main() {
             'description': 'Test description',
             'pictureId': '01',
             'city': 'Jakarta',
-            'rating': 4.5
-          }
-        ]
+            'rating': 4.5,
+          },
+        ],
       };
 
       // Act
@@ -92,7 +92,7 @@ void main() {
       final json = {
         'error': false,
         'founded': 1,
-        'restaurants': ['invalid_data'] // Invalid format
+        'restaurants': ['invalid_data'], // Invalid format
       };
 
       // Act & Assert
@@ -114,32 +114,36 @@ void main() {
       expect(response.isEmpty, true);
     });
 
-    test('should validate consistency between founded and restaurant count',
-        () {
-      // Arrange - Case where API returns fewer results than founded count
-      final json = {
-        'error': false,
-        'founded': 5,
-        'restaurants': [
-          {
-            'id': 'test1',
-            'name': 'Test Restaurant',
-            'description': 'Test description',
-            'pictureId': '01',
-            'city': 'Jakarta',
-            'rating': 4.5
-          }
-        ]
-      };
+    test(
+      'should validate consistency between founded and restaurant count',
+      () {
+        // Arrange - Case where API returns fewer results than founded count
+        final json = {
+          'error': false,
+          'founded': 5,
+          'restaurants': [
+            {
+              'id': 'test1',
+              'name': 'Test Restaurant',
+              'description': 'Test description',
+              'pictureId': '01',
+              'city': 'Jakarta',
+              'rating': 4.5,
+            },
+          ],
+        };
 
-      // Act
-      final response = RestaurantSearchResponse.fromJson(json);
+        // Act
+        final response = RestaurantSearchResponse.fromJson(json);
 
-      // Assert
-      expect(response.isValid,
-          true); // Should be valid as restaurant count <= founded
-      expect(response.foundCount, 5);
-      expect(response.restaurantCount, 1);
-    });
+        // Assert
+        expect(
+          response.isValid,
+          true,
+        ); // Should be valid as restaurant count <= founded
+        expect(response.foundCount, 5);
+        expect(response.restaurantCount, 1);
+      },
+    );
   });
 }

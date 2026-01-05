@@ -23,7 +23,8 @@ class MockApiServiceForErrorTesting extends ApiService {
 
   @override
   Future<ApiResponse<ReviewSubmissionResponse>> submitReview(
-      ReviewSubmissionRequest request) async {
+    ReviewSubmissionRequest request,
+  ) async {
     if (customDelay != null) {
       await Future.delayed(customDelay!);
     } else {
@@ -46,8 +47,10 @@ class MockApiServiceForErrorTesting extends ApiService {
         message: errorToThrow ?? 'Submission failed',
         customerReviews: [],
       );
-      return ApiResponse.failure(errorToThrow ?? 'Submission failed',
-          data: response);
+      return ApiResponse.failure(
+        errorToThrow ?? 'Submission failed',
+        data: response,
+      );
     }
   }
 
@@ -85,15 +88,18 @@ void main() {
     }
 
     group('Network Error Handling', () {
-      testWidgets('should handle SocketException with proper UI feedback',
-          (WidgetTester tester) async {
+      testWidgets('should handle SocketException with proper UI feedback', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'SocketException: Connection refused';
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -109,15 +115,18 @@ void main() {
         expect(find.text('Coba Lagi'), findsOneWidget);
       });
 
-      testWidgets('should show network troubleshooting dialog',
-          (WidgetTester tester) async {
+      testWidgets('should show network troubleshooting dialog', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'SocketException: Network unreachable';
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit to trigger network error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -127,26 +136,37 @@ void main() {
 
         // Verify troubleshooting dialog appears
         expect(find.byType(AlertDialog), findsOneWidget);
-        expect(find.text('Masalah Koneksi'),
-            findsNWidgets(2)); // Title in both error and dialog
-        expect(find.text('Periksa koneksi Wi-Fi atau data seluler'),
-            findsOneWidget);
+        expect(
+          find.text('Masalah Koneksi'),
+          findsNWidgets(2),
+        ); // Title in both error and dialog
+        expect(
+          find.text('Periksa koneksi Wi-Fi atau data seluler'),
+          findsOneWidget,
+        );
         expect(find.text('Pastikan sinyal internet stabil'), findsOneWidget);
         expect(
-            find.text('Coba tutup dan buka kembali aplikasi'), findsOneWidget);
+          find.text('Coba tutup dan buka kembali aplikasi'),
+          findsOneWidget,
+        );
         expect(
-            find.text('Periksa pengaturan jaringan perangkat'), findsOneWidget);
+          find.text('Periksa pengaturan jaringan perangkat'),
+          findsOneWidget,
+        );
       });
 
-      testWidgets('should retry from troubleshooting dialog',
-          (WidgetTester tester) async {
+      testWidgets('should retry from troubleshooting dialog', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'SocketException: Network unreachable';
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit to trigger network error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -169,8 +189,9 @@ void main() {
     });
 
     group('Timeout Error Handling', () {
-      testWidgets('should handle timeout errors with proper UI feedback',
-          (WidgetTester tester) async {
+      testWidgets('should handle timeout errors with proper UI feedback', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow =
             'TimeoutException: Request timeout after 10 seconds';
         mockApiService.shouldSucceed = false;
@@ -179,7 +200,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -194,8 +217,9 @@ void main() {
     });
 
     group('Server Error Handling', () {
-      testWidgets('should handle server errors with proper UI feedback',
-          (WidgetTester tester) async {
+      testWidgets('should handle server errors with proper UI feedback', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'HTTP 500 Internal Server Error';
         mockApiService.shouldSucceed = false;
         await tester.pumpWidget(createTestWidget());
@@ -203,7 +227,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -216,8 +242,9 @@ void main() {
         expect(find.text('Masalah Server'), findsOneWidget);
       });
 
-      testWidgets('should handle different server error codes',
-          (WidgetTester tester) async {
+      testWidgets('should handle different server error codes', (
+        WidgetTester tester,
+      ) async {
         final serverErrors = [
           'HTTP 502 Bad Gateway',
           'HTTP 503 Service Unavailable',
@@ -234,15 +261,23 @@ void main() {
           // Fill form and submit
           await tester.enterText(find.byType(TextFormField).first, 'John Doe');
           await tester.enterText(
-              find.byType(TextFormField).last, 'Great restaurant!');
+            find.byType(TextFormField).last,
+            'Great restaurant!',
+          );
           await tester.tap(find.text('Kirim Ulasan'));
           await tester.pump(const Duration(milliseconds: 100));
 
           // Verify server error is detected
-          expect(provider.lastErrorType, ErrorType.server,
-              reason: 'Failed for error: $error');
-          expect(provider.submissionError, contains('Server'),
-              reason: 'Failed for error: $error');
+          expect(
+            provider.lastErrorType,
+            ErrorType.server,
+            reason: 'Failed for error: $error',
+          );
+          expect(
+            provider.submissionError,
+            contains('Server'),
+            reason: 'Failed for error: $error',
+          );
 
           // Clear for next iteration
           provider.clearError();
@@ -252,8 +287,9 @@ void main() {
     });
 
     group('Validation Error Handling', () {
-      testWidgets('should handle validation errors with proper UI feedback',
-          (WidgetTester tester) async {
+      testWidgets('should handle validation errors with proper UI feedback', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow =
             'Validation failed: Invalid data provided';
         mockApiService.shouldSucceed = false;
@@ -262,7 +298,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -278,8 +316,9 @@ void main() {
     });
 
     group('Authentication Error Handling', () {
-      testWidgets('should handle authentication errors as non-retryable',
-          (WidgetTester tester) async {
+      testWidgets('should handle authentication errors as non-retryable', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'HTTP 401 Unauthorized';
         mockApiService.shouldSucceed = false;
         await tester.pumpWidget(createTestWidget());
@@ -287,7 +326,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -306,8 +347,9 @@ void main() {
     });
 
     group('Not Found Error Handling', () {
-      testWidgets('should handle not found errors as non-retryable',
-          (WidgetTester tester) async {
+      testWidgets('should handle not found errors as non-retryable', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'HTTP 404 Not Found';
         mockApiService.shouldSucceed = false;
         await tester.pumpWidget(createTestWidget());
@@ -315,7 +357,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -330,8 +374,9 @@ void main() {
     });
 
     group('Format Error Handling', () {
-      testWidgets('should handle format/parsing errors',
-          (WidgetTester tester) async {
+      testWidgets('should handle format/parsing errors', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'FormatException: Invalid JSON format';
         mockApiService.shouldSucceed = false;
         await tester.pumpWidget(createTestWidget());
@@ -339,7 +384,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -350,8 +397,9 @@ void main() {
     });
 
     group('Security Error Handling', () {
-      testWidgets('should handle SSL/certificate errors',
-          (WidgetTester tester) async {
+      testWidgets('should handle SSL/certificate errors', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow =
             'HandshakeException: SSL certificate error';
         mockApiService.shouldSucceed = false;
@@ -360,7 +408,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -371,8 +421,9 @@ void main() {
     });
 
     group('Success Message Variations', () {
-      testWidgets('should show varied success messages',
-          (WidgetTester tester) async {
+      testWidgets('should show varied success messages', (
+        WidgetTester tester,
+      ) async {
         mockApiService.shouldSucceed = true;
         final successMessages = <String>{};
 
@@ -384,7 +435,9 @@ void main() {
           // Fill form and submit
           await tester.enterText(find.byType(TextFormField).first, 'John Doe');
           await tester.enterText(
-              find.byType(TextFormField).last, 'Great restaurant!');
+            find.byType(TextFormField).last,
+            'Great restaurant!',
+          );
           await tester.tap(find.text('Kirim Ulasan'));
           await tester.pump(const Duration(milliseconds: 100));
 
@@ -404,20 +457,25 @@ void main() {
         // Verify we got varied success messages
         expect(successMessages.length, greaterThan(1));
         expect(
-            successMessages.every((msg) => msg.contains('berhasil')), isTrue);
+          successMessages.every((msg) => msg.contains('berhasil')),
+          isTrue,
+        );
       });
     });
 
     group('Error Message Clearing', () {
-      testWidgets('should clear error when user starts typing',
-          (WidgetTester tester) async {
+      testWidgets('should clear error when user starts typing', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'Network error';
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit to trigger error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -434,15 +492,18 @@ void main() {
         expect(find.textContaining('koneksi'), findsNothing);
       });
 
-      testWidgets('should clear error when close button is tapped',
-          (WidgetTester tester) async {
+      testWidgets('should clear error when close button is tapped', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'Server error';
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit to trigger error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -459,8 +520,9 @@ void main() {
     });
 
     group('Retry Functionality', () {
-      testWidgets('should retry submission from error banner',
-          (WidgetTester tester) async {
+      testWidgets('should retry submission from error banner', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'Network timeout';
         mockApiService.shouldSucceed = false;
         await tester.pumpWidget(createTestWidget());
@@ -468,7 +530,9 @@ void main() {
         // Fill form and submit to trigger error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -489,15 +553,18 @@ void main() {
         expect(find.byType(SnackBar), findsOneWidget);
       });
 
-      testWidgets('should maintain form data during retry',
-          (WidgetTester tester) async {
+      testWidgets('should maintain form data during retry', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'Temporary error';
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit to trigger error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant experience!');
+          find.byType(TextFormField).last,
+          'Great restaurant experience!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -507,10 +574,12 @@ void main() {
         expect(provider.reviewText, 'Great restaurant experience!');
 
         // Verify form fields still contain data
-        final nameField =
-            tester.widget<TextFormField>(find.byType(TextFormField).first);
-        final reviewField =
-            tester.widget<TextFormField>(find.byType(TextFormField).last);
+        final nameField = tester.widget<TextFormField>(
+          find.byType(TextFormField).first,
+        );
+        final reviewField = tester.widget<TextFormField>(
+          find.byType(TextFormField).last,
+        );
 
         expect(nameField.controller?.text, 'John Doe');
         expect(reviewField.controller?.text, 'Great restaurant experience!');
@@ -518,24 +587,25 @@ void main() {
     });
 
     group('Visual Feedback and Styling', () {
-      testWidgets('should use appropriate colors for different error types',
-          (WidgetTester tester) async {
+      testWidgets('should use appropriate colors for different error types', (
+        WidgetTester tester,
+      ) async {
         final errorTests = {
           'SocketException: Network error': {
             'type': ErrorType.network,
-            'icon': Icons.wifi_off
+            'icon': Icons.wifi_off,
           },
           'TimeoutException: Timeout': {
             'type': ErrorType.timeout,
-            'icon': Icons.access_time
+            'icon': Icons.access_time,
           },
           'HTTP 500 Server Error': {
             'type': ErrorType.server,
-            'icon': Icons.error_outline
+            'icon': Icons.error_outline,
           },
           'Validation failed': {
             'type': ErrorType.validation,
-            'icon': Icons.info_outline
+            'icon': Icons.info_outline,
           },
         };
 
@@ -553,15 +623,23 @@ void main() {
           // Fill form and submit
           await tester.enterText(find.byType(TextFormField).first, 'John Doe');
           await tester.enterText(
-              find.byType(TextFormField).last, 'Great restaurant!');
+            find.byType(TextFormField).last,
+            'Great restaurant!',
+          );
           await tester.tap(find.text('Kirim Ulasan'));
           await tester.pump(const Duration(milliseconds: 100));
 
           // Verify correct error type and icon
-          expect(provider.lastErrorType, expectedType,
-              reason: 'Failed for error: $errorMessage');
-          expect(find.byIcon(expectedIcon), findsOneWidget,
-              reason: 'Failed for error: $errorMessage');
+          expect(
+            provider.lastErrorType,
+            expectedType,
+            reason: 'Failed for error: $errorMessage',
+          );
+          expect(
+            find.byIcon(expectedIcon),
+            findsOneWidget,
+            reason: 'Failed for error: $errorMessage',
+          );
 
           // Clear for next iteration
           provider.clearError();
@@ -569,15 +647,18 @@ void main() {
         }
       });
 
-      testWidgets('should show enhanced success feedback with animation',
-          (WidgetTester tester) async {
+      testWidgets('should show enhanced success feedback with animation', (
+        WidgetTester tester,
+      ) async {
         mockApiService.shouldSucceed = true;
         await tester.pumpWidget(createTestWidget());
 
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -595,28 +676,33 @@ void main() {
     });
 
     group('Accessibility and User Experience', () {
-      testWidgets('should provide proper accessibility labels for error states',
-          (WidgetTester tester) async {
-        mockApiService.errorToThrow = 'Network error';
-        await tester.pumpWidget(createTestWidget());
+      testWidgets(
+        'should provide proper accessibility labels for error states',
+        (WidgetTester tester) async {
+          mockApiService.errorToThrow = 'Network error';
+          await tester.pumpWidget(createTestWidget());
 
-        // Fill form and submit to trigger error
-        await tester.enterText(find.byType(TextFormField).first, 'John Doe');
-        await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
-        await tester.tap(find.text('Kirim Ulasan'));
-        await tester.pump(const Duration(milliseconds: 100));
+          // Fill form and submit to trigger error
+          await tester.enterText(find.byType(TextFormField).first, 'John Doe');
+          await tester.enterText(
+            find.byType(TextFormField).last,
+            'Great restaurant!',
+          );
+          await tester.tap(find.text('Kirim Ulasan'));
+          await tester.pump(const Duration(milliseconds: 100));
 
-        // Verify error message is accessible
-        expect(find.text('Masalah Koneksi'), findsOneWidget);
-        expect(find.byIcon(Icons.wifi_off), findsOneWidget);
+          // Verify error message is accessible
+          expect(find.text('Masalah Koneksi'), findsOneWidget);
+          expect(find.byIcon(Icons.wifi_off), findsOneWidget);
 
-        // Verify retry button is accessible
-        expect(find.text('Coba Lagi'), findsOneWidget);
-      });
+          // Verify retry button is accessible
+          expect(find.text('Coba Lagi'), findsOneWidget);
+        },
+      );
 
-      testWidgets('should handle rapid successive submissions gracefully',
-          (WidgetTester tester) async {
+      testWidgets('should handle rapid successive submissions gracefully', (
+        WidgetTester tester,
+      ) async {
         mockApiService.customDelay = const Duration(milliseconds: 200);
         mockApiService.shouldSucceed = true;
         await tester.pumpWidget(createTestWidget());
@@ -624,7 +710,9 @@ void main() {
         // Fill form
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
 
         // Tap submit button once
         await tester.tap(find.text('Kirim Ulasan'));
@@ -648,8 +736,9 @@ void main() {
     });
 
     group('Edge Cases and Error Recovery', () {
-      testWidgets('should handle null or empty error messages gracefully',
-          (WidgetTester tester) async {
+      testWidgets('should handle null or empty error messages gracefully', (
+        WidgetTester tester,
+      ) async {
         // Test with null error
         mockApiService.errorToThrow = null;
         mockApiService.shouldSucceed = false;
@@ -658,7 +747,9 @@ void main() {
         // Fill form and submit
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 
@@ -667,8 +758,9 @@ void main() {
         expect(provider.submissionError, contains('Gagal mengirim ulasan'));
       });
 
-      testWidgets('should recover from error state when form is cleared',
-          (WidgetTester tester) async {
+      testWidgets('should recover from error state when form is cleared', (
+        WidgetTester tester,
+      ) async {
         mockApiService.errorToThrow = 'Network error';
         mockApiService.shouldSucceed = false;
         await tester.pumpWidget(createTestWidget());
@@ -676,7 +768,9 @@ void main() {
         // Fill form and submit to trigger error
         await tester.enterText(find.byType(TextFormField).first, 'John Doe');
         await tester.enterText(
-            find.byType(TextFormField).last, 'Great restaurant!');
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
         await tester.tap(find.text('Kirim Ulasan'));
         await tester.pump(const Duration(milliseconds: 100));
 

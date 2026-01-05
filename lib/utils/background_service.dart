@@ -25,10 +25,13 @@ class BackgroundService {
       final randomIndex = Random().nextInt(restaurants.length);
       final randomRestaurant = restaurants[randomIndex];
 
-      await notificationHelper
-          .initNotifications(flutterLocalNotificationsPlugin);
+      await notificationHelper.initNotifications(
+        flutterLocalNotificationsPlugin,
+      );
       await notificationHelper.showNotification(
-          flutterLocalNotificationsPlugin, randomRestaurant);
+        flutterLocalNotificationsPlugin,
+        randomRestaurant,
+      );
     } else {
       debugPrint('Alarm Manager: Failed to fetch restaurants');
     }
@@ -48,13 +51,17 @@ void callbackDispatcher() {
       final randomIndex = Random().nextInt(restaurants.length);
       final randomRestaurant = restaurants[randomIndex];
 
-      await notificationHelper
-          .initNotifications(flutterLocalNotificationsPlugin);
+      await notificationHelper.initNotifications(
+        flutterLocalNotificationsPlugin,
+      );
       await notificationHelper.showNotification(
-          flutterLocalNotificationsPlugin, randomRestaurant);
+        flutterLocalNotificationsPlugin,
+        randomRestaurant,
+      );
 
       debugPrint(
-          'Workmanager: Notification shown for ${randomRestaurant.name}');
+        'Workmanager: Notification shown for ${randomRestaurant.name}',
+      );
     } else {
       debugPrint('Workmanager: Failed to fetch restaurants');
     }

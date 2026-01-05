@@ -24,16 +24,14 @@ class DatabaseHelper {
     var db = openDatabase(
       join(path, 'restaurant_db.db'),
       onCreate: (db, version) async {
-        await db.execute(
-          '''CREATE TABLE $_tableName(
+        await db.execute('''CREATE TABLE $_tableName(
                id TEXT PRIMARY KEY,
                name TEXT,
                description TEXT,
                city TEXT,
                rating REAL,
                pictureId TEXT
-             )''',
-        );
+             )''');
       },
       version: 1,
     );
@@ -42,18 +40,14 @@ class DatabaseHelper {
 
   Future<void> insertFavorite(Restaurant restaurant) async {
     final db = await database;
-    await db.insert(
-      _tableName,
-      {
-        'id': restaurant.id,
-        'name': restaurant.name,
-        'description': restaurant.description,
-        'city': restaurant.city,
-        'rating': restaurant.rating,
-        'pictureId': restaurant.pictureId,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert(_tableName, {
+      'id': restaurant.id,
+      'name': restaurant.name,
+      'description': restaurant.description,
+      'city': restaurant.city,
+      'rating': restaurant.rating,
+      'pictureId': restaurant.pictureId,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<Restaurant>> getFavorites() async {
@@ -89,10 +83,6 @@ class DatabaseHelper {
 
   Future<void> removeFavorite(String id) async {
     final db = await database;
-    await db.delete(
-      _tableName,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
   }
 }

@@ -24,7 +24,8 @@ class MockApiService extends ApiService {
 
   @override
   Future<ApiResponse<ReviewSubmissionResponse>> submitReview(
-      ReviewSubmissionRequest request) async {
+    ReviewSubmissionRequest request,
+  ) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 100));
 
@@ -51,7 +52,8 @@ class MockApiService extends ApiService {
 
   @override
   Future<ApiResponse<RestaurantDetailResponse>> getRestaurantDetail(
-      String id) async {
+    String id,
+  ) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 100));
 
@@ -127,54 +129,63 @@ void main() {
       );
     }
 
-    testWidgets('should complete successful submission flow with data refresh',
-        (WidgetTester tester) async {
-      // Setup initial restaurant data
-      await detailProvider.fetchRestaurantDetail('test-restaurant-id');
-      await tester.pumpWidget(createTestWidget());
-      await tester.pumpAndSettle();
+    testWidgets(
+      'should complete successful submission flow with data refresh',
+      (WidgetTester tester) async {
+        // Setup initial restaurant data
+        await detailProvider.fetchRestaurantDetail('test-restaurant-id');
+        await tester.pumpWidget(createTestWidget());
+        await tester.pumpAndSettle();
 
-      // Verify form is present
-      expect(find.byType(ReviewSubmissionForm), findsOneWidget);
+        // Verify form is present
+        expect(find.byType(ReviewSubmissionForm), findsOneWidget);
 
-      // Fill in the form
-      final nameField = find.widgetWithText(TextFormField, 'Nama Anda');
-      final reviewField = find.widgetWithText(TextFormField, 'Ulasan Anda');
+        // Fill in the form
+        final nameField = find.widgetWithText(TextFormField, 'Nama Anda');
+        final reviewField = find.widgetWithText(TextFormField, 'Ulasan Anda');
 
-      await tester.enterText(nameField, 'Test User');
-      await tester.enterText(reviewField, 'Great restaurant experience!');
-      await tester.pumpAndSettle();
+        await tester.enterText(nameField, 'Test User');
+        await tester.enterText(reviewField, 'Great restaurant experience!');
+        await tester.pumpAndSettle();
 
-      // Submit the form
-      final submitButton = find.text('Kirim Ulasan');
-      await tester.tap(submitButton);
-      await tester.pumpAndSettle();
+        // Submit the form
+        final submitButton = find.text('Kirim Ulasan');
+        await tester.tap(submitButton);
+        await tester.pumpAndSettle();
 
-      // Verify loading state is shown
-      expect(find.text('Mengirim...'), findsOneWidget);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        // Verify loading state is shown
+        expect(find.text('Mengirim...'), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      // Wait for submission to complete
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+        // Wait for submission to complete
+        await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      // Verify success message is shown
-      expect(find.text('Ulasan berhasil ditambahkan'), findsOneWidget);
+        // Verify success message is shown
+        expect(find.text('Ulasan berhasil ditambahkan'), findsOneWidget);
 
-      // Verify form is cleared
-      expect(reviewProvider.reviewerName, isEmpty);
-      expect(reviewProvider.reviewText, isEmpty);
+        // Verify form is cleared
+        expect(reviewProvider.reviewerName, isEmpty);
+        expect(reviewProvider.reviewText, isEmpty);
 
-      // Verify restaurant data is refreshed with new review
-      expect(
-          detailProvider.restaurantDetail?.customerReviews.length, equals(1));
-      expect(detailProvider.restaurantDetail?.customerReviews.first.name,
-          equals('Test User'));
-      expect(detailProvider.restaurantDetail?.customerReviews.first.review,
-          equals('Great restaurant experience!'));
-    });
+        // Verify restaurant data is refreshed with new review
+        expect(
+          detailProvider.restaurantDetail?.customerReviews.length,
+          equals(1),
+        );
+        expect(
+          detailProvider.restaurantDetail?.customerReviews.first.name,
+          equals('Test User'),
+        );
+        expect(
+          detailProvider.restaurantDetail?.customerReviews.first.review,
+          equals('Great restaurant experience!'),
+        );
+      },
+    );
 
-    testWidgets('should handle submission failure with error display',
-        (WidgetTester tester) async {
+    testWidgets('should handle submission failure with error display', (
+      WidgetTester tester,
+    ) async {
       // Setup API to fail
       mockApiService.shouldFailSubmission = true;
       mockApiService.failureMessage = 'Network connection failed';
@@ -202,8 +213,9 @@ void main() {
 
       // Verify error message is displayed
       expect(
-          find.text('Terjadi kesalahan: Exception: Network connection failed'),
-          findsOneWidget);
+        find.text('Terjadi kesalahan: Exception: Network connection failed'),
+        findsOneWidget,
+      );
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
 
       // Verify form data is preserved
@@ -214,8 +226,9 @@ void main() {
       expect(find.text('Coba Lagi'), findsOneWidget);
     });
 
-    testWidgets('should handle retry functionality after failure',
-        (WidgetTester tester) async {
+    testWidgets('should handle retry functionality after failure', (
+      WidgetTester tester,
+    ) async {
       // Setup API to fail initially
       mockApiService.shouldFailSubmission = true;
       mockApiService.failureMessage = 'Temporary network error';
@@ -258,11 +271,14 @@ void main() {
 
       // Verify restaurant data is updated
       expect(
-          detailProvider.restaurantDetail?.customerReviews.length, equals(1));
+        detailProvider.restaurantDetail?.customerReviews.length,
+        equals(1),
+      );
     });
 
-    testWidgets('should handle form validation errors properly',
-        (WidgetTester tester) async {
+    testWidgets('should handle form validation errors properly', (
+      WidgetTester tester,
+    ) async {
       // Setup initial restaurant data
       await detailProvider.fetchRestaurantDetail('test-restaurant-id');
       await tester.pumpWidget(createTestWidget());
@@ -294,8 +310,9 @@ void main() {
       expect(find.text('Ulasan tidak boleh kosong'), findsOneWidget);
     });
 
-    testWidgets('should maintain form state during submission process',
-        (WidgetTester tester) async {
+    testWidgets('should maintain form state during submission process', (
+      WidgetTester tester,
+    ) async {
       // Setup initial restaurant data
       await detailProvider.fetchRestaurantDetail('test-restaurant-id');
       await tester.pumpWidget(createTestWidget());
@@ -329,8 +346,9 @@ void main() {
       expect(reviewProvider.isSubmitting, isFalse);
     });
 
-    testWidgets('should handle data refresh failure gracefully',
-        (WidgetTester tester) async {
+    testWidgets('should handle data refresh failure gracefully', (
+      WidgetTester tester,
+    ) async {
       // Setup initial restaurant data
       await detailProvider.fetchRestaurantDetail('test-restaurant-id');
       await tester.pumpWidget(createTestWidget());
@@ -359,8 +377,9 @@ void main() {
       expect(reviewProvider.reviewText, isEmpty);
     });
 
-    testWidgets('should clear error messages when form is modified',
-        (WidgetTester tester) async {
+    testWidgets('should clear error messages when form is modified', (
+      WidgetTester tester,
+    ) async {
       // Setup API to fail
       mockApiService.shouldFailSubmission = true;
 
@@ -392,8 +411,9 @@ void main() {
       expect(reviewProvider.hasSubmissionError, isFalse);
     });
 
-    testWidgets('should handle multiple rapid submissions properly',
-        (WidgetTester tester) async {
+    testWidgets('should handle multiple rapid submissions properly', (
+      WidgetTester tester,
+    ) async {
       // Setup initial restaurant data
       await detailProvider.fetchRestaurantDetail('test-restaurant-id');
       await tester.pumpWidget(createTestWidget());
@@ -421,7 +441,9 @@ void main() {
 
       // Verify only one review was added
       expect(
-          detailProvider.restaurantDetail?.customerReviews.length, equals(1));
+        detailProvider.restaurantDetail?.customerReviews.length,
+        equals(1),
+      );
     });
   });
 }

@@ -34,8 +34,10 @@ void main() {
     final BuildContext context = tester.element(find.byType(MaterialApp));
 
     expect(Provider.of<RestaurantProvider>(context, listen: false), isNotNull);
-    expect(Provider.of<RestaurantDetailProvider>(context, listen: false),
-        isNotNull);
+    expect(
+      Provider.of<RestaurantDetailProvider>(context, listen: false),
+      isNotNull,
+    );
     expect(Provider.of<SearchProvider>(context, listen: false), isNotNull);
   });
 }

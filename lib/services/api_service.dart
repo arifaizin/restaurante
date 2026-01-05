@@ -22,23 +22,25 @@ class ApiService {
   final Connectivity _connectivity;
 
   ApiService({http.Client? client, Connectivity? connectivity})
-      : _client = client ?? http.Client(),
-        _connectivity = connectivity ?? Connectivity();
+    : _client = client ?? http.Client(),
+      _connectivity = connectivity ?? Connectivity();
 
   /// Fetches the list of restaurants from the API
   Future<ApiResponse<List<Restaurant>>> getRestaurants() async {
     try {
       final uri = Uri.parse('$baseUrl$listEndpoint');
 
-      final response = await _client.get(uri).timeout(
-        timeoutDuration,
-        onTimeout: () {
-          throw TimeoutException(
-            'Request timed out. Please check your connection and try again.',
+      final response = await _client
+          .get(uri)
+          .timeout(
             timeoutDuration,
+            onTimeout: () {
+              throw TimeoutException(
+                'Request timed out. Please check your connection and try again.',
+                timeoutDuration,
+              );
+            },
           );
-        },
-      );
 
       return _handleResponse<List<Restaurant>>(
         response,
@@ -69,19 +71,22 @@ class ApiService {
 
   /// Fetches detailed information for a specific restaurant by ID
   Future<ApiResponse<RestaurantDetailResponse>> getRestaurantDetail(
-      String id) async {
+    String id,
+  ) async {
     try {
       final uri = Uri.parse('$baseUrl$detailEndpoint/$id');
 
-      final response = await _client.get(uri).timeout(
-        timeoutDuration,
-        onTimeout: () {
-          throw TimeoutException(
-            'Request timed out. Please check your connection and try again.',
+      final response = await _client
+          .get(uri)
+          .timeout(
             timeoutDuration,
+            onTimeout: () {
+              throw TimeoutException(
+                'Request timed out. Please check your connection and try again.',
+                timeoutDuration,
+              );
+            },
           );
-        },
-      );
 
       return _handleResponse<RestaurantDetailResponse>(
         response,
@@ -112,7 +117,8 @@ class ApiService {
 
   /// Searches for restaurants using the provided query string
   Future<ApiResponse<RestaurantSearchResponse>> searchRestaurants(
-      String query) async {
+    String query,
+  ) async {
     try {
       // Validate query parameter
       if (query.trim().isEmpty) {
@@ -130,15 +136,17 @@ class ApiService {
       final encodedQuery = Uri.encodeQueryComponent(query.trim());
       final uri = Uri.parse('$baseUrl$searchEndpoint?q=$encodedQuery');
 
-      final response = await _client.get(uri).timeout(
-        timeoutDuration,
-        onTimeout: () {
-          throw TimeoutException(
-            'Search request timed out. Please check your connection and try again.',
+      final response = await _client
+          .get(uri)
+          .timeout(
             timeoutDuration,
+            onTimeout: () {
+              throw TimeoutException(
+                'Search request timed out. Please check your connection and try again.',
+                timeoutDuration,
+              );
+            },
           );
-        },
-      );
 
       return _handleResponse<RestaurantSearchResponse>(
         response,
@@ -194,7 +202,8 @@ class ApiService {
 
   /// Submits a review for a restaurant
   Future<ApiResponse<ReviewSubmissionResponse>> submitReview(
-      ReviewSubmissionRequest request) async {
+    ReviewSubmissionRequest request,
+  ) async {
     try {
       // Validate request data
       if (!request.isValid()) {
@@ -214,21 +223,19 @@ class ApiService {
 
       final response = await _client
           .post(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: requestBody,
-      )
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: requestBody,
+          )
           .timeout(
-        timeoutDuration,
-        onTimeout: () {
-          throw TimeoutException(
-            'Review submission timed out. Please check your connection and try again.',
             timeoutDuration,
+            onTimeout: () {
+              throw TimeoutException(
+                'Review submission timed out. Please check your connection and try again.',
+                timeoutDuration,
+              );
+            },
           );
-        },
-      );
 
       // Special handling for review submission response
       try {
@@ -353,9 +360,7 @@ class ApiService {
           message: jsonData['message'] ?? 'Success',
         );
       } else {
-        return ApiResponse.failure(
-          _getHttpErrorMessage(response.statusCode),
-        );
+        return ApiResponse.failure(_getHttpErrorMessage(response.statusCode));
       }
     } on FormatException catch (_) {
       return ApiResponse.failure('Invalid JSON response from server');

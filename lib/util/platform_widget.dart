@@ -5,7 +5,11 @@ class PlatformWidget extends StatelessWidget {
   final WidgetBuilder androidBuilder;
   final WidgetBuilder iosBuilder;
 
-  const PlatformWidget({Key? key, required this.androidBuilder, required this.iosBuilder}) : super(key: key);
+  const PlatformWidget({
+    Key? key,
+    required this.androidBuilder,
+    required this.iosBuilder,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

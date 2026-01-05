@@ -13,14 +13,14 @@ void main() {
           {
             'name': 'John Doe',
             'review': 'Great food and service!',
-            'date': '13 November 2019'
+            'date': '13 November 2019',
           },
           {
             'name': 'Jane Smith',
             'review': 'Amazing experience!',
-            'date': '14 November 2019'
-          }
-        ]
+            'date': '14 November 2019',
+          },
+        ],
       };
 
       // Act
@@ -49,7 +49,7 @@ void main() {
       final json = {
         'error': true,
         'message': 'Validation failed',
-        'customerReviews': []
+        'customerReviews': [],
       };
 
       // Act
@@ -83,7 +83,7 @@ void main() {
       final json = {
         'error': false,
         'message': 'success',
-        'customerReviews': null
+        'customerReviews': null,
       };
 
       // Act
@@ -99,7 +99,7 @@ void main() {
       final json = {
         'error': false,
         'message': 'success',
-        'customerReviews': []
+        'customerReviews': [],
       };
 
       // Act
@@ -159,10 +159,10 @@ void main() {
           {
             'name': 'John Doe',
             'review': 'Great food!',
-            'date': '13 November 2019'
+            'date': '13 November 2019',
           },
           'invalid_review_data', // This should cause an error
-        ]
+        ],
       };
 
       // Act & Assert
@@ -211,8 +211,8 @@ void main() {
           {
             'review': 'Great food!',
             // Missing name and date fields
-          }
-        ]
+          },
+        ],
       };
 
       // Act

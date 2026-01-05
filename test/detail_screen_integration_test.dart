@@ -46,55 +46,57 @@ void main() {
     }
 
     testWidgets(
-        'should display ReviewSubmissionForm in customer reviews section',
-        (WidgetTester tester) async {
-      // Setup test data
-      final testRestaurant = RestaurantDetail(
-        id: 'test-restaurant-id',
-        name: 'Test Restaurant',
-        description: 'Test Description',
-        city: 'Test City',
-        address: 'Test Address',
-        pictureId: 'test-picture',
-        categories: [Category(name: 'Test Category')],
-        menus: Menus(
-          foods: [MenuItem(name: 'Test Food')],
-          drinks: [MenuItem(name: 'Test Drink')],
-        ),
-        rating: 4.5,
-        customerReviews: [
-          CustomerReview(
-            name: 'Test Reviewer',
-            review: 'Test Review',
-            date: '2023-01-01',
+      'should display ReviewSubmissionForm in customer reviews section',
+      (WidgetTester tester) async {
+        // Setup test data
+        final testRestaurant = RestaurantDetail(
+          id: 'test-restaurant-id',
+          name: 'Test Restaurant',
+          description: 'Test Description',
+          city: 'Test City',
+          address: 'Test Address',
+          pictureId: 'test-picture',
+          categories: [Category(name: 'Test Category')],
+          menus: Menus(
+            foods: [MenuItem(name: 'Test Food')],
+            drinks: [MenuItem(name: 'Test Drink')],
           ),
-        ],
-      );
+          rating: 4.5,
+          customerReviews: [
+            CustomerReview(
+              name: 'Test Reviewer',
+              review: 'Test Review',
+              date: '2023-01-01',
+            ),
+          ],
+        );
 
-      await tester.pumpWidget(createTestWidget());
+        await tester.pumpWidget(createTestWidget());
 
-      // Set restaurant data in provider after widget is built
-      detailProvider.restaurantDetail = testRestaurant;
-      await tester.pumpAndSettle();
+        // Set restaurant data in provider after widget is built
+        detailProvider.restaurantDetail = testRestaurant;
+        await tester.pumpAndSettle();
 
-      // Verify that ReviewSubmissionForm is present
-      expect(find.byType(ReviewSubmissionForm), findsOneWidget);
+        // Verify that ReviewSubmissionForm is present
+        expect(find.byType(ReviewSubmissionForm), findsOneWidget);
 
-      // Verify form is positioned above reviews
-      expect(find.text('Tulis Ulasan'), findsOneWidget);
-      expect(find.text('Customer Reviews'), findsOneWidget);
+        // Verify form is positioned above reviews
+        expect(find.text('Tulis Ulasan'), findsOneWidget);
+        expect(find.text('Customer Reviews'), findsOneWidget);
 
-      // Verify form fields are present
-      expect(find.byType(TextFormField), findsNWidgets(2));
-      expect(find.text('Nama Anda'), findsOneWidget);
-      expect(find.text('Ulasan Anda'), findsOneWidget);
+        // Verify form fields are present
+        expect(find.byType(TextFormField), findsNWidgets(2));
+        expect(find.text('Nama Anda'), findsOneWidget);
+        expect(find.text('Ulasan Anda'), findsOneWidget);
 
-      // Verify submit button is present
-      expect(find.text('Kirim Ulasan'), findsOneWidget);
-    });
+        // Verify submit button is present
+        expect(find.text('Kirim Ulasan'), findsOneWidget);
+      },
+    );
 
-    testWidgets('should display form even when no reviews exist',
-        (WidgetTester tester) async {
+    testWidgets('should display form even when no reviews exist', (
+      WidgetTester tester,
+    ) async {
       // Setup test data with no reviews
       final testRestaurant = RestaurantDetail(
         id: 'test-restaurant-id',
@@ -130,8 +132,9 @@ void main() {
       expect(find.text('Kirim Ulasan'), findsOneWidget);
     });
 
-    testWidgets('should show form elements are accessible',
-        (WidgetTester tester) async {
+    testWidgets('should show form elements are accessible', (
+      WidgetTester tester,
+    ) async {
       // Setup test data
       final testRestaurant = RestaurantDetail(
         id: 'test-restaurant-id',
@@ -167,8 +170,9 @@ void main() {
       expect(find.byType(ReviewSubmissionForm), findsOneWidget);
     });
 
-    testWidgets('should display error messages when form validation fails',
-        (WidgetTester tester) async {
+    testWidgets('should display error messages when form validation fails', (
+      WidgetTester tester,
+    ) async {
       // Setup test data
       final testRestaurant = RestaurantDetail(
         id: 'test-restaurant-id',
@@ -206,120 +210,122 @@ void main() {
     });
 
     testWidgets(
-        'should maintain consistent styling with existing UI components',
-        (WidgetTester tester) async {
-      // Setup test data
-      final testRestaurant = RestaurantDetail(
-        id: 'test-restaurant-id',
-        name: 'Test Restaurant',
-        description: 'Test Description',
-        city: 'Test City',
-        address: 'Test Address',
-        pictureId: 'test-picture',
-        categories: [Category(name: 'Test Category')],
-        menus: Menus(
-          foods: [MenuItem(name: 'Test Food')],
-          drinks: [MenuItem(name: 'Test Drink')],
-        ),
-        rating: 4.5,
-        customerReviews: [
-          CustomerReview(
-            name: 'Test Reviewer',
-            review: 'Test Review',
-            date: '2023-01-01',
+      'should maintain consistent styling with existing UI components',
+      (WidgetTester tester) async {
+        // Setup test data
+        final testRestaurant = RestaurantDetail(
+          id: 'test-restaurant-id',
+          name: 'Test Restaurant',
+          description: 'Test Description',
+          city: 'Test City',
+          address: 'Test Address',
+          pictureId: 'test-picture',
+          categories: [Category(name: 'Test Category')],
+          menus: Menus(
+            foods: [MenuItem(name: 'Test Food')],
+            drinks: [MenuItem(name: 'Test Drink')],
           ),
-        ],
-      );
+          rating: 4.5,
+          customerReviews: [
+            CustomerReview(
+              name: 'Test Reviewer',
+              review: 'Test Review',
+              date: '2023-01-01',
+            ),
+          ],
+        );
 
-      await tester.pumpWidget(createTestWidget());
+        await tester.pumpWidget(createTestWidget());
 
-      // Set restaurant data in provider after widget is built
-      detailProvider.restaurantDetail = testRestaurant;
-      await tester.pumpAndSettle();
+        // Set restaurant data in provider after widget is built
+        detailProvider.restaurantDetail = testRestaurant;
+        await tester.pumpAndSettle();
 
-      // Verify form is present and has proper styling
-      expect(find.byType(ReviewSubmissionForm), findsOneWidget);
+        // Verify form is present and has proper styling
+        expect(find.byType(ReviewSubmissionForm), findsOneWidget);
 
-      // Verify form has containers with decorations
-      final containers = find.descendant(
-        of: find.byType(ReviewSubmissionForm),
-        matching: find.byType(Container),
-      );
-      expect(containers, findsWidgets);
+        // Verify form has containers with decorations
+        final containers = find.descendant(
+          of: find.byType(ReviewSubmissionForm),
+          matching: find.byType(Container),
+        );
+        expect(containers, findsWidgets);
 
-      // Verify at least one container has decoration
-      bool hasDecoratedContainer = false;
-      for (final element in containers.evaluate()) {
-        final container = element.widget as Container;
-        if (container.decoration != null) {
-          hasDecoratedContainer = true;
-          expect(container.decoration, isA<BoxDecoration>());
-          break;
+        // Verify at least one container has decoration
+        bool hasDecoratedContainer = false;
+        for (final element in containers.evaluate()) {
+          final container = element.widget as Container;
+          if (container.decoration != null) {
+            hasDecoratedContainer = true;
+            expect(container.decoration, isA<BoxDecoration>());
+            break;
+          }
         }
-      }
-      expect(hasDecoratedContainer, isTrue);
-    });
+        expect(hasDecoratedContainer, isTrue);
+      },
+    );
 
     testWidgets(
-        'should integrate properly with existing customer reviews section',
-        (WidgetTester tester) async {
-      // Setup test data with multiple reviews
-      final testRestaurant = RestaurantDetail(
-        id: 'test-restaurant-id',
-        name: 'Test Restaurant',
-        description: 'Test Description',
-        city: 'Test City',
-        address: 'Test Address',
-        pictureId: 'test-picture',
-        categories: [Category(name: 'Test Category')],
-        menus: Menus(
-          foods: [MenuItem(name: 'Test Food')],
-          drinks: [MenuItem(name: 'Test Drink')],
-        ),
-        rating: 4.5,
-        customerReviews: [
-          CustomerReview(
-            name: 'Reviewer 1',
-            review: 'Great food!',
-            date: '2023-01-01',
+      'should integrate properly with existing customer reviews section',
+      (WidgetTester tester) async {
+        // Setup test data with multiple reviews
+        final testRestaurant = RestaurantDetail(
+          id: 'test-restaurant-id',
+          name: 'Test Restaurant',
+          description: 'Test Description',
+          city: 'Test City',
+          address: 'Test Address',
+          pictureId: 'test-picture',
+          categories: [Category(name: 'Test Category')],
+          menus: Menus(
+            foods: [MenuItem(name: 'Test Food')],
+            drinks: [MenuItem(name: 'Test Drink')],
           ),
-          CustomerReview(
-            name: 'Reviewer 2',
-            review: 'Excellent service!',
-            date: '2023-01-02',
-          ),
-        ],
-      );
+          rating: 4.5,
+          customerReviews: [
+            CustomerReview(
+              name: 'Reviewer 1',
+              review: 'Great food!',
+              date: '2023-01-01',
+            ),
+            CustomerReview(
+              name: 'Reviewer 2',
+              review: 'Excellent service!',
+              date: '2023-01-02',
+            ),
+          ],
+        );
 
-      await tester.pumpWidget(createTestWidget());
+        await tester.pumpWidget(createTestWidget());
 
-      // Set restaurant data in provider after widget is built
-      detailProvider.restaurantDetail = testRestaurant;
-      await tester.pumpAndSettle();
+        // Set restaurant data in provider after widget is built
+        detailProvider.restaurantDetail = testRestaurant;
+        await tester.pumpAndSettle();
 
-      // Verify section header is present
-      expect(find.text('Customer Reviews'), findsOneWidget);
+        // Verify section header is present
+        expect(find.text('Customer Reviews'), findsOneWidget);
 
-      // Verify review count badge shows correct number
-      expect(find.text('2'), findsOneWidget);
+        // Verify review count badge shows correct number
+        expect(find.text('2'), findsOneWidget);
 
-      // Verify form is positioned above existing reviews
-      expect(find.byType(ReviewSubmissionForm), findsOneWidget);
+        // Verify form is positioned above existing reviews
+        expect(find.byType(ReviewSubmissionForm), findsOneWidget);
 
-      // Verify existing reviews are still displayed
-      expect(find.text('Reviewer 1'), findsOneWidget);
-      expect(find.text('Reviewer 2'), findsOneWidget);
-      expect(find.text('Great food!'), findsOneWidget);
-      expect(find.text('Excellent service!'), findsOneWidget);
+        // Verify existing reviews are still displayed
+        expect(find.text('Reviewer 1'), findsOneWidget);
+        expect(find.text('Reviewer 2'), findsOneWidget);
+        expect(find.text('Great food!'), findsOneWidget);
+        expect(find.text('Excellent service!'), findsOneWidget);
 
-      // Verify proper layout order: form first, then reviews
-      final reviewFormFinder = find.byType(ReviewSubmissionForm);
-      final reviewCardFinder = find.text('Reviewer 1');
+        // Verify proper layout order: form first, then reviews
+        final reviewFormFinder = find.byType(ReviewSubmissionForm);
+        final reviewCardFinder = find.text('Reviewer 1');
 
-      final formPosition = tester.getTopLeft(reviewFormFinder);
-      final reviewPosition = tester.getTopLeft(reviewCardFinder);
+        final formPosition = tester.getTopLeft(reviewFormFinder);
+        final reviewPosition = tester.getTopLeft(reviewCardFinder);
 
-      expect(formPosition.dy, lessThan(reviewPosition.dy));
-    });
+        expect(formPosition.dy, lessThan(reviewPosition.dy));
+      },
+    );
   });
 }

@@ -43,7 +43,11 @@ dependencies:
   shared_preferences: ^2.5.4
   flutter_local_notifications: ^19.5.0
   android_alarm_manager_plus: ^5.0.0
-  workmanager: ^0.5.2
+  workmanager:
+   git:
+     url: https://github.com/fluttercommunity/flutter_workmanager.git
+     path: workmanager
+     ref: main
   rxdart: ^0.28.0
 
 dev_dependencies:

@@ -17,8 +17,11 @@ class MockApiService extends ApiService {
 
   @override
   Future<ApiResponse<ReviewSubmissionResponse>> submitReview(
-      ReviewSubmissionRequest request) async {
-    await Future.delayed(const Duration(milliseconds: 100)); // Simulate network delay
+    ReviewSubmissionRequest request,
+  ) async {
+    await Future.delayed(
+      const Duration(milliseconds: 100),
+    ); // Simulate network delay
 
     if (shouldSucceed) {
       final response = ReviewSubmissionResponse(
@@ -26,16 +29,20 @@ class MockApiService extends ApiService {
         message: 'Review added successfully',
         customerReviews: [],
       );
-      return ApiResponse.success(response,
-          message: 'Review added successfully');
+      return ApiResponse.success(
+        response,
+        message: 'Review added successfully',
+      );
     } else {
       final response = ReviewSubmissionResponse(
         error: true,
         message: errorMessage ?? 'Submission failed',
         customerReviews: [],
       );
-      return ApiResponse.failure(errorMessage ?? 'Submission failed',
-          data: response);
+      return ApiResponse.failure(
+        errorMessage ?? 'Submission failed',
+        data: response,
+      );
     }
   }
 
@@ -69,8 +76,9 @@ void main() {
       );
     }
 
-    testWidgets('should render form with all required elements',
-        (WidgetTester tester) async {
+    testWidgets('should render form with all required elements', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Check form header
@@ -87,8 +95,9 @@ void main() {
       expect(find.byIcon(Icons.send), findsOneWidget);
     });
 
-    testWidgets('should show validation errors for empty fields',
-        (WidgetTester tester) async {
+    testWidgets('should show validation errors for empty fields', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Tap submit button without filling fields
@@ -101,8 +110,9 @@ void main() {
       expect(find.textContaining('Ulasan'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for short name',
-        (WidgetTester tester) async {
+    testWidgets('should show validation error for short name', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Enter short name
@@ -114,8 +124,9 @@ void main() {
       expect(find.textContaining('2 karakter'), findsOneWidget);
     });
 
-    testWidgets('should update provider state when text changes',
-        (WidgetTester tester) async {
+    testWidgets('should update provider state when text changes', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Enter name
@@ -126,20 +137,25 @@ void main() {
 
       // Enter review
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       expect(provider.reviewText, equals('Great restaurant!'));
     });
 
-    testWidgets('should show loading state during submission',
-        (WidgetTester tester) async {
+    testWidgets('should show loading state during submission', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Tap submit button
@@ -154,15 +170,18 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     });
 
-    testWidgets('should clear form after successful submission',
-        (WidgetTester tester) async {
+    testWidgets('should clear form after successful submission', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = true;
       await tester.pumpWidget(createTestWidget());
 
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Submit form
@@ -173,24 +192,29 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
 
       // Check that form is cleared
-      final nameField =
-          tester.widget<TextFormField>(find.byType(TextFormField).first);
-      final reviewField =
-          tester.widget<TextFormField>(find.byType(TextFormField).last);
+      final nameField = tester.widget<TextFormField>(
+        find.byType(TextFormField).first,
+      );
+      final reviewField = tester.widget<TextFormField>(
+        find.byType(TextFormField).last,
+      );
 
       expect(nameField.controller?.text, isEmpty);
       expect(reviewField.controller?.text, isEmpty);
     });
 
-    testWidgets('should show success snackbar after successful submission',
-        (WidgetTester tester) async {
+    testWidgets('should show success snackbar after successful submission', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = true;
       await tester.pumpWidget(createTestWidget());
 
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Submit form
@@ -205,8 +229,9 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
     });
 
-    testWidgets('should show error message on submission failure',
-        (WidgetTester tester) async {
+    testWidgets('should show error message on submission failure', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = false;
       mockApiService.errorMessage = 'Network error occurred';
 
@@ -215,7 +240,9 @@ void main() {
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Submit form
@@ -230,8 +257,9 @@ void main() {
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
     });
 
-    testWidgets('should clear error message when close button is tapped',
-        (WidgetTester tester) async {
+    testWidgets('should clear error message when close button is tapped', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = false;
       mockApiService.errorMessage = 'Network error occurred';
 
@@ -240,7 +268,9 @@ void main() {
       // Fill form and submit to trigger error
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.tap(find.text('Kirim Ulasan'));
       await tester.pump(const Duration(milliseconds: 200));
 
@@ -255,21 +285,26 @@ void main() {
       expect(find.text('Network error occurred'), findsNothing);
     });
 
-    testWidgets('should call onSubmissionSuccess callback when provided',
-        (WidgetTester tester) async {
+    testWidgets('should call onSubmissionSuccess callback when provided', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = true;
       bool callbackCalled = false;
 
-      await tester.pumpWidget(createTestWidget(
-        onSubmissionSuccess: () {
-          callbackCalled = true;
-        },
-      ));
+      await tester.pumpWidget(
+        createTestWidget(
+          onSubmissionSuccess: () {
+            callbackCalled = true;
+          },
+        ),
+      );
 
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Submit form
@@ -279,14 +314,17 @@ void main() {
       expect(callbackCalled, isTrue);
     });
 
-    testWidgets('should disable form fields during submission',
-        (WidgetTester tester) async {
+    testWidgets('should disable form fields during submission', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Submit form
@@ -294,10 +332,12 @@ void main() {
       await tester.pump();
 
       // Check that fields are disabled
-      final nameField =
-          tester.widget<TextFormField>(find.byType(TextFormField).first);
-      final reviewField =
-          tester.widget<TextFormField>(find.byType(TextFormField).last);
+      final nameField = tester.widget<TextFormField>(
+        find.byType(TextFormField).first,
+      );
+      final reviewField = tester.widget<TextFormField>(
+        find.byType(TextFormField).last,
+      );
 
       expect(nameField.enabled, isFalse);
       expect(reviewField.enabled, isFalse);
@@ -306,8 +346,9 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('should handle focus management correctly',
-        (WidgetTester tester) async {
+    testWidgets('should handle focus management correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Focus on name field and press next
@@ -322,8 +363,9 @@ void main() {
       expect(focusedWidget!.hasFocus, isTrue);
     });
 
-    testWidgets('should have proper accessibility labels',
-        (WidgetTester tester) async {
+    testWidgets('should have proper accessibility labels', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Check that form fields have proper labels
@@ -334,15 +376,18 @@ void main() {
       expect(find.byType(TextFormField), findsNWidgets(2));
     });
 
-    testWidgets('should submit form when done is pressed on review field',
-        (WidgetTester tester) async {
+    testWidgets('should submit form when done is pressed on review field', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = true;
       await tester.pumpWidget(createTestWidget());
 
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Press done on review field
@@ -350,65 +395,73 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
 
       // Verify submission occurred (form should be cleared)
-      final nameField =
-          tester.widget<TextFormField>(find.byType(TextFormField).first);
+      final nameField = tester.widget<TextFormField>(
+        find.byType(TextFormField).first,
+      );
       expect(nameField.controller?.text, isEmpty);
     });
 
     testWidgets(
-        'should clear error messages when user starts typing after error',
-        (WidgetTester tester) async {
-      mockApiService.shouldSucceed = false;
-      mockApiService.errorMessage = 'Network error occurred';
+      'should clear error messages when user starts typing after error',
+      (WidgetTester tester) async {
+        mockApiService.shouldSucceed = false;
+        mockApiService.errorMessage = 'Network error occurred';
 
-      await tester.pumpWidget(createTestWidget());
+        await tester.pumpWidget(createTestWidget());
 
-      // Fill form and submit to trigger error
-      await tester.enterText(find.byType(TextFormField).first, 'John Doe');
-      await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
-      await tester.tap(find.text('Kirim Ulasan'));
-      await tester.pump(const Duration(milliseconds: 200));
+        // Fill form and submit to trigger error
+        await tester.enterText(find.byType(TextFormField).first, 'John Doe');
+        await tester.enterText(
+          find.byType(TextFormField).last,
+          'Great restaurant!',
+        );
+        await tester.tap(find.text('Kirim Ulasan'));
+        await tester.pump(const Duration(milliseconds: 200));
 
-      // Verify error is shown
-      expect(find.text('Network error occurred'), findsOneWidget);
+        // Verify error is shown
+        expect(find.text('Network error occurred'), findsOneWidget);
 
-      // Start typing in name field
-      await tester.enterText(find.byType(TextFormField).first, 'Jane Doe');
-      await tester.pump();
+        // Start typing in name field
+        await tester.enterText(find.byType(TextFormField).first, 'Jane Doe');
+        await tester.pump();
 
-      // Verify error message is cleared
-      expect(find.text('Network error occurred'), findsNothing);
-    });
+        // Verify error message is cleared
+        expect(find.text('Network error occurred'), findsNothing);
+      },
+    );
 
     testWidgets(
-        'should show inline validation errors and clear them when typing',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
+      'should show inline validation errors and clear them when typing',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget());
 
-      // Enter invalid short name and trigger validation
-      await tester.enterText(find.byType(TextFormField).first, 'A');
-      await tester.enterText(find.byType(TextFormField).last,
-          'Some review text that is long enough');
-      await tester.pump();
+        // Enter invalid short name and trigger validation
+        await tester.enterText(find.byType(TextFormField).first, 'A');
+        await tester.enterText(
+          find.byType(TextFormField).last,
+          'Some review text that is long enough',
+        );
+        await tester.pump();
 
-      // Trigger validation by attempting to submit
-      await tester.tap(find.text('Kirim Ulasan'));
-      await tester.pump();
+        // Trigger validation by attempting to submit
+        await tester.tap(find.text('Kirim Ulasan'));
+        await tester.pump();
 
-      // Verify validation error is shown
-      expect(find.textContaining('pendek'), findsOneWidget);
+        // Verify validation error is shown
+        expect(find.textContaining('pendek'), findsOneWidget);
 
-      // Enter valid name to trigger provider validation
-      await tester.enterText(find.byType(TextFormField).first, 'John Doe');
-      await tester.pump();
+        // Enter valid name to trigger provider validation
+        await tester.enterText(find.byType(TextFormField).first, 'John Doe');
+        await tester.pump();
 
-      // Check that provider validation cleared the error
-      expect(provider.hasNameError, isFalse);
-    });
+        // Check that provider validation cleared the error
+        expect(provider.hasNameError, isFalse);
+      },
+    );
 
-    testWidgets('should maintain form state during validation errors',
-        (WidgetTester tester) async {
+    testWidgets('should maintain form state during validation errors', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = false;
       mockApiService.errorMessage = 'Validation failed';
 
@@ -417,7 +470,9 @@ void main() {
       // Fill form with valid data
       await tester.enterText(find.byType(TextFormField).first, 'John Doe');
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Submit form to trigger error
@@ -427,17 +482,20 @@ void main() {
       // Verify error is shown but form data is preserved
       expect(find.text('Validation failed'), findsOneWidget);
 
-      final nameField =
-          tester.widget<TextFormField>(find.byType(TextFormField).first);
-      final reviewField =
-          tester.widget<TextFormField>(find.byType(TextFormField).last);
+      final nameField = tester.widget<TextFormField>(
+        find.byType(TextFormField).first,
+      );
+      final reviewField = tester.widget<TextFormField>(
+        find.byType(TextFormField).last,
+      );
 
       expect(nameField.controller?.text, equals('John Doe'));
       expect(reviewField.controller?.text, equals('Great restaurant!'));
     });
 
-    testWidgets('should provide proper accessibility support',
-        (WidgetTester tester) async {
+    testWidgets('should provide proper accessibility support', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
 
       // Check that form fields have proper labels
@@ -453,8 +511,9 @@ void main() {
       expect(find.byIcon(Icons.rate_review_outlined), findsOneWidget);
     });
 
-    testWidgets('should handle complete validation and feedback flow',
-        (WidgetTester tester) async {
+    testWidgets('should handle complete validation and feedback flow', (
+      WidgetTester tester,
+    ) async {
       mockApiService.shouldSucceed = true;
       await tester.pumpWidget(createTestWidget());
 
@@ -475,7 +534,9 @@ void main() {
 
       // Step 3: Fill review field
       await tester.enterText(
-          find.byType(TextFormField).last, 'Great restaurant!');
+        find.byType(TextFormField).last,
+        'Great restaurant!',
+      );
       await tester.pump();
 
       // Step 4: Submit valid form - should show loading then success
@@ -494,10 +555,12 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
 
       // Check form is cleared
-      final nameField =
-          tester.widget<TextFormField>(find.byType(TextFormField).first);
-      final reviewField =
-          tester.widget<TextFormField>(find.byType(TextFormField).last);
+      final nameField = tester.widget<TextFormField>(
+        find.byType(TextFormField).first,
+      );
+      final reviewField = tester.widget<TextFormField>(
+        find.byType(TextFormField).last,
+      );
 
       expect(nameField.controller?.text, isEmpty);
       expect(reviewField.controller?.text, isEmpty);

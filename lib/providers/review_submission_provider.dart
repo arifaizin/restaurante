@@ -23,7 +23,7 @@ class ReviewSubmissionProvider extends ChangeNotifier {
   String? _reviewError;
 
   ReviewSubmissionProvider({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   // Getters for accessing state properties
   bool get isSubmitting => _isSubmitting;
@@ -151,16 +151,18 @@ class ReviewSubmissionProvider extends ChangeNotifier {
       } else {
         // Use enhanced error message for review submission
         final originalError = response.message;
-        final errorMessage =
-            ErrorHelper.getReviewSubmissionErrorMessage(originalError);
+        final errorMessage = ErrorHelper.getReviewSubmissionErrorMessage(
+          originalError,
+        );
         _setSubmissionError(errorMessage, originalError);
         return false;
       }
     } catch (e) {
       // Use enhanced error message for exceptions
       final originalError = e.toString();
-      final errorMessage =
-          ErrorHelper.getReviewSubmissionErrorMessage(originalError);
+      final errorMessage = ErrorHelper.getReviewSubmissionErrorMessage(
+        originalError,
+      );
       _setSubmissionError(errorMessage, originalError);
       return false;
     } finally {

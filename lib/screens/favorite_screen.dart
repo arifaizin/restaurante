@@ -12,17 +12,12 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorite Restaurants'),
-      ),
+      appBar: AppBar(title: const Text('Favorite Restaurants')),
       body: _buildList(context),
     );
   }
@@ -59,8 +54,10 @@ class FavoriteScreen extends StatelessWidget {
                   provider.removeFavorite(restaurant.id);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content:
-                            Text('${restaurant.name} removed from favorites')),
+                      content: Text(
+                        '${restaurant.name} removed from favorites',
+                      ),
+                    ),
                   );
                 },
                 child: RestaurantCard(restaurant: restaurant),

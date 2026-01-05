@@ -8,7 +8,7 @@ enum ErrorType {
   notFound,
   format,
   security,
-  unknown
+  unknown,
 }
 
 /// Error information with type and user-friendly message
@@ -252,7 +252,8 @@ class ErrorHelper {
 
     // Use a counter for better test predictability while maintaining variety
     final now = DateTime.now();
-    final seed = (_successMessageCounter++ + now.microsecondsSinceEpoch) %
+    final seed =
+        (_successMessageCounter++ + now.microsecondsSinceEpoch) %
         messages.length;
     return messages[seed];
   }

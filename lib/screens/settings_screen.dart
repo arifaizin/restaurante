@@ -12,12 +12,14 @@ class SettingsScreen extends StatelessWidget {
 
   Future<bool> _requestNotificationPermission(BuildContext context) async {
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
+        flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >();
 
     if (androidImplementation != null) {
-      final bool? granted =
-          await androidImplementation.requestNotificationsPermission();
+      final bool? granted = await androidImplementation
+          .requestNotificationsPermission();
       return granted ?? false;
     }
     return true; // For iOS or if permission is already granted
@@ -26,9 +28,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: Consumer<PreferencesProvider>(
         builder: (context, provider, child) {
           return ListView(
@@ -43,14 +43,15 @@ class SettingsScreen extends StatelessWidget {
                       return Theme(
                         data: Theme.of(context).copyWith(
                           // Ensure switch is visible in light mode when disabled
-                          colorScheme: Theme.of(context).colorScheme.copyWith(
-                                outline: Colors.grey.shade400,
-                              ),
+                          colorScheme: Theme.of(
+                            context,
+                          ).colorScheme.copyWith(outline: Colors.grey.shade400),
                         ),
                         child: Switch.adaptive(
                           value: provider.isDailyReminderActive,
-                          activeThumbColor:
-                              Theme.of(context).colorScheme.primary,
+                          activeThumbColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           inactiveThumbColor: Colors.grey.shade300,
                           inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) async {
@@ -64,7 +65,8 @@ class SettingsScreen extends StatelessWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
-                                        'Notification permission is required'),
+                                      'Notification permission is required',
+                                    ),
                                   ),
                                 );
                                 return;
@@ -73,8 +75,9 @@ class SettingsScreen extends StatelessWidget {
 
                             // Update schedule via SchedulingProvider
                             try {
-                              bool result =
-                                  await scheduled.scheduledNews(value);
+                              bool result = await scheduled.scheduledNews(
+                                value,
+                              );
                               debugPrint("Scheduled Result: $result");
 
                               // Update preference
@@ -83,9 +86,11 @@ class SettingsScreen extends StatelessWidget {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(value
-                                      ? 'Daily reminder enabled at 11:00 AM'
-                                      : 'Daily reminder disabled'),
+                                  content: Text(
+                                    value
+                                        ? 'Daily reminder enabled at 11:00 AM'
+                                        : 'Daily reminder disabled',
+                                  ),
                                 ),
                               );
                             } catch (e) {

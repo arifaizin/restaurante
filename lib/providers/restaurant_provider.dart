@@ -15,7 +15,7 @@ class RestaurantProvider extends ChangeNotifier {
   bool _isDisposed = false;
 
   RestaurantProvider({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   @override
   void dispose() {
@@ -99,8 +99,9 @@ class RestaurantProvider extends ChangeNotifier {
       'bad gateway',
     ];
 
-    return retryableErrors
-            .any((error) => errorMessage.toLowerCase().contains(error)) &&
+    return retryableErrors.any(
+          (error) => errorMessage.toLowerCase().contains(error),
+        ) &&
         _retryCount < _maxRetries;
   }
 

@@ -29,10 +29,6 @@ class ReviewSubmissionRequest {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name.trim(),
-      'review': review.trim(),
-    };
+    return {'id': id, 'name': name.trim(), 'review': review.trim()};
   }
 }

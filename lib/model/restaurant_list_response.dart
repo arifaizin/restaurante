@@ -21,7 +21,8 @@ class RestaurantListResponse {
       error: json['error'] ?? false,
       message: json['message'] ?? '',
       count: json['count'] ?? 0,
-      restaurants: (json['restaurants'] as List<dynamic>?)
+      restaurants:
+          (json['restaurants'] as List<dynamic>?)
               ?.map((restaurantJson) => Restaurant.fromJson(restaurantJson))
               .toList() ??
           [],

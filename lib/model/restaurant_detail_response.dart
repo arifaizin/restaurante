@@ -12,10 +12,11 @@ class RestaurantDetailResponse {
   });
 
   RestaurantDetailResponse.fromJson(Map<String, dynamic> json)
-      : error = json['error'] ?? false,
-        message = json['message'] ?? '',
-        restaurant = RestaurantDetail.fromJson(
-            json['restaurant'] as Map<String, dynamic>? ?? {});
+    : error = json['error'] ?? false,
+      message = json['message'] ?? '',
+      restaurant = RestaurantDetail.fromJson(
+        json['restaurant'] as Map<String, dynamic>? ?? {},
+      );
 
   Map<String, dynamic> toJson() {
     return {

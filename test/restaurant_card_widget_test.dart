@@ -13,14 +13,15 @@ void main() {
     pictureId: '14',
   );
 
-  testWidgets('Should display restaurant name and city',
-      (WidgetTester tester) async {
+  testWidgets('Should display restaurant name and city', (
+    WidgetTester tester,
+  ) async {
     // Provide the widget
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: RestaurantCard(restaurant: restaurant),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: RestaurantCard(restaurant: restaurant)),
       ),
-    ));
+    );
 
     // Verify name and city are displayed
     expect(find.text(restaurant.name), findsOneWidget);

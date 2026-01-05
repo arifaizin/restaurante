@@ -16,21 +16,21 @@ class Restaurant {
   });
 
   Restaurant.fromJson(Map<String, dynamic> restaurant)
-      : id = restaurant['id'] ?? '',
-        name = restaurant['name'] ?? '',
-        description = restaurant['description'] ?? '',
-        city = restaurant['city'] ?? '',
-        rating = (restaurant['rating'] ?? 0).toDouble(),
-        pictureId = restaurant['pictureId'] ?? '';
+    : id = restaurant['id'] ?? '',
+      name = restaurant['name'] ?? '',
+      description = restaurant['description'] ?? '',
+      city = restaurant['city'] ?? '',
+      rating = (restaurant['rating'] ?? 0).toDouble(),
+      pictureId = restaurant['pictureId'] ?? '';
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "description": description,
-        "city": city,
-        "rating": rating,
-        "pictureId": pictureId,
-      };
+    "id": id,
+    "name": name,
+    "description": description,
+    "city": city,
+    "rating": rating,
+    "pictureId": pictureId,
+  };
 
   /// Returns the full image URL for the restaurant picture
   /// Handles both API format (pictureId only) and local JSON format (full URL)

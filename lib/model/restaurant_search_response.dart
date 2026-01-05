@@ -21,13 +21,13 @@ class RestaurantSearchResponse {
         founded: json['founded'] ?? 0,
         restaurants:
             (json['restaurants'] as List<dynamic>?)?.map((restaurantJson) {
-                  if (restaurantJson is Map<String, dynamic>) {
-                    return Restaurant.fromJson(restaurantJson);
-                  } else {
-                    throw const FormatException('Invalid restaurant data format');
-                  }
-                }).toList() ??
-                [],
+              if (restaurantJson is Map<String, dynamic>) {
+                return Restaurant.fromJson(restaurantJson);
+              } else {
+                throw const FormatException('Invalid restaurant data format');
+              }
+            }).toList() ??
+            [],
       );
     } catch (e) {
       throw FormatException('Failed to parse search response: ${e.toString()}');

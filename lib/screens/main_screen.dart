@@ -43,9 +43,10 @@ class MainScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: false,
         title: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(Constants.appName)),
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(Constants.appName),
+        ),
         elevation: 0.0,
         actions: [
           Consumer<PreferencesProvider>(
@@ -165,7 +166,9 @@ class MainScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                           Navigator.pushNamed(
-                              context, FavoriteScreen.routeName);
+                            context,
+                            FavoriteScreen.routeName,
+                          );
                         },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -180,7 +183,9 @@ class MainScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                           Navigator.pushNamed(
-                              context, SettingsScreen.routeName);
+                            context,
+                            SettingsScreen.routeName,
+                          );
                         },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -222,9 +227,7 @@ class MainScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: provider.restaurants.length,
               itemBuilder: (context, index) {
-                return RestaurantCard(
-                  restaurant: provider.restaurants[index],
-                );
+                return RestaurantCard(restaurant: provider.restaurants[index]);
               },
             ),
           );
@@ -240,8 +243,9 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _buildErrorState(BuildContext context, RestaurantProvider provider) {
-    final userFriendlyMessage =
-        ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
+    final userFriendlyMessage = ErrorHelper.getUserFriendlyMessage(
+      provider.errorMessage,
+    );
     final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
 
     return RefreshIndicator(

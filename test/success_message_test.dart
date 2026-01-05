@@ -21,8 +21,10 @@ void main() {
       // Verify we got success messages and they contain expected content
       expect(messages.isNotEmpty, isTrue);
       expect(messages.length, greaterThanOrEqualTo(1));
-      expect(messages.every((msg) => msg.toLowerCase().contains('berhasil')),
-          isTrue);
+      expect(
+        messages.every((msg) => msg.toLowerCase().contains('berhasil')),
+        isTrue,
+      );
     });
 
     test('should provide contextually appropriate success messages', () {
@@ -30,23 +32,25 @@ void main() {
 
       // Should be encouraging and specific to review submission
       expect(
-          message,
-          anyOf([
-            contains('ulasan'),
-            contains('Ulasan'),
-            contains('feedback'),
-            contains('pengalaman'),
-          ]));
+        message,
+        anyOf([
+          contains('ulasan'),
+          contains('Ulasan'),
+          contains('feedback'),
+          contains('pengalaman'),
+        ]),
+      );
 
       // Should express gratitude or confirmation
       expect(
-          message.toLowerCase(),
-          anyOf([
-            contains('terima kasih'),
-            contains('berhasil'),
-            contains('ditambahkan'),
-            contains('dikirim'),
-          ]));
+        message.toLowerCase(),
+        anyOf([
+          contains('terima kasih'),
+          contains('berhasil'),
+          contains('ditambahkan'),
+          contains('dikirim'),
+        ]),
+      );
     });
   });
 }

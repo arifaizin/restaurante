@@ -28,8 +28,10 @@ class _DetailScreenState extends State<DetailScreen> {
     super.initState();
     // Trigger data fetching after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<RestaurantDetailProvider>(context, listen: false)
-          .fetchRestaurantDetail(widget.restaurantId);
+      Provider.of<RestaurantDetailProvider>(
+        context,
+        listen: false,
+      ).fetchRestaurantDetail(widget.restaurantId);
     });
   }
 
@@ -100,10 +102,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -148,9 +147,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   Text(
                     restaurant.rating.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.orange,
-                        ),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
                   ),
                 ],
               ),
@@ -210,9 +209,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   label: Text(
                     category.name,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   backgroundColor: Colors.orange,
                   elevation: 2.0,
@@ -273,10 +272,7 @@ class _DetailScreenState extends State<DetailScreen> {
           children: [
             Icon(icon, color: Colors.orange, size: 20.0),
             const SizedBox(width: 8.0),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
         const SizedBox(height: 8.0),
@@ -295,9 +291,9 @@ class _DetailScreenState extends State<DetailScreen> {
                 Text(
                   'No ${title.toLowerCase()} available',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                        fontStyle: FontStyle.italic,
-                      ),
+                    color: Colors.grey[600],
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ],
             ),
@@ -313,10 +309,8 @@ class _DetailScreenState extends State<DetailScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: items.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: Colors.grey[200],
-              ),
+              separatorBuilder: (context, index) =>
+                  Divider(height: 1, color: Colors.grey[200]),
               itemBuilder: (context, index) {
                 final item = items[index];
                 return ListTile(
@@ -357,8 +351,10 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
               const SizedBox(width: 8.0),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 2.0,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(12.0),
@@ -366,9 +362,9 @@ class _DetailScreenState extends State<DetailScreen> {
                 child: Text(
                   '${restaurant.customerReviews.length}',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -387,9 +383,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     if (!context.mounted) return;
                     final detailProvider =
                         Provider.of<RestaurantDetailProvider>(
-                      context,
-                      listen: false,
-                    );
+                          context,
+                          listen: false,
+                        );
                     detailProvider.refreshAfterReviewSubmission();
                   });
                 },
@@ -414,9 +410,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: Text(
                       'No customer reviews available yet.',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.grey[600],
-                            fontStyle: FontStyle.italic,
-                          ),
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   ),
                 ],
@@ -472,17 +468,17 @@ class _DetailScreenState extends State<DetailScreen> {
                           ? review.name[0].toUpperCase()
                           : '?',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Text(
                     review.name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -517,16 +513,16 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.titleLarge,
-    );
+    return Text(title, style: Theme.of(context).textTheme.titleLarge);
   }
 
   Widget _buildErrorState(
-      BuildContext context, RestaurantDetailProvider provider) {
-    final userFriendlyMessage =
-        ErrorHelper.getUserFriendlyMessage(provider.errorMessage);
+    BuildContext context,
+    RestaurantDetailProvider provider,
+  ) {
+    final userFriendlyMessage = ErrorHelper.getUserFriendlyMessage(
+      provider.errorMessage,
+    );
     final isNetworkError = ErrorHelper.isNetworkError(provider.errorMessage);
 
     return Center(
@@ -592,21 +588,24 @@ class FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<DatabaseProvider>(
       builder: (context, provider, child) {
-        final isFavorited =
-            provider.favorites.any((r) => r.id == restaurant.id);
+        final isFavorited = provider.favorites.any(
+          (r) => r.id == restaurant.id,
+        );
         return RawMaterialButton(
           onPressed: () {
             if (isFavorited) {
               provider.removeFavorite(restaurant.id);
             } else {
-              provider.addFavorite(Restaurant(
-                id: restaurant.id,
-                name: restaurant.name,
-                description: restaurant.description,
-                city: restaurant.city,
-                rating: restaurant.rating,
-                pictureId: restaurant.pictureId,
-              ));
+              provider.addFavorite(
+                Restaurant(
+                  id: restaurant.id,
+                  name: restaurant.name,
+                  description: restaurant.description,
+                  city: restaurant.city,
+                  rating: restaurant.rating,
+                  pictureId: restaurant.pictureId,
+                ),
+              );
             }
           },
           fillColor: Colors.white,

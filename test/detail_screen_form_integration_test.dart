@@ -40,18 +40,25 @@ void main() {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.rate_review,
-                                color: Colors.orange, size: 20.0),
+                            const Icon(
+                              Icons.rate_review,
+                              color: Colors.orange,
+                              size: 20.0,
+                            ),
                             const SizedBox(width: 8.0),
                             const Text(
                               'Customer Reviews',
                               style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold),
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(width: 8.0),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 2.0),
+                                horizontal: 8.0,
+                                vertical: 2.0,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.orange,
                                 borderRadius: BorderRadius.circular(12.0),
@@ -92,9 +99,10 @@ void main() {
                           child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Test Reviewer',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Text(
+                                'Test Reviewer',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               SizedBox(height: 8.0),
                               Text('Great restaurant!'),
                             ],
@@ -111,8 +119,9 @@ void main() {
       );
     }
 
-    testWidgets('should display ReviewSubmissionForm with proper integration',
-        (WidgetTester tester) async {
+    testWidgets('should display ReviewSubmissionForm with proper integration', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -136,8 +145,9 @@ void main() {
       expect(find.text('Great restaurant!'), findsOneWidget);
     });
 
-    testWidgets('should handle form validation properly',
-        (WidgetTester tester) async {
+    testWidgets('should handle form validation properly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -148,17 +158,22 @@ void main() {
 
       // Verify validation error messages appear (using the actual error messages from ErrorHelper)
       expect(
-          find.text(
-              'Nama tidak boleh kosong. Masukkan nama Anda untuk melanjutkan.'),
-          findsOneWidget);
+        find.text(
+          'Nama tidak boleh kosong. Masukkan nama Anda untuk melanjutkan.',
+        ),
+        findsOneWidget,
+      );
       expect(
-          find.text(
-              'Ulasan tidak boleh kosong. Bagikan pengalaman Anda tentang restoran ini.'),
-          findsOneWidget);
+        find.text(
+          'Ulasan tidak boleh kosong. Bagikan pengalaman Anda tentang restoran ini.',
+        ),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('should maintain consistent styling with UI components',
-        (WidgetTester tester) async {
+    testWidgets('should maintain consistent styling with UI components', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -173,8 +188,9 @@ void main() {
       expect(containers, findsWidgets);
     });
 
-    testWidgets('should connect to ReviewSubmissionProvider using Consumer',
-        (WidgetTester tester) async {
+    testWidgets('should connect to ReviewSubmissionProvider using Consumer', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -197,8 +213,9 @@ void main() {
       expect(reviewProvider.reviewText, equals('Great food!'));
     });
 
-    testWidgets('should display proper error handling and loading states',
-        (WidgetTester tester) async {
+    testWidgets('should display proper error handling and loading states', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
@@ -220,23 +237,24 @@ void main() {
     });
 
     testWidgets(
-        'should position form above existing reviews with proper spacing',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-      await tester.pumpAndSettle();
+      'should position form above existing reviews with proper spacing',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget());
+        await tester.pumpAndSettle();
 
-      // Verify proper layout order: form first, then reviews
-      final reviewFormFinder = find.byType(ReviewSubmissionForm);
-      final existingReviewFinder = find.text('Test Reviewer');
+        // Verify proper layout order: form first, then reviews
+        final reviewFormFinder = find.byType(ReviewSubmissionForm);
+        final existingReviewFinder = find.text('Test Reviewer');
 
-      expect(reviewFormFinder, findsOneWidget);
-      expect(existingReviewFinder, findsOneWidget);
+        expect(reviewFormFinder, findsOneWidget);
+        expect(existingReviewFinder, findsOneWidget);
 
-      final formPosition = tester.getTopLeft(reviewFormFinder);
-      final reviewPosition = tester.getTopLeft(existingReviewFinder);
+        final formPosition = tester.getTopLeft(reviewFormFinder);
+        final reviewPosition = tester.getTopLeft(existingReviewFinder);
 
-      // Form should be positioned above the existing review
-      expect(formPosition.dy, lessThan(reviewPosition.dy));
-    });
+        // Form should be positioned above the existing review
+        expect(formPosition.dy, lessThan(reviewPosition.dy));
+      },
+    );
   });
 }

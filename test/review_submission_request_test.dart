@@ -143,41 +143,41 @@ void main() {
       expect(request.getValidationError(), 'Ulasan tidak boleh kosong');
     });
 
-    test('should handle name with leading/trailing whitespace in validation',
-        () {
-      // Arrange
-      final request = ReviewSubmissionRequest(
-        id: 'restaurant123',
-        name: '  Jo  ',
-        review: 'Great food!',
-      );
+    test(
+      'should handle name with leading/trailing whitespace in validation',
+      () {
+        // Arrange
+        final request = ReviewSubmissionRequest(
+          id: 'restaurant123',
+          name: '  Jo  ',
+          review: 'Great food!',
+        );
 
-      // Act & Assert
-      expect(request.isValid(), true);
-      expect(request.getValidationError(), null);
-    });
+        // Act & Assert
+        expect(request.isValid(), true);
+        expect(request.getValidationError(), null);
+      },
+    );
 
-    test('should handle review with leading/trailing whitespace in validation',
-        () {
-      // Arrange
-      final request = ReviewSubmissionRequest(
-        id: 'restaurant123',
-        name: 'John Doe',
-        review: '  Great food!  ',
-      );
+    test(
+      'should handle review with leading/trailing whitespace in validation',
+      () {
+        // Arrange
+        final request = ReviewSubmissionRequest(
+          id: 'restaurant123',
+          name: 'John Doe',
+          review: '  Great food!  ',
+        );
 
-      // Act & Assert
-      expect(request.isValid(), true);
-      expect(request.getValidationError(), null);
-    });
+        // Act & Assert
+        expect(request.isValid(), true);
+        expect(request.getValidationError(), null);
+      },
+    );
 
     test('should return first validation error encountered', () {
       // Arrange
-      final request = ReviewSubmissionRequest(
-        id: '',
-        name: '',
-        review: '',
-      );
+      final request = ReviewSubmissionRequest(id: '', name: '', review: '');
 
       // Act & Assert
       expect(request.isValid(), false);
