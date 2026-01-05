@@ -57,8 +57,8 @@ void main() {
       // Verify error UI elements
       expect(find.text('No Internet Connection'), findsOneWidget);
       expect(find.byIcon(Icons.wifi_off), findsOneWidget);
-      expect(find.text('Retry Search'), findsOneWidget);
-      expect(find.text('Check Connection'), findsOneWidget);
+      expect(find.text('Try Again'), findsOneWidget);
+      expect(find.text('Check your internet connection'), findsOneWidget);
       expect(find.text('New Search'), findsOneWidget);
     });
 
@@ -83,9 +83,10 @@ void main() {
       await tester.pump(); // Allow error state to update
 
       // Verify error UI elements
-      expect(find.text('Request Timed Out'), findsOneWidget);
-      expect(find.byIcon(Icons.access_time), findsOneWidget);
-      expect(find.text('Retry Search'), findsOneWidget);
+      expect(find.text('Search Failed'), findsOneWidget);
+      expect(find.text('Connection too slow'), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+      expect(find.text('Try Again'), findsOneWidget);
     });
 
     testWidgets('should display server error UI correctly', (
@@ -109,9 +110,10 @@ void main() {
       await tester.pump(); // Allow error state to update
 
       // Verify error UI elements
-      expect(find.text('Server Error'), findsOneWidget);
-      expect(find.byIcon(Icons.cloud_off), findsOneWidget);
-      expect(find.text('Retry Search'), findsOneWidget);
+      expect(find.text('Search Failed'), findsOneWidget);
+      expect(find.text('Server is having trouble'), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+      expect(find.text('Try Again'), findsOneWidget);
     });
 
     testWidgets('should handle retry button tap', (WidgetTester tester) async {
@@ -133,11 +135,11 @@ void main() {
       await tester.pump(); // Allow error state to update
 
       // Tap retry button
-      await tester.tap(find.text('Retry Search'));
+      await tester.tap(find.text('Try Again'));
       await tester.pump();
 
       // Verify retry was attempted (error should still be there since mock always fails)
-      expect(find.text('Retry Search'), findsOneWidget);
+      expect(find.text('Try Again'), findsOneWidget);
     });
 
     testWidgets('should handle new search button tap', (
@@ -165,7 +167,8 @@ void main() {
       await tester.pump();
 
       // Verify search field was cleared and error state reset
-      expect(find.text('Search for restaurants'), findsOneWidget);
+      expect(find.text('Enter at least 3 characters to start searching'),
+          findsOneWidget);
     });
   });
 }
